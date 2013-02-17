@@ -1,9 +1,7 @@
-var mongoose = require("mongoose");
-var crypto = require("crypto");
-
-
-var secret = "@#$af$#@F";
-var Schema = mongoose.Schema;
+var mongoose = require("mongoose")
+  , crypto = require("crypto")
+  , Schema = mongoose.Schema
+  ;
 
 var UserSchema = new Schema(  {
     email: {type:String, unique:true},
