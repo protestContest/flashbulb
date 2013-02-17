@@ -23,6 +23,7 @@ app.configure(function() {
 app.configure("development", function() {
     console.log("running in development environment");
     credentials = require("./credentials").development;
+    app.use(express.session({secret: "flashbulb"}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -65,6 +66,6 @@ passport.deserializeUser(function(obj, done) {
 
 // Routes
 app.get("/", ac.home);
-app.get("/atuh/dropbox", passport.authenticate("dropbox"));
+app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox",
                                  { "failureRedirect": "/" }));
