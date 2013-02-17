@@ -64,7 +64,6 @@ passport.use(new DropboxStrategy({
 }, ac.dbAuthenticate));
 
 passport.serializeUser(function(user, done) {
-    console.log(user);
     done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
