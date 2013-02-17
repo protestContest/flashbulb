@@ -1,21 +1,32 @@
-var User;
+var Dropbox = require("dropbox")
+  , crypto = require("crypto")
+  ;
 
-var ApplicationController = function() {
+var ApplicationController = function(credentials) {
+    var User
+      ;
+
     if (!(this instanceof ApplicationController)) {
-        return new ApplicationController();
+        return new ApplicationController(credentials);
     }
 
     User = require("../models/User");
+    dropbox = new Dropbox.Client({
+        key: credentials.dropbox.appkey,
+        secret: credentials.dropbox.secret,
+        sandbox: true
+    });
 
     this.home = function(req, res) {
         if (req.isAuthenticated()) {
-            res.render("user");
+            res.render("user", {user: req.user});
         } else {
             res.render("home");
         }
     };
 
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
+        dropbox.oauth.setToken(token, tokenSecret);
         User.findOrCreate({ dropboxId: profile.id }, function(err, user) {
             return done(err, user);
         });
@@ -28,6 +39,16 @@ var ApplicationController = function() {
     this.logout = function(req, res) {
         req.logout();
         res.redirect("/");
+    };
+
+    this.dbTest = function(req, res) {
+        dropbox.getUserInfo(function(err, info) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(info);
+            }
+        });
     };
 
 }
