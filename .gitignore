@@ -1,0 +1,6 @@
+*~
+.DS_Store
+.vagrant
+*.vim
+credentials.js
+node_modules

@@ -1,0 +1,22 @@
+{
+  "name": "flashbulb",
+  "subdomain": "flashbulb",
+  "scripts": {
+    "start": "./app.js"
+  },
+  "version": "0.0.0-29",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "dropbox": "0.9.x",
+    "express": "3.1.x",
+    "jade": "0.28.x",
+    "knox": "0.5.x",
+    "mime-magic": "0.4.x",
+    "mongoose": "3.5.x",
+    "passport": "0.1.x",
+    "passport-facebook": "0.1.x",
+    "passport-dropbox": "0.1.x"
+  }
+}
