@@ -8,7 +8,7 @@ var ApplicationController = function() {
     User = require("../models/User");
 
     this.home = function(req, res) {
-
+        res.render("home");
     };
 
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
