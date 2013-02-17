@@ -45,6 +45,7 @@ var ApplicationController = function(credentials) {
 
     this.logout = function(req, res) {
         req.logout();
+        dropbox.signOut();
         res.redirect("/");
     };
 
