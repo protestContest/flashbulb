@@ -18,14 +18,14 @@ UserSchema.static("findOrCreate", function(query, callback)  {
         if(error)  {
             callback(error);
         } else if(user)  {
-            callback("email or userid already taken, try choosing another");
+            callback(null, user);
         } else  {
-            var u = new User({"email":email});
+            var u = new User(query);
             u.save(function(error)  {
                 if(error)  {
                     callback(error);
                 }  else  {
-                    callback("user created<br/>userid:"+name+"<br/>email:"+email+"<br/>password: " + pw);
+                    callback(null, u);
                 }
             });
         }
