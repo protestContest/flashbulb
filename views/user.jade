@@ -5,4 +5,8 @@ html(lang="en")
     body
         h1 Flashbulb!
         p Welcome #{user.name}
+        
+        ul: each f in files
+            li= f
+
         p: a(href="/logout") Logout

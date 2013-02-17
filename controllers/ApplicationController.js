@@ -19,7 +19,10 @@ var ApplicationController = function(credentials) {
 
     this.home = function(req, res) {
         if (req.isAuthenticated()) {
-            res.render("user", {user: req.user});
+            dropbox.readdir("/", function(err, files) {
+                res.render("user", {user: req.user,
+                                    files: files});
+            });
         } else {
             res.render("home");
         }
