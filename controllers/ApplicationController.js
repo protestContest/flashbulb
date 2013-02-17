@@ -8,19 +8,26 @@ var ApplicationController = function() {
     User = require("../models/User");
 
     this.home = function(req, res) {
-        res.render("home");
+        if (req.isAuthenticated()) {
+            res.render("user");
+        } else {
+            res.render("home");
+        }
     };
 
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
-        console.log("Authenticating via Dropbox");
         User.findOrCreate({ dropboxId: profile.id }, function(err, user) {
             return done(err, user);
         });
     };
 
-    this.login = function(req, res) {
-        console.log(req.user);
-        res.render("login", { user: req.user });
+    this.loginSuccess = function(req, res) {
+        res.redirect("/");
+    };
+
+    this.logout = function(req, res) {
+        req.logout();
+        res.redirect("/");
     };
 
 }

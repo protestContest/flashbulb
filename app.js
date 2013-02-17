@@ -68,4 +68,7 @@ passport.deserializeUser(function(obj, done) {
 app.get("/", ac.home);
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
-        ac.login);
+        ac.loginSuccess);
+
+// user routes
+app.get("/logout", ac.logout);
