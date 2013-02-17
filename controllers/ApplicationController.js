@@ -27,8 +27,15 @@ var ApplicationController = function(credentials) {
 
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
         dropbox.oauth.setToken(token, tokenSecret);
-        User.findOrCreate({ dropboxId: profile.id }, function(err, user) {
-            return done(err, user);
+        dropbox.getUserInfo(function(err, userInfo) {
+            if (err) { done(err); }
+            else {
+                User.findOrCreate({ dropboxId: profile.id }, userInfo,
+                    function(err, user) {
+                        return done(err, user);
+                    }
+                );
+            }
         });
     };
 
