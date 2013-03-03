@@ -17,6 +17,10 @@ app.configure(function() {
     app.set("view engine", "jade");
     app.use(express.bodyParser());
     app.use(express.methodOverride());
+    app.use(require('less-middleware')({
+      'src': __dirname + '/public' ,
+      'compress': false
+    }));
     app.use(express.static(__dirname + "/public"));
     app.use(express.cookieParser());
 });
@@ -24,6 +28,7 @@ app.configure(function() {
 app.configure("development", function() {
     console.log("running in development environment");
     credentials = require("./credentials").development;
+    app.locals.pretty = true;
     app.use(express.session({secret: "flashbulb"}));
     app.use(passport.initialize());
     app.use(passport.session());
@@ -72,10 +77,12 @@ passport.deserializeUser(function(obj, done) {
 
 // Routes
 app.get("/", ac.home);
+
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
         ac.loginSuccess);
-
-// user routes
 app.get("/logout", ac.logout);
+
+app.get("/db/:path", ac.getFile);
+
 app.get("/dbtest", ac.dbTest);
