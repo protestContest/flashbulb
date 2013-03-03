@@ -20,13 +20,21 @@ var ApplicationController = function(credentials) {
     this.home = function(req, res) {
         if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
-                console.log(files);
                 res.render("user", {user: req.user,
                                     files: files});
             });
         } else {
             res.render("home");
         }
+    };
+
+    this.auth = function(req, res, next) {
+        if (req.user) {
+            next();
+        } else {
+            res.redirect("/");
+        }
+
     };
 
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
@@ -74,6 +82,10 @@ var ApplicationController = function(credentials) {
             }
         });
     }
+
+    this.editFile = function(req, res) {
+
+    };
 
 }
 
