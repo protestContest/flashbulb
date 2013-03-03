@@ -1,6 +1,8 @@
 @primary: #de5e31;
 @primary-light: (@primary - #222);
 @white: #eee;
+@span3: 220px;
+@dim: rgba(50, 50, 50, 0.67);
 
 .logo {
     font-size: 2em;
@@ -17,4 +19,26 @@
     color: @white;
     border: 1px solid (@primary - #2b2b2b);
     border-radius: 0px;
+}
+
+.thumb {
+    position: relative;
+    margin-bottom: 20px;
+    height: 220px;
+    overflow: hidden;
+}
+
+.thumb img {
+    min-height: @span3;
+    min-width: @span3;
+}
+
+.thumbinfo {
+    position: absolute;
+    display: none;
+    bottom: 0px;
+    background-color: @dim;
+    color: @white;
+    padding: 5px;
+    width: 100%;
 }
