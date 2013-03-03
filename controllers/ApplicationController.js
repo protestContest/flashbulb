@@ -64,11 +64,12 @@ var ApplicationController = function(credentials) {
     };
 
     this.getFile = function(req, res) {
-        dropbox.readFile(req.params.path, function(err, data) {
+        dropbox.readFile(req.params.path, {buffer: true}, function(err, data) {
             if (err) {
                 console.log(err);
-                res.redirect("/");
+                res.redirect("/auth/dropbox");
             } else {
+                res.setHeader("Content-type", "image");
                 res.send(data);
             }
         });
