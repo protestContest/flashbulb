@@ -13,6 +13,7 @@
     "express": "3.1.x",
     "jade": "0.28.x",
     "knox": "0.5.x",
+    "less-middleware": "0.1.x",
     "mime-magic": "0.4.x",
     "mongoose": "3.5.x",
     "passport": "0.1.x",
