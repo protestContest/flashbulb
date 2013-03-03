@@ -8,11 +8,12 @@ block navbar
           i.icon-camera-retro 
           | Flashbulb!
         ul.nav.pull-right
+          li #{user.name}
           li
             a(href="/settings", title="Settings")
               i.icon-cog.icon-large
               | Settings
-          li.last
+          li
             a(href='/logout', title='Logout')
               i.icon-signout.icon-large
               | Logout

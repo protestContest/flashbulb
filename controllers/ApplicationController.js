@@ -29,6 +29,14 @@ var ApplicationController = function(credentials) {
         }
     };
 
+    this.albums = function(req, res) {
+        dropbox.readdir("/", function(err, files) {
+            res.render("albums", {title: "Albums",
+                                  user: req.user,
+                                  files: files});
+        });
+    };
+
     this.auth = function(req, res, next) {
         if (req.user) {
             next();

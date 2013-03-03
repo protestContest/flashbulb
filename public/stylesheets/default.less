@@ -29,7 +29,12 @@ a.logo:hover {
     border-radius: 0px;
 }
 
+.primary.navbar-inverse .navbar-inner .nav>li {
+    line-height: 50px;
+}
+
 .primary.navbar-inverse .navbar-inner .nav>li>a {
+    line-height: 30px;
     color: @white;
 }
 
@@ -43,13 +48,25 @@ a.logo:hover {
 
 .toolbar.navbar-inverse .navbar-inner {
     background: url("/images/darknoise.png") repeat scroll 0% 0% #333;
+    border: none;
 }
 
 .toolbar.navbar-inverse .container {
     width: @container-width;
+    line-height: 40px;
+    font-size: 22px;
+}
+
+.toolbar.navbar-inverse .container .nav>li.active {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.toolbar.navbar-inverse .container .nav>li:first-child,
+.toolbar.navbar-inverse .container .nav>li:first-child>a {
+    padding-left: 0px;
 }
 
 .page-title {
-    line-height: 40px;
-    font-size: 22px;
+    float: left;
 }

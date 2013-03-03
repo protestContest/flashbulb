@@ -8,7 +8,10 @@ block toolbar
   .toolbar.navbar.navbar-inverse
     .navbar-inner
       .container
-        .page-title #{title}
+        ul.nav.pull-left
+          li.active All Pictures
+          li
+            a(href="/albums") Albums
 
 
 block content
@@ -21,4 +24,6 @@ block content
       .span3.thumb 
         a(href='/edit/' + file)
           img(src='/file/' + file, alt='User image')
+          .thumb-overlay
+            i.icon-2x.icon-edit
         .thumbinfo= trim_file
