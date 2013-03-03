@@ -2,6 +2,7 @@ extends base-layout
 
 block head
   link(rel="stylesheet", href="/stylesheets/user.css")
+  script(src="/javascripts/user.js")
 
 block content
   .navbar.navbar-inverse
@@ -11,12 +12,22 @@ block content
           i.icon-camera-retro 
           | Flashbulb!
         ul.nav.pull-right
+          li
+            a(href="/settings", title="Settings")
+              i.icon-cog.icon-2x
           li 
             a(href='/logout', title='Logout')
               i.icon-signout.icon-2x
 
   .container
     p Welcome #{user.name}
-    
-    ul: each f in files
-      li: a(href='/db/' + f)= f
+
+    .row: each file, i in files
+      - trim_file = file.split('.')[0]
+      if i%4==0
+        .row-fluid
+
+      .span3.thumb 
+        a(href='/edit/' + file)
+          img(src='/file/' + file, alt='User image')
+        .thumbinfo= trim_file
