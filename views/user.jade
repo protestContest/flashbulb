@@ -1,16 +1,22 @@
-!!!
-html(lang="en")
-    head
-        title Flashbulb
-        script(src="//code.jquery.com/jquery-1.9.1.min.js")
-        script(src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.0/dropbox.min.js")
-        script(src="/javascripts/script.js")
+extends base-layout
 
-    body
-        h1 Flashbulb!
-        p Welcome #{user.name}
-        
-        ul: each f in files
-            li= f
+block head
+  link(rel="stylesheet", href="/stylesheets/user.css")
 
-        p: a(href="/logout") Logout
+block content
+  .navbar.navbar-inverse
+    .navbar-inner
+      .container
+        .logo 
+          i.icon-camera-retro 
+          | Flashbulb!
+        ul.nav.pull-right
+          li 
+            a(href='/logout', title='Logout')
+              i.icon-signout.icon-2x
+
+  .container
+    p Welcome #{user.name}
+    
+    ul: each f in files
+      li: a(href='/db/' + f)= f
