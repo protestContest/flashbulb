@@ -20,7 +20,8 @@ var ApplicationController = function(credentials) {
     this.home = function(req, res) {
         if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
-                res.render("user", {user: req.user,
+                res.render("user", {title: "All Pictures",
+                                    user: req.user,
                                     files: files});
             });
         } else {
@@ -58,6 +59,7 @@ var ApplicationController = function(credentials) {
     this.logout = function(req, res) {
         req.logout();
         dropbox.signOut();
+        delete req.user;
         res.redirect("/");
     };
 
@@ -84,7 +86,7 @@ var ApplicationController = function(credentials) {
     }
 
     this.editFile = function(req, res) {
-
+        res.redirect("/file/" + req.params.path);
     };
 
 }
