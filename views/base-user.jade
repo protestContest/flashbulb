@@ -1,0 +1,18 @@
+extends base-layout
+
+block navbar
+  .primary.navbar.navbar-inverse
+    .navbar-inner
+      .container
+        a.logo(href="/")
+          i.icon-camera-retro 
+          | Flashbulb!
+        ul.nav.pull-right
+          li
+            a(href="/settings", title="Settings")
+              i.icon-cog.icon-large
+              | Settings
+          li.last
+            a(href='/logout', title='Logout')
+              i.icon-signout.icon-large
+              | Logout

@@ -1,27 +1,18 @@
-extends base-layout
+extends base-user
 
 block head
   link(rel="stylesheet", href="/stylesheets/user.css")
   script(src="/javascripts/user.js")
 
-block content
-  .navbar.navbar-inverse
+block toolbar
+  .toolbar.navbar.navbar-inverse
     .navbar-inner
       .container
-        .logo 
-          i.icon-camera-retro 
-          | Flashbulb!
-        ul.nav.pull-right
-          li
-            a(href="/settings", title="Settings")
-              i.icon-cog.icon-2x
-          li 
-            a(href='/logout', title='Logout')
-              i.icon-signout.icon-2x
+        .page-title #{title}
 
+
+block content
   .container
-    p Welcome #{user.name}
-
     .row: each file, i in files
       - trim_file = file.split('.')[0]
       if i%4==0
