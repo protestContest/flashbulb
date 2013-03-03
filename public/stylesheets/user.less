@@ -1,0 +1,20 @@
+@primary: #de5e31;
+@primary-light: (@primary - #222);
+@white: #eee;
+
+.logo {
+    font-size: 2em;
+    float: left;
+    line-height: 50px;
+}
+
+.logo i {
+    margin-right: 10px;
+}
+
+.navbar-inverse .navbar-inner {
+    background-image: linear-gradient(to bottom, @primary, @primary-light);
+    color: @white;
+    border: 1px solid (@primary - #2b2b2b);
+    border-radius: 0px;
+}
