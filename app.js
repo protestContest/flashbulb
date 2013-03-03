@@ -7,7 +7,8 @@ var express = require("express")
   , mongoServer
   , port
   , app = express()
-  , ac
+  , ac, uc
+  ;
 
 
 // Configuration Server
@@ -59,7 +60,8 @@ console.log("Express server listening on port %d", port);
 mongoose.connect(mongoServer);
 
 // Controllers
-ac =  require("./controllers/ApplicationController")(credentials);
+ac = require("./controllers/ApplicationController")(credentials);
+uc = require("./controllers/UserController")(credentials);
 
 // configure passport
 passport.use(new DropboxStrategy({
@@ -83,6 +85,9 @@ app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
         ac.loginSuccess);
 app.get("/logout", ac.logout);
 
-app.get("/db/:path", ac.getFile);
+app.get("/file/:path", [ac.auth], ac.getFile);
+app.get("/edit/:path", [ac.auth], ac.editFile);
+
+app.get("/settings", [ac.auth], uc.settings);
 
 app.get("/dbtest", ac.dbTest);
