@@ -16,11 +16,13 @@ block toolbar
 block dropdowns
   .container#share.dropdown
     .row
-      .span3.thumb
+      .span3.thumb.offset1
         img#share-image(src="", alt="Share Image")
       .span6
-        p#share-image-title
+        #share-image-title
         p Share on Facebook!
+      .span2.dropdown-controls
+        span.dropdown-title Share
         i.close.icon-remove.icon-2x
 
 block content
@@ -37,6 +39,6 @@ block content
             a(href="/edit/" + file, title="Edit")
               i.icon-2x.icon-edit
           li.overlay-button
-            a(href="javascript:void(0)" + file, title="Share")
+            a(href="javascript:void(0);" + file, title="Share")
               i.icon-2x.icon-share
         .thumbinfo= trim_file
