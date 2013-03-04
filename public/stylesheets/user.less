@@ -26,11 +26,29 @@
     width: 100%;
 }
 
-.thumb-overlay {
+ul.overlay-buttons {
     position: absolute;
     display: none;
     top: 0px;
-    left: 0px;
     color: @dim;
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+
+li.overlay-button {
+    float: left;
     padding: 5px;
+    padding-right: 0px;
+}
+
+li.overlay-button a {
+    color: @dim;
+    text-decoration: none;
+    text-shadow: 1px 1px @white;
+}
+
+li.overlay-button a:hover {
+    color: @white;
+    text-shadow: 1px 1px @dim;
 }
