@@ -51,6 +51,9 @@ app.configure("production", function() {
             "secret": process.env.DROPBOX_SECRET
         }
     };
+    app.use(express.session({secret: "bananahorsepancakes"}));
+    app.use(passport.initialize());
+    app.use(passport.session());
     app.use(app.router);
     app.use(express.errorHandler()); 
     port = process.env.PORT || 8080;
