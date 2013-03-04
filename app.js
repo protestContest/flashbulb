@@ -83,6 +83,7 @@ passport.use(new DropboxStrategy({
     consumerSecret: credentials.dropbox.secret,
     callbackURL: hostname + "/auth/dropbox/success"
 }, ac.dbAuthenticate));
+console.log(hostname + "/auth/dropbox/success");
 
 passport.serializeUser(function(user, done) {
     done(null, user);
