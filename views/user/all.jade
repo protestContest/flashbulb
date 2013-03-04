@@ -22,8 +22,12 @@ block content
         .row-fluid
 
       .span3.thumb 
-        a(href='/edit/' + file)
-          img(src='/file/' + file, alt='User image')
-          .thumb-overlay
-            i.icon-2x.icon-edit
+        img(src='/file/' + file, alt=trim_file)
+        ul.overlay-buttons
+          li.overlay-button
+            a(href="/edit/" + file, title="Edit")
+              i.icon-2x.icon-edit
+          li.overlay-button
+            a(href="/share/" + file, title="Share")
+              i.icon-2x.icon-share
         .thumbinfo= trim_file

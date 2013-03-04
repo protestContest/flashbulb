@@ -17,12 +17,14 @@ var ApplicationController = function(credentials) {
         sandbox: true
     });
 
-    this.home = function(req, res) {
+    this.allFiles = function(req, res) {
         if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
-                res.render("user", {title: "All Pictures",
-                                    user: req.user,
-                                    files: files});
+                res.render("user/all", {
+                    title: "All Pictures",
+                    user: req.user,
+                    files: files
+                });
             });
         } else {
             res.render("home");
@@ -31,9 +33,11 @@ var ApplicationController = function(credentials) {
 
     this.albums = function(req, res) {
         dropbox.readdir("/", function(err, files) {
-            res.render("albums", {title: "Albums",
-                                  user: req.user,
-                                  files: files});
+            res.render("user/albums", {
+                title: "Albums",
+                user: req.user,
+                files: files
+            });
         });
     };
 
@@ -94,6 +98,18 @@ var ApplicationController = function(credentials) {
     }
 
     this.editFile = function(req, res) {
+        dropbox.readFile(req.params.path, {buffer: true}, function(err, data) {
+            if (err) {
+                console.log(err);
+                res.redirect("/");
+            } else {
+                res.render("user/edit", {
+                    title: "Albums",
+                    user: req.user,
+                    editFile: data
+                });
+            }
+        });
         res.redirect("/file/" + req.params.path);
     };
 

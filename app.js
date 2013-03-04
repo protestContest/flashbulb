@@ -78,9 +78,9 @@ passport.deserializeUser(function(obj, done) {
 });
 
 // Routes
-app.get("/", ac.home);
-app.get("/all", ac.home);
-app.get("/albums", ac.albums);
+app.get("/", ac.allFiles);
+app.get("/all", [ac.auth], ac.allFiles);
+app.get("/albums", [ac.auth], ac.albums);
 
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
