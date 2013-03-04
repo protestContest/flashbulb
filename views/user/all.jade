@@ -5,7 +5,7 @@ block head
   script(src="/javascripts/user.js")
 
 block toolbar
-  .toolbar.navbar.navbar-inverse
+  .toolbar.navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
         ul.nav.pull-left
@@ -14,11 +14,11 @@ block toolbar
             a(href="/albums") Albums
 
 block dropdowns
-  .container#share.dropdown
+  .span12#share.dropdown
     .row
       .span3.thumb.offset1
         img#share-image(src="", alt="Share Image")
-      .span6
+      .span5
         #share-image-title
         p Share on Facebook!
       .span2.dropdown-controls
@@ -29,9 +29,6 @@ block content
   .main.container
     .row: each file, i in files
       - trim_file = file.split('.')[0]
-      if i%4==0
-        .row-fluid
-
       .span3.thumb 
         img(src='/file/' + file, alt=trim_file)
         ul.overlay-buttons
@@ -39,6 +36,6 @@ block content
             a(href="/edit/" + file, title="Edit")
               i.icon-2x.icon-edit
           li.overlay-button
-            a(href="javascript:void(0);" + file, title="Share")
+            a(href="" + file, title="Share")
               i.icon-2x.icon-share
         .thumbinfo= trim_file
