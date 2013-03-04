@@ -53,7 +53,7 @@ app.configure("production", function() {
     };
     app.use(app.router);
     app.use(express.errorHandler()); 
-    port = 8080;
+    port = process.env.PORT || 8080;
 });
 
 dbClient = new dropbox.Client({
