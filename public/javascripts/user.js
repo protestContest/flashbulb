@@ -1,7 +1,4 @@
 $(document).ready(function() {
-    $(".dropdown .close").click(function() {
-        $(this).closest(".dropdown").slideUp();
-    });
 
     $('.thumb').hover(function() {
         $(this).children('.thumbinfo').slideToggle("fast");
@@ -9,22 +6,33 @@ $(document).ready(function() {
     });
 
     $(".icon-share").click(function(evt) {
+
         var img, imgTitle, imgPath, imgRowHead, imgRowHeadIndex, shareDropdown, that;
         that = $(this);
-        evt.preventDefault();
 
         $("#share.dropdown").slideUp("fast", function() {
+            // remove dropdown
             shareDropdown = $(this).remove();
+            // image clicked
             img = that.closest(".thumb").children("img");
             imgPath = img.attr("src");
             imgTitle = img.attr("alt");
+            // find the image at the beginning of this row
             imgRowHeadIndex = Math.floor($(".thumb").index(that.closest(".thumb")) / 4) * 4;
             imgRowHead = that.closest(".row").children()[imgRowHeadIndex];
 
+            // put dropdown before row's first image
             shareDropdown.insertBefore(imgRowHead);
+            // edit dropdown content
             $("#share-image").attr("src", imgPath);
             $("#share-image-title").html(imgTitle);
+            // show dropdown
             shareDropdown.slideDown("fast");
+
+            // register close button
+            $(".close").click(function() {
+                $(".dropdown").slideUp();
+            });
         });
 
     });
