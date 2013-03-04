@@ -41,7 +41,16 @@ app.configure("development", function() {
 app.configure("production", function() {
     var store;
     console.log("running in production environment");
-    credentials = require("./credentials").production;
+    //credentials = require("./credentials").production;
+    credentials = {
+        "mongodb": {
+            "url": process.env.MONGO_URL
+        },
+        "dropbox": {
+            "appkey": process.env.DROPBOX_APPKEY,
+            "secret": process.env.DROPBOX_SECRET
+        }
+    };
     app.use(app.router);
     app.use(express.errorHandler()); 
     port = 8080;
