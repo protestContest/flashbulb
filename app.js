@@ -5,7 +5,7 @@ var express = require("express")
   , DropboxStrategy = require("passport-dropbox").Strategy
   , dropbox = require("dropbox")
   , mongoServer
-  , port
+  , port, hostname
   , app = express()
   , ac, uc
   ;
@@ -36,6 +36,7 @@ app.configure("development", function() {
     app.use(app.router);
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
     port = 3000;
+    hostname = "http://127.0.0.1:" + port;
 });
 
 app.configure("production", function() {
@@ -57,6 +58,7 @@ app.configure("production", function() {
     app.use(app.router);
     app.use(express.errorHandler()); 
     port = process.env.PORT || 8080;
+    hostname = process.env.HOSTNAME;
 });
 
 dbClient = new dropbox.Client({
@@ -79,7 +81,7 @@ uc = require("./controllers/UserController")(credentials);
 passport.use(new DropboxStrategy({
     consumerKey: credentials.dropbox.appkey,
     consumerSecret: credentials.dropbox.secret,
-    callbackURL: "http://127.0.0.1:3000/auth/dropbox/success"
+    callbackURL: hostname + "/auth/dropbox/success"
 }, ac.dbAuthenticate));
 
 passport.serializeUser(function(user, done) {
