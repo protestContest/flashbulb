@@ -13,9 +13,18 @@ block toolbar
           li
             a(href="/albums") Albums
 
+block dropdowns
+  .container#share.dropdown
+    .row
+      .span3.thumb
+        img#share-image(src="", alt="Share Image")
+      .span6
+        p#share-image-title
+        p Share on Facebook!
+        i.close.icon-remove.icon-2x
 
 block content
-  .container
+  .main.container
     .row: each file, i in files
       - trim_file = file.split('.')[0]
       if i%4==0
@@ -28,6 +37,6 @@ block content
             a(href="/edit/" + file, title="Edit")
               i.icon-2x.icon-edit
           li.overlay-button
-            a(href="/share/" + file, title="Share")
+            a(href="javascript:void(0)" + file, title="Share")
               i.icon-2x.icon-share
         .thumbinfo= trim_file
