@@ -3,6 +3,7 @@ var express = require("express")
   , credentials
   , passport = require("passport")
   , DropboxStrategy = require("passport-dropbox").Strategy
+  , FacebookStrategy = require("passport-facebook").Strategy
   , dropbox = require("dropbox")
   , mongoServer
   , port, hostname
@@ -83,7 +84,12 @@ passport.use(new DropboxStrategy({
     consumerSecret: credentials.dropbox.secret,
     callbackURL: hostname + "/auth/dropbox/success"
 }, ac.dbAuthenticate));
-console.log(hostname + "/auth/dropbox/success");
+passport.use(new FacebookStrategy({
+    clientID: credentials.facebook.clientId,
+    clientSecret: credentials.facebook.secret,
+    callbackURL: hostname + "/auth/facebook/success",
+    passReqToCallback: true
+}, ac.fbAuthenticate));
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -100,10 +106,18 @@ app.get("/albums", [ac.auth], ac.albums);
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
         ac.loginSuccess);
+app.get("/auth/facebook", passport.authorize("facebook", {
+    scope: "publish_stream",
+    failureRedirect: "/fail"
+}));
+app.get("/auth/facebook/success", passport.authorize("facebook", { 
+    failureRedirect: "/fail"
+}), ac.fbUpload);
 app.get("/logout", ac.logout);
 
 app.get("/file/:path", [ac.auth], ac.getFile);
 app.get("/edit/:path", [ac.auth], ac.editFile);
+app.post("/share/file/:path", [ac.auth], ac.shareFile);
 
 app.get("/settings", [ac.auth], uc.settings);
 

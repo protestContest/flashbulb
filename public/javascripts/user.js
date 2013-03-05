@@ -26,6 +26,7 @@ $(document).ready(function() {
             // edit dropdown content
             $("#share-image").attr("src", imgPath);
             $("#share-image-title").html(imgTitle);
+            $("#share-link").attr("href", "/share" + imgPath);
             // show dropdown
             shareDropdown.slideDown("fast");
 
@@ -33,9 +34,26 @@ $(document).ready(function() {
             $(".close").click(function() {
                 $(".dropdown").slideUp();
             });
+
+
+            $("#share-link").click(function() {
+                console.log("Sharing to " + "/share" + $("#share-image").attr("src"));
+                console.log(window.location.pathname);
+                $.post("/share" + $("#share-image").attr("src"), {
+                    "url": $("#share-image").attr("src"),
+                    "desc": $("#share-desc").val(),
+                    "returnURL": window.location.pathname
+                }, function(data, textStatus, jqXHR) {
+                    console.log(data);
+                    if (data.redirect) {
+                        window.location = data.redirect;
+                    }
+                });
+            });
         });
 
     });
+
 
     $(window).scroll(function() {
         $(".toolbar.navbar-fixed-top").css("top",Math.max(0,52-$(this).scrollTop()));

@@ -1,5 +1,7 @@
 var Dropbox = require("dropbox")
   , crypto = require("crypto")
+  , https = require("https")
+  , FB = require("fb");
   ;
 
 var ApplicationController = function(credentials) {
@@ -64,6 +66,13 @@ var ApplicationController = function(credentials) {
         });
     };
 
+    this.fbAuthenticate = function(req, token, tokenSecret, profile, done) {
+        req.session.facebook = { };
+        req.session.facebook.id = profile.id;
+        req.session.facebook.access_token = token;
+        return done(null, req.user);
+    };
+
     this.loginSuccess = function(req, res) {
         res.redirect("/");
     };
@@ -72,6 +81,7 @@ var ApplicationController = function(credentials) {
         req.logout();
         dropbox.signOut();
         delete req.user;
+        delete req.account;
         res.redirect("/");
     };
 
@@ -111,6 +121,76 @@ var ApplicationController = function(credentials) {
             }
         });
         res.redirect("/file/" + req.params.path);
+    };
+
+    function loadFile(url) {
+        dropbox.readFile(url, function(err, data) {
+            if (err) {
+                console.log(err);
+                return null;
+            } else {
+                return data;
+            }
+        });
+    }
+
+    this.fbUpload = function(req, res) {
+        if (req.account && req.session.share) {
+
+            // post to fb
+            FB.setAccessToken(req.session.facebook.access_token);
+            FB.api("me/photos", "post", {
+                "message": "Test post, please ignore",
+                "url": "http://flashbulb.herokuapp.com" + req.session.share.url
+            }, function(res) {
+                if (!res || res.error) {
+                    console.log(!res ? "fb upload error!" : res.error);
+                }
+            });
+
+            //var fbPost = https.request({
+            //    host: "graph.facebook.com",
+            //    port: 443,
+            //    path: "/" + req.session.facebook.id + "/photos?access_token=" + req.session.facebook.access_token,
+            //    method: "POST"
+            //}, function(res) {
+            //    res.setEncoding("utf-8");
+            //    var resString = "";
+
+            //    res.on("data", function(data) {
+            //        resString += data;
+            //    });
+
+            //    res.on("end", function() {
+            //        console.log(resString);
+            //    });
+            //});
+
+            //fbPost.on("error", function(err) {
+            //    console.log(err);
+            //});
+            //
+            //fbPost.write(JSON.stringify({
+            //    "message": req.session.share.desc,
+            //    "source": loadFile(url)
+            //}));
+            //fbPost.end();
+
+            res.redirect(req.session.share.returnURL);
+        } else {
+            res.redirect("/");
+        }
+    };
+
+    this.shareFile = function(req, res) {
+        if (req.account) {
+            // already auth'd with Facebook
+            res.redirect(req.session.share.returnURL);
+        } else {
+            // need Facebook auth
+            req.session.share = req.body;
+            res.send({ redirect: "/auth/facebook" });
+        }
     };
 
 }
