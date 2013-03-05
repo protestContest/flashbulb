@@ -51,6 +51,10 @@ app.configure("production", function() {
         "dropbox": {
             "appkey": process.env.DROPBOX_APPKEY,
             "secret": process.env.DROPBOX_SECRET
+        },
+        "facebook": {
+            "clientId": process.env.FACEBOOK_CLIENTID,
+            "secret":   process.env.FACEBOOK_SECRET
         }
     };
     app.use(express.session({secret: "bananahorsepancakes"}));
