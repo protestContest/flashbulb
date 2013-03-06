@@ -6,7 +6,6 @@ $(document).ready(function() {
     });
 
     $(".icon-share").click(function(evt) {
-
         that = $(this);
 
         $("#share.dropdown").slideUp("fast", function() {
@@ -35,6 +34,13 @@ $(document).ready(function() {
             $("#irc_pc").css("left", ircpcOffset + "px");
             // show dropdown
             shareDropdown.slideDown("fast");
+            // scroll window
+            if ($(that).offset().top + 490 > $(window).scrollTop() + $(window).height()) {
+                $("html, body").animate({
+                    scrollTop: $(that).offset().top - ($(window).height() - 490)
+                });
+            }
+
 
             // register close button
             $(".close").click(function() {
