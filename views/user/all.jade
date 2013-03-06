@@ -32,6 +32,7 @@ block content
     .row: each file, i in files
       - trim_file = file.split('.')[0]
       .span3.thumb 
+        i.icon-spinner.icon-spin.icon-4x
         img(src='/file/' + file, alt=trim_file)
         ul.overlay-buttons
           li.overlay-button
