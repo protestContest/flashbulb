@@ -23,6 +23,9 @@ a.logo:hover {
 }
 
 .navbar-inverse .navbar-inner {
+    background-image: -webkit-gradient(linear, left top, left bottom,
+    from(@primary), to(@primary-light));
+    background-image: -webkit-linear-gradient(top, @primary, @primary-light);
     background-image: linear-gradient(to bottom, @primary, @primary-light);
     color: @white;
     border: 1px solid (@primary - #2b2b2b);
