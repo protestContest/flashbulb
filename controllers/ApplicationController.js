@@ -124,7 +124,10 @@ var ApplicationController = function(credentials) {
     };
 
     function loadFile(url) {
-        dropbox.readFile(url, function(err, data) {
+        if (url.substr(0, 5) === "/file") {
+            url = url.substr(5);
+        }
+        dropbox.readFile(url, { "buffer": true }, function(err, data) {
             if (err) {
                 console.log(err);
                 return null;
@@ -141,7 +144,10 @@ var ApplicationController = function(credentials) {
             FB.setAccessToken(req.session.facebook.access_token);
             FB.api("me/photos", "post", {
                 "message": "Test post, please ignore",
-                "url": "http://flashbulb.herokuapp.com" + req.session.share.url
+                //"url": "http://127.0.0.1:3000" + req.session.share.url
+                "source": loadFile(req.session.share.url),
+                "fileUpload": true,
+                "enctype": "multipart/form-data"
             }, function(res) {
                 if (!res || res.error) {
                     console.log(!res ? "fb upload error!" : res.error);
