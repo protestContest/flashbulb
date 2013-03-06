@@ -1,9 +1,5 @@
 extends base-user
 
-block head
-  link(rel="stylesheet", href="/stylesheets/user.css")
-  script(src="/javascripts/user.js")
-
 block toolbar
   .toolbar.navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
@@ -15,6 +11,7 @@ block toolbar
 
 block dropdowns
   .span12#share.dropdown
+    #irc_pc
     .row
       .span3.thumb.offset1
         img#share-image(src="", alt="Share Image")

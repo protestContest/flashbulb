@@ -7,10 +7,12 @@ $(document).ready(function() {
 
     $(".icon-share").click(function(evt) {
 
-        var img, imgTitle, imgPath, imgRowHead, imgRowHeadIndex, shareDropdown, that;
         that = $(this);
 
         $("#share.dropdown").slideUp("fast", function() {
+            var img, imgTitle, imgPath, imgRowTail, imgRowTailIndex, shareDropdown,
+                imgIndex, ircpcOffset;
+
             // remove dropdown
             shareDropdown = $(this).remove();
             // image clicked
@@ -18,15 +20,19 @@ $(document).ready(function() {
             imgPath = img.attr("src");
             imgTitle = img.attr("alt");
             // find the image at the beginning of this row
-            imgRowHeadIndex = Math.floor($(".thumb").index(that.closest(".thumb")) / 4) * 4;
-            imgRowHead = that.closest(".row").children()[imgRowHeadIndex];
+            imgIndex = $(".thumb").index(that.closest(".thumb"));
+            imgRowTailIndex = Math.ceil((imgIndex + 1) / 4) * 4 - 1;
+            imgIndexInRow = imgIndex - (imgRowTailIndex - 3);
+            imgRowTail = that.closest(".row").children()[imgRowTailIndex];
+            ircpcOffset = 240 * imgIndexInRow + 100;
 
-            // put dropdown before row's first image
-            shareDropdown.insertBefore(imgRowHead);
+            // put dropdown after row's last image
+            shareDropdown.insertAfter(imgRowTail);
             // edit dropdown content
             $("#share-image").attr("src", imgPath);
             $("#share-image-title").html(imgTitle);
             $("#share-link").attr("href", "/share" + imgPath);
+            $("#irc_pc").css("left", ircpcOffset + "px");
             // show dropdown
             shareDropdown.slideDown("fast");
 
