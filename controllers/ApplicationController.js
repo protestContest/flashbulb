@@ -22,11 +22,13 @@ var ApplicationController = function(credentials) {
     this.allFiles = function(req, res) {
         if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
-                res.render("user/all", {
+                var data = {
                     title: "All Pictures",
                     user: req.user,
-                    files: files
-                });
+                    files: files,
+                    access_token: req.session.facebookToken
+                };
+                res.render("user/all", data);
             });
         } else {
             res.render("home");
@@ -67,6 +69,7 @@ var ApplicationController = function(credentials) {
     };
 
     this.fbAuthenticate = function(req, token, tokenSecret, profile, done) {
+        req.session.facebookToken = token;
         req.session.facebook = { };
         req.session.facebook.id = profile.id;
         req.session.facebook.access_token = token;
