@@ -6,7 +6,8 @@ var mongoose = require("mongoose")
 var UserSchema = new Schema(  {
     email: {type:String, unique:true},
     name: String,
-    dropboxId: String
+    dropboxId: String,
+    albums: [String]
 });
 
 
@@ -31,6 +32,7 @@ UserSchema.static("findOrCreate", function(query, userInfo, callback)  {
         }
     });
 });
+
 
 mongoose.model('User', UserSchema);
 var User = mongoose.model('User');
