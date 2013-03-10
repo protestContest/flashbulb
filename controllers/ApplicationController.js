@@ -191,15 +191,20 @@ var ApplicationController = function(credentials) {
         }
     };
 
-    this.shareFile = function(req, res) {
-        if (req.account) {
-            // already auth'd with Facebook
-            res.redirect(req.session.share.returnURL);
-        } else {
-            // need Facebook auth
-            req.session.share = req.body;
-            res.send({ redirect: "/auth/facebook" });
+    this.getPublicUrl = function(req, res) {
+        if (req.params.path.substr(0, 5) === "/file") {
+            req.params.path = req.params.path.substr(5);
         }
+        dropbox.makeUrl(req.params.path, { 
+            "download": true,
+            "downloadHack": true
+        }, function(err, url) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(url);
+            }
+        });
     };
 
 }

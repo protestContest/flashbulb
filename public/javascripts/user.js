@@ -33,8 +33,8 @@ $(document).ready(function() {
             $("#share-image").attr("src", imgPath);
             $("#share-image-title").html(imgTitle);
             imgPath = imgPath.replace(/ /g, "%20");
+
             // TODO: make this point to public dropbox url
-            //$("#fbSource").attr("value", "@http://flashbulb.herokuapp.com" + imgPath);
 
             $("#irc_pc").css("left", ircpcOffset + "px");
 
@@ -42,17 +42,43 @@ $(document).ready(function() {
             shareDropdown.slideDown("fast");
 
             // scroll window
-            console.log($(that).offset().top);
             if (img.offset().top + 490 > $(window).scrollTop() + $(window).height()) {
                 $("html, body").animate({
                     scrollTop: img.offset().top - ($(window).height() - 490)
                 });
             }
 
-
             // register close button
             $(".close").click(function() {
                 $(".dropdown").slideUp();
+            });
+
+            // facebook upload sumbit
+            $("#fb-submit").click(function(evt) {
+                evt.preventDefault();
+
+                console.log("Posting to Facebook..");
+
+                $.get("/public" + imgPath, function(publicUrl, status) {
+                    var formData = new FormData();
+                    formData.append("url", publicUrl.url);
+                    formData.append("message", $("#share-desc").val());
+
+                    $.ajax({
+                        "url": $("#shareform").attr("action"),
+                        "data": formData,
+                        "cache": false,
+                        "contentType": false,
+                        "processData": false,
+                        "type": "POST",
+                        "success": function(data) {
+                            console.log("POST SUCCESSFUL");
+                        }
+                    });
+
+                    $("#fbSource").attr("value", "@" + publicUrl.url);
+                }, "json");
+
             });
 
 

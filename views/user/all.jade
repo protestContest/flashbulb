@@ -21,9 +21,8 @@ block dropdowns
           form#shareform(action="https://graph.facebook.com/me/photos?access_token=" + access_token,
                          enctype="multipart/formdata", method="post")
             input#fbSource(type="hidden", name="url")
-            input(type="hidden", name="upload file", value="true")
             textarea#share-desc(name="message") Test post, please ignore
-            input(type="submit", value="Share on Facebook")
+            input#fb-submit.btn(type="submit", value="Share on Facebook")
 
         else
           a(href="/auth/facebook") Login to Facebook to share

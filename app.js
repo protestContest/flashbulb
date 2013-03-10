@@ -121,7 +121,7 @@ app.get("/logout", ac.logout);
 
 app.get("/file/:path", [ac.auth], ac.getFile);
 app.get("/edit/:path", [ac.auth], ac.editFile);
-app.post("/share/file/:path", [ac.auth], ac.shareFile);
+app.get("/public/file/:path", [ac.auth], ac.getPublicUrl);
 
 app.get("/settings", [ac.auth], uc.settings);
 
