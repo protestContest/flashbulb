@@ -43,9 +43,9 @@ $(document).ready(function() {
 
             // scroll window
             console.log($(that).offset().top);
-            if ($(that).offset().top + 490 > $(window).scrollTop() + $(window).height()) {
+            if (img.offset().top + 490 > $(window).scrollTop() + $(window).height()) {
                 $("html, body").animate({
-                    scrollTop: $(that).offset().top - ($(window).height() - 490)
+                    scrollTop: img.offset().top - ($(window).height() - 490)
                 });
             }
 
