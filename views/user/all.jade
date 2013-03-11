@@ -22,7 +22,7 @@ block dropdowns
                          enctype="multipart/formdata", method="post")
             input#fbSource(type="hidden", name="url")
             textarea#share-desc(name="message") Test post, please ignore
-            input#fb-submit.btn(type="submit", value="Share on Facebook")
+            button#fb-submit.btn Share on Facebook
 
         else
           a(href="/auth/facebook") Login to Facebook to share

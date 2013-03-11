@@ -1,6 +1,15 @@
 extends base-layout
 
+block head
+  link(rel="stylesheet", href="/stylesheets/home.css")
+
 block content
-    h1 Flashbulb :/
-    a(href="/auth/dropbox")
-      button Sign in with Dropbox!
+  .container
+    .hero-unit
+      .row
+        .span5.well
+          h1 Flashbulb
+          p Fo shizzle ipsum dolizzle gangsta daahng dawg, consectetizzle adipiscing
+            | shiz. Nullizzle uhuh ... yih! velizzle, ma nizzle volutpizzle, suscipizzle
+            | quis, hizzle vizzle, arcu. Pellentesque my shizz tortor. Sizzle eros. Fusce
+          p: a.btn.btn-large(href="/auth/dropbox") Sign in with Dropbox
