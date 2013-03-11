@@ -30,8 +30,10 @@ var ApplicationController = function(credentials) {
                     access_token: req.session.facebookToken
                 };
                 res.render("user/base-user", data, function(err, baseHtml) {
-                    res.render("user/all", data, function(err, html) {
-                        res.send(baseHtml + html);
+                    res.render("user/all-toolbar", data, function(err, toolbarHtml) {
+                        res.render("user/all", data, function(err, html) {
+                            res.send(baseHtml + toolbarHtml + html);
+                        });
                     });
                 });
             });
@@ -73,7 +75,6 @@ var ApplicationController = function(credentials) {
                 ret.content = html;
 
                 res.render("user/albums-toolbar", data, function(err, html) {
-                    console.log(html);
                     ret.toolbar = html;
 
                     res.send(ret);

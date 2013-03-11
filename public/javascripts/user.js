@@ -1,4 +1,4 @@
-$(document).ready(function() {
+var init = function() {
 
     $('.thumb').hover(function() {
         $(this).children('.thumbinfo').slideToggle("fast");
@@ -109,11 +109,27 @@ $(document).ready(function() {
         });
     });
 
-});
+};
 
 window.onpopstate = function(evt) {
     $(".main.container").hide();
-    $(".main.container").replaceWith(evt.state.content);
-    $(".toolbar").replaceWith(evt.state.toolbar);
-    $(".main.container").fadeIn("fast");
+
+    if (evt.state === null) {
+        $("*").css("cursor", "wait");
+        $.getJSON("/all", function(state) {
+            $("*").css("cursor", "");
+            $(".main.container").replaceWith(state.content);
+            $(".toolbar").replaceWith(state.toolbar);
+            $(".main.container").fadeIn("fast");
+            init();
+        });
+    } else {
+        $(".main.container").replaceWith(evt.state.content);
+        $(".toolbar").replaceWith(evt.state.toolbar);
+        $(".main.container").fadeIn("fast");
+        init();
+    }
+
 };
+
+$(document).ready(init);
