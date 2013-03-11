@@ -95,7 +95,7 @@ var init = function() {
 
     $("#albums").click(function() {
         $("*").css("cursor", "wait");
-        $.getJSON("/albums", function(state) {
+        $.getJSON("/albums.json", function(state) {
             $(".main.container").fadeOut("fast", function() {
                 window.history.pushState(state, "Albums", "/albums");
                 $("*").css("cursor", "");
@@ -109,7 +109,7 @@ var init = function() {
 
     $("#all").click(function() {
         $("*").css("cursor", "wait");
-        $.getJSON("/all", function(state) {
+        $.getJSON("/all.json", function(state) {
             $(".main.container").fadeOut("fast", function() {
                 window.history.pushState(state, "All Pictures", "/all");
                 $("*").css("cursor", "");
@@ -128,7 +128,7 @@ window.onpopstate = function(evt) {
 
     if (evt.state === null) {
         $("*").css("cursor", "wait");
-        $("html, body").css("height", "100%");
+        $("html, body").css("min-height", $(window).height());
         $.getJSON("/all", function(state) {
             $("*").css("cursor", "");
             $("html, body").css("height", "");

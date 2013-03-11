@@ -22,6 +22,14 @@ var ApplicationController = function(credentials) {
 
     this.index = function(req, res) {
         if (req.isAuthenticated()) {
+            res.redirect("/all");
+        } else {
+            res.render("home");
+        }
+    };
+
+    this.all = function(req, res) {
+        if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
                 var data = {
                     title: "All Pictures",
@@ -38,11 +46,33 @@ var ApplicationController = function(credentials) {
                 });
             });
         } else {
-            res.render("home");
+            res.redirect("/");
         }
     };
 
-    this.allFiles = function(req, res) {
+    this.albums = function(req, res) {
+        if (req.isAuthenticated()) {
+            dropbox.readdir("/", function(err, files) {
+                var data = {
+                    title: "Albums",
+                    user: req.user,
+                    files: files,
+                    access_token: req.session.facebookToken
+                };
+                res.render("user/base-user", data, function(err, baseHtml) {
+                    res.render("user/albums-toolbar", data, function(err, toolbarHtml) {
+                        res.render("user/albums", data, function(err, html) {
+                            res.send(baseHtml + toolbarHtml + html);
+                        });
+                    });
+                });
+            });
+        } else {
+            res.redirect("/");
+        }
+    };
+
+    this.allJson = function(req, res) {
         dropbox.readdir("/", function(err, files) {
             var data = {
                 title: "All Pictures",
@@ -63,7 +93,7 @@ var ApplicationController = function(credentials) {
         });
     };
 
-    this.albums = function(req, res) {
+    this.albumsJson = function(req, res) {
         dropbox.readdir("/", function(err, files) {
             var data = {
                 title: "Albums",

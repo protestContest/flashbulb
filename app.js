@@ -104,8 +104,10 @@ passport.deserializeUser(function(obj, done) {
 
 // Routes
 app.get("/", ac.index);
-app.get("/all", [ac.auth], ac.allFiles);
-app.get("/albums", [ac.auth], ac.albums);
+app.get("/all", ac.all);
+app.get("/albums", ac.albums);
+app.get("/all.json", [ac.auth], ac.allJson);
+app.get("/albums.json", [ac.auth], ac.albumsJson);
 
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
