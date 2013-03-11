@@ -98,13 +98,27 @@ var init = function() {
     $("#albums").click(function() {
         $("*").css("cursor", "wait");
         $.getJSON("/albums", function(state) {
-            console.log(state.toolbar);
             $(".main.container").fadeOut("fast", function() {
                 window.history.pushState(state, "Albums", "/albums");
                 $("*").css("cursor", "");
                 $(this).replaceWith(state.content);
                 $(".toolbar").replaceWith(state.toolbar);
-                $(this).fadeIn("fast");
+                $(".main.container").hide().fadeIn("fast");
+                init();
+            });
+        });
+    });
+
+    $("#all").click(function() {
+        $("*").css("cursor", "wait");
+        $.getJSON("/all", function(state) {
+            $(".main.container").fadeOut("fast", function() {
+                window.history.pushState(state, "All Pictures", "/all");
+                $("*").css("cursor", "");
+                $(this).replaceWith(state.content);
+                $(".toolbar").replaceWith(state.toolbar);
+                $(".main.container").hide().fadeIn("fast");
+                init();
             });
         });
     });
@@ -116,8 +130,11 @@ window.onpopstate = function(evt) {
 
     if (evt.state === null) {
         $("*").css("cursor", "wait");
+        $("html, body").css("height", "100%");
         $.getJSON("/all", function(state) {
             $("*").css("cursor", "");
+            $("html, body").css("height", "");
+
             $(".main.container").replaceWith(state.content);
             $(".toolbar").replaceWith(state.toolbar);
             $(".main.container").fadeIn("fast");
