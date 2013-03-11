@@ -1,7 +1,8 @@
 var Dropbox = require("dropbox")
   , crypto = require("crypto")
   , https = require("https")
-  , FB = require("fb");
+  , FB = require("fb")
+  , jade = require("jade")
   ;
 
 var ApplicationController = function(credentials) {
@@ -19,7 +20,7 @@ var ApplicationController = function(credentials) {
         sandbox: true
     });
 
-    this.allFiles = function(req, res) {
+    this.index = function(req, res) {
         if (req.isAuthenticated()) {
             dropbox.readdir("/", function(err, files) {
                 var data = {
@@ -28,19 +29,55 @@ var ApplicationController = function(credentials) {
                     files: files,
                     access_token: req.session.facebookToken
                 };
-                res.render("user/all", data);
+                res.render("user/base-user", data, function(err, baseHtml) {
+                    res.render("user/all", data, function(err, html) {
+                        res.send(baseHtml + html);
+                    });
+                });
             });
         } else {
             res.render("home");
         }
     };
 
+    this.allFiles = function(req, res) {
+        dropbox.readdir("/", function(err, files) {
+            var data = {
+                title: "All Pictures",
+                user: req.user,
+                files: files,
+                access_token: req.session.facebookToken
+            };
+            res.render("user/all", data, function(err, html) {
+                var ret = { };
+                ret.content = html;
+
+                res.render("user/all-toolbar", data, function(err, html) {
+                    ret.toolbar = html;
+
+                    res.send(ret);
+                });
+            });
+        });
+    };
+
     this.albums = function(req, res) {
         dropbox.readdir("/", function(err, files) {
-            res.render("user/albums", {
+            var data = {
                 title: "Albums",
                 user: req.user,
                 files: files
+            };
+            res.render("user/albums", data, function(err, html) {
+                var ret = { };
+                ret.content = html;
+
+                res.render("user/albums-toolbar", data, function(err, html) {
+                    console.log(html);
+                    ret.toolbar = html;
+
+                    res.send(ret);
+                });
             });
         });
     };

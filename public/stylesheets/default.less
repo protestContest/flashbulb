@@ -64,9 +64,21 @@ a.logo:hover {
     font-size: 22px;
 }
 
-.toolbar.navbar-inverse .container .nav>li.active {
+.toolbar.navbar-inverse .container .nav>li {
     padding-bottom: 10px;
     padding-top: 10px;
+    padding-right: 15px;
+    color: #999;
+    cursor: pointer;
+}
+
+.toolbar.navbar-inverse .container .nav>li:hover {
+    color: @white;
+}
+
+.toolbar.navbar-inverse .container .nav>li.active {
+    color: @white;
+    cursor: auto;
 }
 
 .toolbar.navbar-fixed-top {

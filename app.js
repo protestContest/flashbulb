@@ -103,7 +103,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 // Routes
-app.get("/", ac.allFiles);
+app.get("/", ac.index);
 app.get("/all", [ac.auth], ac.allFiles);
 app.get("/albums", [ac.auth], ac.albums);
 

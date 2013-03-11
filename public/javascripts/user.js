@@ -91,5 +91,29 @@ $(document).ready(function() {
         $(".toolbar.navbar-fixed-top").css("top",Math.max(0,52-$(this).scrollTop()));
     });
 
+
+
+
+
+    $("#albums").click(function() {
+        $("*").css("cursor", "wait");
+        $.getJSON("/albums", function(state) {
+            console.log(state.toolbar);
+            $(".main.container").fadeOut("fast", function() {
+                window.history.pushState(state, "Albums", "/albums");
+                $("*").css("cursor", "");
+                $(this).replaceWith(state.content);
+                $(".toolbar").replaceWith(state.toolbar);
+                $(this).fadeIn("fast");
+            });
+        });
+    });
+
 });
 
+window.onpopstate = function(evt) {
+    $(".main.container").hide();
+    $(".main.container").replaceWith(evt.state.content);
+    $(".toolbar").replaceWith(evt.state.toolbar);
+    $(".main.container").fadeIn("fast");
+};
