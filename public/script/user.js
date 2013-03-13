@@ -1,3 +1,8 @@
+/**
+ * hidden sharing bar
+ * display your secrets to me
+ * so I may be seen
+ */
 function showDropdown() {
     var img, imgTitle, imgPath, imgRowTail, imgRowTailIndex, shareDropdown,
         imgIndex, ircpcOffset;
@@ -128,6 +133,7 @@ var init = function() {
     $("a.edit").click(function(evt) {
         var href = $(this).attr("href"),
             loadTimeout;
+
         evt.preventDefault();
 
         $("*").css("cursor", "wait");
@@ -149,7 +155,7 @@ var init = function() {
     var abortLoadPage = function() {
         xhr.abort();
         $("*").css("cursor", "");
-        alert("Page load timeout");
+        //alert("Page load timeout");
     };
 
 };

@@ -19,9 +19,18 @@ app.configure(function() {
     app.set("view engine", "jade");
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(require('less-middleware')({
-      'src': __dirname + '/public' ,
-      'compress': false
+    app.use(require("less-middleware")({
+        "prefix": "/style",
+        "src": __dirname + "/public/style/src" ,
+        "dest": __dirname + "/public/style",
+        "compress": false
+    }));
+    app.use(require("js-middleware")({
+        "root": __dirname + "/public",
+        "src": "js/src",
+        "dst": "js",
+        "suffix": "js",
+        "minify": false
     }));
     app.use(express.static(__dirname + "/public"));
     app.use(express.cookieParser());
