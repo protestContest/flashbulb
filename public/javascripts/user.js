@@ -25,8 +25,6 @@ function showDropdown() {
     $("#fb-submit").html("Share on Facebook");
     imgPath = imgPath.replace(/ /g, "%20");
 
-    // TODO: make this point to public dropbox url
-
     $("#irc_pc").css("left", ircpcOffset + "px");
 
     // show dropdown
@@ -75,6 +73,7 @@ function showDropdown() {
 }
 
 var init = function() {
+    var xhr;
 
     $('.thumb').hover(function() {
         $(this).children('.thumbinfo').slideToggle("fast");
@@ -95,7 +94,9 @@ var init = function() {
 
     $("#albums").click(function() {
         $("*").css("cursor", "wait");
-        $.getJSON("/albums.json", function(state) {
+        var loadTimeout = setTimeout(abortLoadPage, 10000);
+        xhr = $.getJSON("/albums.json", function(state) {
+            window.clearTimeout(loadTimeout);
             $(".main.container").fadeOut("fast", function() {
                 window.history.pushState(state, "Albums", "/albums");
                 $("*").css("cursor", "");
@@ -105,11 +106,14 @@ var init = function() {
                 init();
             });
         });
+        setTimeout(abortLoadPage, 10000);
     });
 
     $("#all").click(function() {
         $("*").css("cursor", "wait");
-        $.getJSON("/all.json", function(state) {
+        var loadTimeout = setTimeout(abortLoadPage, 10000);
+        xhr = $.getJSON("/all.json", function(state) {
+            window.clearTimeout(loadTimeout);
             $(".main.container").fadeOut("fast", function() {
                 window.history.pushState(state, "All Pictures", "/all");
                 $("*").css("cursor", "");
@@ -120,6 +124,33 @@ var init = function() {
             });
         });
     });
+
+    $("a.edit").click(function(evt) {
+        var href = $(this).attr("href"),
+            loadTimeout;
+        evt.preventDefault();
+
+        $("*").css("cursor", "wait");
+        loadTimeout = setTimeout(abortLoadPage, 10000);
+        xhr = $.getJSON(href, function(state) {
+            window.clearTimeout(loadTimeout);
+            $(".main.container").fadeOut("fast", function() {
+                window.history.pushState(state, "Edit", href);
+                $("*").css("cursor", "");
+                $(this).replaceWith(state.content);
+                $(".toolbar").replaceWith(state.toolbar);
+                $(".main.container").hide().fadeIn("fast");
+                init();
+            });
+        });
+    });
+
+
+    var abortLoadPage = function() {
+        xhr.abort();
+        $("*").css("cursor", "");
+        alert("Page load timeout");
+    };
 
 };
 
