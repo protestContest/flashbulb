@@ -27,10 +27,11 @@ app.configure(function() {
     }));
     app.use(require("js-middleware")({
         "root": __dirname + "/public",
-        "src": "js/src",
-        "dst": "js",
-        "suffix": "js",
-        "minify": false
+        "src": "script/src",
+        "dst": "script",
+        "suffix": ".js",
+        "minify": false,
+        "force": true
     }));
     app.use(express.static(__dirname + "/public"));
     app.use(express.cookieParser());
