@@ -6,6 +6,12 @@
  */
 function Toolbar(page, html) {
     var links = html.find(".toolbar-link");
+
+    if(!Array.isArray(links)) {
+        var oldLinks = links;
+        links = [];
+        links[0] = oldLinks;
+    }
     
     /**
      * Binds events
@@ -18,7 +24,7 @@ function Toolbar(page, html) {
         links.forEach(function(link) {
             var that = this;
 
-            $(this).click(function() {
+            link.click(function() {
                 var href = that.attr("data-href");
 
                 page.loadPage(href);

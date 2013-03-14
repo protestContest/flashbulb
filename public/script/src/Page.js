@@ -1,4 +1,5 @@
 // js_middleware_import script/src/Toolbar.js
+// js_middleware_import script/src/Gallery.js
 
 /**
  * Manages the current contents of the page
@@ -10,8 +11,13 @@
 function Page(toolbarRef, contentRef) {
     var self = this,
         toolbar = new Toolbar(this, toolbarRef),
-        //content = new Content(this, contentRef);
         content = { };
+
+    if (contentRef.attr("data-type") === "gallery") {
+        content = new Gallery(this, contentRef);
+    } else if (contentRef.attr("data-type") === "editor") {
+        content = new Editor(this, contentRef);
+    }
 
     /**
      * Binds events

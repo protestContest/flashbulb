@@ -10,6 +10,12 @@
  */
 function Toolbar(page, html) {
     var links = html.find(".toolbar-link");
+
+    if(!Array.isArray(links)) {
+        var oldLinks = links;
+        links = [];
+        links[0] = oldLinks;
+    }
     
     /**
      * Binds events
@@ -40,6 +46,53 @@ function Toolbar(page, html) {
 
 };
 
+
+// included: script/src/Gallery.js
+
+// included: script/src/Content.js
+/**
+ * Manages a content jQuery object of type gallery
+ * @constructor
+ * @param {Page} page that controls this gallery
+ * @param {object} jQuery object this controls
+ */
+
+Content = {
+    html: {},
+    page: {},
+
+    testFunc: function() {
+        console.log("Content test");
+    },
+
+    update: function(newContent) {
+        html.fadeOut("fast", function() {
+            html.replaceWith(newContent);
+            html.fadeIn("fast");
+        });
+    }
+};
+
+/**
+ * Manages a content jQuery object of type gallery
+ * @constructor
+ * @param {Page} page that controls this gallery
+ * @param {object} jQuery object this controls
+ */
+Gallery.prototype = Content;
+Gallery.prototype.constructor = Gallery;
+function Gallery(page, html) {
+    /**
+     * Binds events
+     */
+    this.init = function() {
+        $(".thumb").hover(function() {
+            $(this).children(".thumbinfo").slideToggle("fast");
+            $(this).find(".overlay-buttons").toggle();
+        });
+    };
+};
+
 /**
  * Manages the current contents of the page
  *
@@ -50,8 +103,13 @@ function Toolbar(page, html) {
 function Page(toolbarRef, contentRef) {
     var self = this,
         toolbar = new Toolbar(this, toolbarRef),
-        //content = new Content(this, contentRef);
         content = { };
+
+    if (contentRef.attr("data-type") === "gallery") {
+        content = new Gallery(this, contentRef);
+    } else if (contentRef.attr("data-type") === "editor") {
+        content = new Editor(this, contentRef);
+    }
 
     /**
      * Binds events
@@ -109,6 +167,7 @@ function Page(toolbarRef, contentRef) {
 };
 
 $(document).ready(function() {
+    console.log("Creating page");
     window.page = new Page($("#toolbar"), $("#content"));
     page.init();
     page.showMessage("Welcome!", 2000);
