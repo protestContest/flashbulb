@@ -28,10 +28,10 @@ function Toolbar(page, html) {
         links.forEach(function(link) {
             var that = this;
 
-            $(this).click(function() {
-                var href = that.attr("data-href");
+            link.click(function() {
+                var href = link.attr("data-href");
 
-                page.loadPage(href);
+                page.load(href);
             });
         });
     };
@@ -41,7 +41,11 @@ function Toolbar(page, html) {
      * @param {string} new value for message
      */
     this.updateMessage = function(message) {
-        html.find("#messages").html(message);
+        html.find("#messages").fadeOut().html(message).fadeIn();
+    };
+
+    this.update = function(newToolbar) {
+        html.replaceWith(newToolbar);
     };
 
 };
@@ -66,6 +70,7 @@ Content = {
     },
 
     update: function(newContent) {
+        var html = this.html;
         html.fadeOut("fast", function() {
             html.replaceWith(newContent);
             html.fadeIn("fast");
@@ -82,6 +87,9 @@ Content = {
 Gallery.prototype = Content;
 Gallery.prototype.constructor = Gallery;
 function Gallery(page, html) {
+    this.html = html;
+    this.page = page;
+
     /**
      * Binds events
      */
@@ -133,9 +141,10 @@ function Page(toolbarRef, contentRef) {
      */
     this.load = function(url) {
         $("*").css("cursor", "wait");
-        $.getJSON(url, function(newPage) {
+        $.getJSON(url + ".json", function(newPage) {
+            window.history.pushState(newPage, url, url);
             $("*").css("cursor", "");
-            self.updatePage(newPage);
+            self.update(newPage);
         });
     };
 

@@ -9,6 +9,9 @@
 Gallery.prototype = Content;
 Gallery.prototype.constructor = Gallery;
 function Gallery(page, html) {
+    this.html = html;
+    this.page = page;
+
     /**
      * Binds events
      */

@@ -25,9 +25,9 @@ function Toolbar(page, html) {
             var that = this;
 
             link.click(function() {
-                var href = that.attr("data-href");
+                var href = link.attr("data-href");
 
-                page.loadPage(href);
+                page.load(href);
             });
         });
     };
@@ -37,7 +37,11 @@ function Toolbar(page, html) {
      * @param {string} new value for message
      */
     this.updateMessage = function(message) {
-        html.find("#messages").html(message);
+        html.find("#messages").fadeOut().html(message).fadeIn();
+    };
+
+    this.update = function(newToolbar) {
+        html.replaceWith(newToolbar);
     };
 
 };

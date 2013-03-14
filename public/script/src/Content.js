@@ -14,6 +14,7 @@ Content = {
     },
 
     update: function(newContent) {
+        var html = this.html;
         html.fadeOut("fast", function() {
             html.replaceWith(newContent);
             html.fadeIn("fast");

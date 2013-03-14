@@ -41,9 +41,10 @@ function Page(toolbarRef, contentRef) {
      */
     this.load = function(url) {
         $("*").css("cursor", "wait");
-        $.getJSON(url, function(newPage) {
+        $.getJSON(url + ".json", function(newPage) {
+            window.history.pushState(newPage, url, url);
             $("*").css("cursor", "");
-            self.updatePage(newPage);
+            self.update(newPage);
         });
     };
 
