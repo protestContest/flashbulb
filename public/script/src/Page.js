@@ -1,5 +1,5 @@
 // js_middleware_import script/src/Toolbar.js
-// js_middleware_import script/src/Gallery.js
+// js_middleware_import script/src/Content.js
 
 /**
  * Manages the current contents of the page
