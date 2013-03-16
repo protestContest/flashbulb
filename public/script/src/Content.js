@@ -1,8 +1,8 @@
 function Content (page, html) {
-    this.html = html;
-    this.page = page;
+    var self = this;
 
     this.init = function() {
+        console.log("Initializing content");
         $(".thumb").hover(function() {
             $(this).children(".thumbinfo").slideToggle("fast");
             $(this).find(".overlay-buttons").toggle();
@@ -18,6 +18,7 @@ function Content (page, html) {
             html.replaceWith(newContent);
             html = $(html.selector);
             html.fadeIn("fast");
+            self.init();
         });
     };
 }
