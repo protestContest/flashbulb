@@ -11,13 +11,7 @@
 function Page(toolbarRef, contentRef) {
     var self = this,
         toolbar = new Toolbar(this, toolbarRef),
-        content = { };
-
-    if (contentRef.attr("data-type") === "gallery") {
-        content = new Gallery(this, contentRef);
-    } else if (contentRef.attr("data-type") === "editor") {
-        content = new Editor(this, contentRef);
-    }
+        content = new Content(this, contentRef);
 
     /**
      * Binds events
@@ -28,7 +22,7 @@ function Page(toolbarRef, contentRef) {
 
         window.onpopstate = function(evt) {
             if (evt.state === null) {
-                self.load("/all.json");
+                self.load("/all");
             } else {
                 self.update(evt.state);
             }
