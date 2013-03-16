@@ -37,11 +37,14 @@ function Toolbar(page, html) {
      * @param {string} new value for message
      */
     this.updateMessage = function(message) {
-        html.find("#messages").fadeOut().html(message).fadeIn();
+        html.find("#messages").fadeOut(function() {
+           $(this).html(message).fadeIn(); 
+        });
     };
 
     this.update = function(newToolbar) {
         html.replaceWith(newToolbar);
+        html = $(html.selector);
     };
 
 };
