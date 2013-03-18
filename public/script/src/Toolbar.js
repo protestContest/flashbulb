@@ -5,13 +5,7 @@
  * @param {object} jQuery object this controls
  */
 function Toolbar(page, html) {
-    var links = html.find(".toolbar-link");
-
-    if(!Array.isArray(links)) {
-        var oldLinks = links;
-        links = [];
-        links[0] = oldLinks;
-    }
+    var self = this;
     
     /**
      * Binds events
@@ -21,11 +15,10 @@ function Toolbar(page, html) {
             html.css("top", Math.max(0, 52 - $(window).scrollTop()));
         });
 
-        links.forEach(function(link) {
-            var that = this;
-
-            link.click(function() {
-                var href = link.attr("data-href");
+        html.find(".toolbar-link").each(function(i, link) {
+            $(this).click(function() {
+                var href = $(link).attr("data-href");
+                console.log("Clicked " + href + " !!!");
 
                 page.load(href);
             });
@@ -45,6 +38,7 @@ function Toolbar(page, html) {
     this.update = function(newToolbar) {
         html.replaceWith(newToolbar);
         html = $(html.selector);
+        self.init();
     };
 
 };
