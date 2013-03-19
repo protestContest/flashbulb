@@ -15,10 +15,10 @@ function Toolbar(page, html) {
             html.css("top", Math.max(0, 52 - $(window).scrollTop()));
         });
 
+        // TODO: make this only bind once
         html.find(".toolbar-link").each(function(i, link) {
             $(this).click(function() {
                 var href = $(link).attr("data-href");
-                console.log("Clicked " + href + " !!!");
 
                 page.load(href);
             });

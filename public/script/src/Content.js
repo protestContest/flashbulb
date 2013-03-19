@@ -2,7 +2,6 @@ function Content (page, html) {
     var self = this;
 
     this.init = function() {
-        console.log("Initializing content");
         $(".thumb").hover(function() {
             $(this).children(".thumbinfo").slideToggle("fast");
             $(this).find(".overlay-buttons").toggle();
