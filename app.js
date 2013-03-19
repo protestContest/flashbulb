@@ -25,14 +25,6 @@ app.configure(function() {
         "dest": __dirname + "/public/style",
         "compress": false
     }));
-    app.use(require("js-middleware")({
-        "root": __dirname + "/public",
-        "src": "script/src",
-        "dst": "script",
-        "suffix": ".js",
-        "minify": false,
-        "force": true
-    }));
     app.use(express.static(__dirname + "/public"));
     app.use(express.cookieParser());
 });
@@ -89,21 +81,23 @@ console.log("Express server listening on port %d", port);
 mongoose.connect(mongoServer);
 
 // Controllers
-ac = require("./controllers/ApplicationController")(credentials);
-uc = require("./controllers/UserController")(credentials);
+appCon = require("./controllers/ApplicationController")(credentials);
+userCon = require("./controllers/UserController")();
+albumCon = require("./controllers/AlbumController")();
+photoCon = require("./controllers/PhotoController")();
 
 // configure passport
 passport.use(new DropboxStrategy({
     consumerKey: credentials.dropbox.appkey,
     consumerSecret: credentials.dropbox.secret,
     callbackURL: hostname + "/auth/dropbox/success"
-}, ac.dbAuthenticate));
+}, appCon.dbAuthenticate));
 passport.use(new FacebookStrategy({
     clientID: credentials.facebook.clientId,
     clientSecret: credentials.facebook.secret,
     callbackURL: hostname + "/auth/facebook/success",
     passReqToCallback: true
-}, ac.fbAuthenticate));
+}, appCon.fbAuthenticate));
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -112,24 +106,50 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
-// Routes
-app.get("/", ac.index);
-app.get("/all", ac.all);
-app.get("/albums", ac.albums);
-app.get("/all.json", [ac.auth], ac.allJson);
-app.get("/albums.json", [ac.auth], ac.albumsJson);
+/* Routes */
 
+// app
+app.get("/", appCon.index);
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
-        ac.loginSuccess);
+        appCon.loginSuccess);
 app.get("/auth/facebook", passport.authorize("facebook", {
     scope: "publish_stream",
     failureRedirect: "/fail"
 }));
 app.get("/auth/facebook/success", passport.authorize("facebook", { 
     failureRedirect: "/fail"
-}), ac.fbUpload);
-app.get("/logout", ac.logout);
+}), appCon.fbUpload);
+app.get("/logout", appCon.logout);
+
+// user
+app.post("/user", userCon.create);
+app.put("/user/:id", userCon.update);
+app.delete("/user/:id", userCon.destroy);
+
+// album
+app.get("/album/:id", albumCon.view);
+app.post("/album", albumCon.create);
+app.put("/album/:id", albumCon.update);
+app.delete("/album/:id", albumCon.destroy);
+
+// photo
+app.get("/photo/:id", photoCon.view);
+app.post("/photo", photoCon.create);
+app.put("/album/:id", photoCon.update);
+app.delete("/album/:id", albumCon.destroy);
+
+// shortcuts
+app.get("/all", albumCon.viewAll);
+
+
+/*
+app.get("/", ac.index);
+app.get("/all", ac.all);
+app.get("/albums", ac.albums);
+app.get("/all.json", [ac.auth], ac.allJson);
+app.get("/albums.json", [ac.auth], ac.albumsJson);
+
 
 app.get("/file/:path", [ac.auth], ac.getFile);
 app.get("/edit/:path", [ac.auth], ac.editFile);
@@ -138,3 +158,4 @@ app.get("/public/file/:path", [ac.auth], ac.getPublicUrl);
 app.get("/settings", [ac.auth], uc.settings);
 
 app.get("/dbtest", ac.dbTest);
+*/

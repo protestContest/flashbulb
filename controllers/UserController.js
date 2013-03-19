@@ -1,24 +1,20 @@
-var Dropbox = require("dropbox")
-  , crypto = require("crypto")
-  ;
-
-var UserController = function(credentials) {
-    var User
-      ;
+var UserController = function() {
+    var User = require("../models/User");
 
     if (!(this instanceof UserController)) {
-        return new UserController(credentials);
+        return new UserController();
     }
 
-    User = require("../models/User");
-    dropbox = new Dropbox.Client({
-        key: credentials.dropbox.appkey,
-        secret: credentials.dropbox.secret,
-        sandbox: true
-    });
+    this.create = function(req, res) {
+        res.send("Coming soon!");
+    };
 
-    this.settings = function(req, res) {
-        res.render("settings", {user: req.user});
+    this.update = function(req, res) {
+        res.send("Coming soon!");
+    };
+
+    this.destroy = function(req, res) {
+        res.send("Coming soon!");
     };
 }
 

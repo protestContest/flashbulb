@@ -28,100 +28,6 @@ var ApplicationController = function(credentials) {
         }
     };
 
-    this.all = function(req, res) {
-        if (req.isAuthenticated()) {
-            dropbox.readdir("/", function(err, files) {
-                var data = {
-                    title: "All Pictures",
-                    user: req.user,
-                    files: files,
-                    access_token: req.session.facebookToken
-                };
-                res.render("user/base-user", data, function(err, baseHtml) {
-                    res.render("user/all-toolbar", data, function(err, toolbarHtml) {
-                        res.render("user/all", data, function(err, html) {
-                            res.send(baseHtml + toolbarHtml + html);
-                        });
-                    });
-                });
-            });
-        } else {
-            res.redirect("/");
-        }
-    };
-
-    this.albums = function(req, res) {
-        if (req.isAuthenticated()) {
-            dropbox.readdir("/", function(err, files) {
-                var data = {
-                    title: "Albums",
-                    user: req.user,
-                    files: files,
-                    access_token: req.session.facebookToken
-                };
-                res.render("user/base-user", data, function(err, baseHtml) {
-                    res.render("user/albums-toolbar", data, function(err, toolbarHtml) {
-                        res.render("user/albums", data, function(err, html) {
-                            res.send(baseHtml + toolbarHtml + html);
-                        });
-                    });
-                });
-            });
-        } else {
-            res.redirect("/");
-        }
-    };
-
-    this.allJson = function(req, res) {
-        dropbox.readdir("/", function(err, files) {
-            var data = {
-                title: "All Pictures",
-                user: req.user,
-                files: files,
-                access_token: req.session.facebookToken
-            };
-            res.render("user/all", data, function(err, html) {
-                var ret = { };
-                ret.content = html;
-
-                res.render("user/all-toolbar", data, function(err, html) {
-                    ret.toolbar = html;
-
-                    res.send(ret);
-                });
-            });
-        });
-    };
-
-    this.albumsJson = function(req, res) {
-        dropbox.readdir("/", function(err, files) {
-            var data = {
-                title: "Albums",
-                user: req.user,
-                files: files
-            };
-            res.render("user/albums", data, function(err, html) {
-                var ret = { };
-                ret.content = html;
-
-                res.render("user/albums-toolbar", data, function(err, html) {
-                    ret.toolbar = html;
-
-                    res.send(ret);
-                });
-            });
-        });
-    };
-
-    this.auth = function(req, res, next) {
-        if (req.user) {
-            next();
-        } else {
-            res.redirect("/");
-        }
-
-    };
-
     this.dbAuthenticate = function(token, tokenSecret, profile, done) {
         dropbox.oauth.setToken(token, tokenSecret);
         dropbox.getUserInfo(function(err, userInfo) {
@@ -166,48 +72,6 @@ var ApplicationController = function(credentials) {
         });
     };
 
-    this.getFile = function(req, res) {
-        dropbox.readFile(req.params.path, {buffer: true}, function(err, data) {
-            if (err) {
-                console.log(err);
-                res.redirect("/auth/dropbox");
-            } else {
-                res.setHeader("Content-type", "image");
-                res.send(data);
-            }
-        });
-    }
-
-    this.editFile = function(req, res) {
-        dropbox.readFile(req.params.path, {buffer: true}, function(err, data) {
-            if (err) {
-                console.log(err);
-                res.redirect("/");
-            } else {
-                res.render("user/edit", {
-                    title: "Albums",
-                    user: req.user,
-                    editFile: data
-                });
-            }
-        });
-        res.redirect("/file/" + req.params.path);
-    };
-
-    function loadFile(url) {
-        if (url.substr(0, 5) === "/file") {
-            url = url.substr(5);
-        }
-        dropbox.readFile(url, { "buffer": true }, function(err, data) {
-            if (err) {
-                console.log(err);
-                return null;
-            } else {
-                return data;
-            }
-        });
-    }
-
     this.fbUpload = function(req, res) {
         if (req.account && req.session.share) {
 
@@ -215,8 +79,7 @@ var ApplicationController = function(credentials) {
             FB.setAccessToken(req.session.facebook.access_token);
             FB.api("me/photos", "post", {
                 "message": "Test post, please ignore",
-                //"url": "http://127.0.0.1:3000" + req.session.share.url
-                "source": loadFile(req.session.share.url),
+                "source": loadFile(req.session.share.url),  // get actual file here, in a buffer
                 "fileUpload": true,
                 "enctype": "multipart/form-data"
             }, function(res) {
@@ -225,54 +88,10 @@ var ApplicationController = function(credentials) {
                 }
             });
 
-            //var fbPost = https.request({
-            //    host: "graph.facebook.com",
-            //    port: 443,
-            //    path: "/" + req.session.facebook.id + "/photos?access_token=" + req.session.facebook.access_token,
-            //    method: "POST"
-            //}, function(res) {
-            //    res.setEncoding("utf-8");
-            //    var resString = "";
-
-            //    res.on("data", function(data) {
-            //        resString += data;
-            //    });
-
-            //    res.on("end", function() {
-            //        console.log(resString);
-            //    });
-            //});
-
-            //fbPost.on("error", function(err) {
-            //    console.log(err);
-            //});
-            //
-            //fbPost.write(JSON.stringify({
-            //    "message": req.session.share.desc,
-            //    "source": loadFile(url)
-            //}));
-            //fbPost.end();
-
             res.redirect(req.session.share.returnURL);
         } else {
             res.redirect("/");
         }
-    };
-
-    this.getPublicUrl = function(req, res) {
-        if (req.params.path.substr(0, 5) === "/file") {
-            req.params.path = req.params.path.substr(5);
-        }
-        dropbox.makeUrl(req.params.path, { 
-            "download": true,
-            "downloadHack": true
-        }, function(err, url) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(url);
-            }
-        });
     };
 
 }

@@ -1,13 +1,12 @@
-var mongoose = require("mongoose")
-  , crypto = require("crypto")
-  , Schema = mongoose.Schema
-  ;
+var mongoose = require("mongoose"), 
+    Schema = mongoose.Schema,
+    Album = require("./Album");
 
 var UserSchema = new Schema(  {
     email: {type:String, unique:true},
     name: String,
     dropboxId: String,
-    albums: [String]
+    albums: [Album]
 });
 
 
