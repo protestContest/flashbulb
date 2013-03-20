@@ -6,19 +6,25 @@ var Dropbox = require("dropbox")
   ;
 
 var ApplicationController = function(credentials) {
-    var User
-      ;
+    var User;
 
     if (!(this instanceof ApplicationController)) {
         return new ApplicationController(credentials);
     }
 
     User = require("../models/User");
-    dropbox = new Dropbox.Client({
-        key: credentials.dropbox.appkey,
-        secret: credentials.dropbox.secret,
-        sandbox: true
-    });
+
+    function createDropboxClient(token, tokenSecret) {
+        var dropbox = new Dropbox.Client({
+            key: credentials.dropbox.appkey,
+            secret: credentials.dropbox.secret,
+            sandbox: true
+        });
+
+        dropbox.oauth.setToken(token, tokenSecret);
+
+        return dropbox;
+    }
 
     this.index = function(req, res) {
         if (req.isAuthenticated()) {
@@ -28,13 +34,14 @@ var ApplicationController = function(credentials) {
         }
     };
 
-    this.dbAuthenticate = function(token, tokenSecret, profile, done) {
-        dropbox.oauth.setToken(token, tokenSecret);
+    this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {
+        var dropbox = createDropboxClient(token, tokenSecret);
         dropbox.getUserInfo(function(err, userInfo) {
             if (err) { done(err); }
             else {
                 User.findOrCreate({ dropboxId: profile.id }, userInfo,
                     function(err, user) {
+                        user.dbClient = dropbox;
                         return done(err, user);
                     }
                 );
@@ -51,19 +58,20 @@ var ApplicationController = function(credentials) {
     };
 
     this.loginSuccess = function(req, res) {
+        console.log(req);
         res.redirect("/");
     };
 
     this.logout = function(req, res) {
         req.logout();
-        dropbox.signOut();
+        req.user.dbClient.signOut();
         delete req.user;
         delete req.account;
         res.redirect("/");
     };
 
     this.dbTest = function(req, res) {
-        dropbox.getUserInfo(function(err, info) {
+        req.user.dbClient.getUserInfo(function(err, info) {
             if (err) {
                 res.send(err);
             } else {

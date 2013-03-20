@@ -8,7 +8,7 @@ var express = require("express")
   , mongoServer
   , port, hostname
   , app = express()
-  , ac, uc
+  , appCon, userCon, albumCon, photoCon
   ;
 
 
@@ -90,7 +90,8 @@ photoCon = require("./controllers/PhotoController")();
 passport.use(new DropboxStrategy({
     consumerKey: credentials.dropbox.appkey,
     consumerSecret: credentials.dropbox.secret,
-    callbackURL: hostname + "/auth/dropbox/success"
+    callbackURL: hostname + "/auth/dropbox/success",
+    passReqToCallback: true
 }, appCon.dbAuthenticate));
 passport.use(new FacebookStrategy({
     clientID: credentials.facebook.clientId,
