@@ -16,6 +16,10 @@ var UserController = function() {
     this.destroy = function(req, res) {
         res.send("Coming soon!");
     };
+
+    this.scanDropbox = function(dbClient) {
+
+    };
 }
 
 module.exports = UserController;
