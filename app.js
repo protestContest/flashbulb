@@ -142,6 +142,8 @@ app.delete("/album/:id", albumCon.destroy);
 
 // shortcuts
 app.get("/all", albumCon.viewAll);
+app.get("/scan", userCon.scan);
+app.get("/dbtest", appCon.dbTest);
 
 
 /*

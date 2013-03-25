@@ -1,3 +1,5 @@
+var  Dropbox = require("dropbox").Client;
+
 var UserController = function() {
     var User = require("../models/User");
 
@@ -17,9 +19,35 @@ var UserController = function() {
         res.send("Coming soon!");
     };
 
-    this.scanDropbox = function(dbClient) {
-
+    this.addClient = function(id, client) {
+        console.log(client);
+        dbClients[id] = client;
     };
-}
+
+    this.scan = function(req, res) {
+        var dropbox = new Drobox({
+            key: req.session.dropbox.oauth.key,
+            secret: req.session.dropbox.oauth.secret,
+            sandbox: true
+        });
+        scanDropbox(dropbox);
+    };
+
+    function scanDropbox(dbClient) {
+        dbClient.readdir("/", function(err, items) {
+            if (err) {
+                console.log(err);
+            } else {
+                items.forEach(function(item, i) {
+                    dbClient.readdir(item, function(err, items) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                });
+            }
+        });
+    };
+};
 
 module.exports = UserController;

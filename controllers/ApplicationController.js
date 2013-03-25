@@ -1,8 +1,9 @@
-var Dropbox = require("dropbox")
+var Dropbox = require("dropbox").Client
   , crypto = require("crypto")
   , https = require("https")
   , FB = require("fb")
   , jade = require("jade")
+  , userCon = require("./UserController")
   ;
 
 var ApplicationController = function(credentials) {
@@ -15,7 +16,7 @@ var ApplicationController = function(credentials) {
     User = require("../models/User");
 
     function createDropboxClient(token, tokenSecret) {
-        var dropbox = new Dropbox.Client({
+        var dropbox = new Dropbox({
             key: credentials.dropbox.appkey,
             secret: credentials.dropbox.secret,
             sandbox: true
@@ -41,7 +42,8 @@ var ApplicationController = function(credentials) {
             else {
                 User.findOrCreate({ dropboxId: profile.id }, userInfo,
                     function(err, user) {
-                        user.dbClient = dropbox;
+                        req.session.dropbox = dropbox;
+                        console.log(dropbox);
                         return done(err, user);
                     }
                 );
@@ -58,7 +60,6 @@ var ApplicationController = function(credentials) {
     };
 
     this.loginSuccess = function(req, res) {
-        console.log(req);
         res.redirect("/");
     };
 
@@ -71,7 +72,7 @@ var ApplicationController = function(credentials) {
     };
 
     this.dbTest = function(req, res) {
-        req.user.dbClient.getUserInfo(function(err, info) {
+        req.session.dbClient.getUserInfo(function(err, info) {
             if (err) {
                 res.send(err);
             } else {
