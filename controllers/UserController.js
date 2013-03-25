@@ -7,6 +7,7 @@ var UserController = function() {
         return new UserController();
     }
 
+
     this.create = function(req, res) {
         res.send("Coming soon!");
     };
@@ -25,7 +26,7 @@ var UserController = function() {
     };
 
     this.scan = function(req, res) {
-        var dropbox = new Drobox({
+        var dropbox = new Dropbox({
             key: req.session.dropbox.oauth.key,
             secret: req.session.dropbox.oauth.secret,
             sandbox: true
