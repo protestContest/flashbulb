@@ -38,7 +38,9 @@ describe("Album", function() {
     });
 
     afterEach(function(done) {
-        Album.remove({}, done);
+        User.remove({}, function(err) {
+            Album.remove({}, done);
+        });
     });
 
     describe("#create", function() {
@@ -109,19 +111,24 @@ describe("Album", function() {
         it("should change a album's name", function(done) {
             testAlbum.update({ name: "New Name" }, function(err) {
                 testAlbum.name.should.equal("New Name");
-                testAlbum.email.should.equal("testAlbum@example.com");
+                testAlbum.user.email.should.equal("testUser@example.com");
                 done(err);
             });
         });
 
-        it("should change a album's name and email", function(done) {
-            testAlbum.update({
-                name: "Newer Name",
-                email: "newemail@example.com"
-            }, function(err) {
-                testAlbum.name.should.equal("Newer Name");
-                testAlbum.email.should.equal("newemail@example.com");
-                done(err);
+        it("should change a album's name and user", function(done) {
+            User.create({
+                email: "newUser@example.com"
+            }, function(err, newUser) {
+                testAlbum.update({
+                    name: "Newer Name",
+                    user: newUser
+                }, function(err) {
+                    testAlbum.name.should.equal("Newer Name");
+                    testAlbum.user.email.should.equal("newUser@example.com");
+                    testAlbum.albumId.should.equal("newUser@example.com:Newer Name");
+                    done(err);
+                });
             });
         });
     });
@@ -129,7 +136,7 @@ describe("Album", function() {
     describe("#destroy", function() {
         it("should destroy a album", function(done) {
             testAlbum.destroy(function(destroyErr) {
-                Album.get(testAlbum.email, function(err, album) {
+                Album.get(testAlbum.albumId, function(err, album) {
                     should.not.exist(album);
                     should.exist(err);
                     err.should.equal("album not found");
