@@ -51,6 +51,8 @@ AlbumSchema.method("update", function(attrs, callback) {
         this[attr] = attrs[attr];
     }
 
+    this.albumId = this.user.email + ":" + this.name;
+
     this.save(function(err) {
         if (err) { callback(err); }
         else {
@@ -60,8 +62,9 @@ AlbumSchema.method("update", function(attrs, callback) {
 });
 
 AlbumSchema.method("destroy", function(callback) {
-    Album.remove({ email: this.email}, callback);
+    Album.remove({ albumId: this.albumId}, callback);
 });
 
 mongoose.model("Album", AlbumSchema);
-module.exports = mongoose.model("Album");
+var Album = mongoose.model("Album");
+module.exports = Album;
