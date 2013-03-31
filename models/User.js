@@ -38,11 +38,20 @@ UserSchema.static("get", function(email, callback) {
 });
 
 UserSchema.method("update", function(attrs, callback) {
-    callback(null);
+    for (var attr in attrs) {
+        this[attr] = attrs[attr];
+    }
+
+    this.save(function(err) {
+        if (err) { callback(err); }
+        else {
+            callback(null);
+        }
+    });
 });
 
 UserSchema.method("destroy", function(callback) {
-    callback(null);
+    User.remove({ email: this.email}, callback);
 });
 
 UserSchema.static("findOrCreate", function(query, userInfo, callback)  {
