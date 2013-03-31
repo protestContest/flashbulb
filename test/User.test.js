@@ -100,9 +100,13 @@ describe("User", function() {
 
     describe("#destroy", function() {
         it("should destroy a user", function(done) {
-            testUser.destroy(function(err) {
-                should.not.exist(testUser);
-                done(err);
+            testUser.destroy(function(destroyErr) {
+                User.get(testUser.email, function(err, user) {
+                    should.not.exist(user);
+                    should.exist(err);
+                    err.should.equal("user not found");
+                    done(destroyErr);
+                });
             });
         });
     });
