@@ -2,10 +2,19 @@ var should = require("should"),
     User = require("../models/User"),
     mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost/test");
 
 describe("User", function() {
     var testUser;
+
+    before(function(done) {
+        mongoose.connect("mongodb://localhost/user_test");
+        User.remove({}, done);
+    });
+
+    after(function(done) {
+        mongoose.disconnect();
+        done();
+    });
 
     beforeEach(function(done) {
         User.create({
@@ -111,3 +120,4 @@ describe("User", function() {
         });
     });
 });
+
