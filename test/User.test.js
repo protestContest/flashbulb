@@ -1,5 +1,8 @@
 var should = require("should"),
-    User = require("../models/User");
+    User = require("../models/User"),
+    mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/test");
 
 describe("User", function() {
     var testUser;
@@ -24,9 +27,9 @@ describe("User", function() {
             User.create({ email: "test@example.com" }, function(err, user) {
                 should.exist(user);
                 user.email.should.equal("test@example.com");
-                user.should.not.have("name");
-                user.should.not.have("dropboxId");
-                user.albums.should.be.empty();
+                user.should.not.have.property("name");
+                user.should.not.have.property("dropboxId");
+                user.albums.should.be.empty;
                 done(err);
             });
         });
@@ -39,9 +42,8 @@ describe("User", function() {
             }, function(err, user) {
                 should.exist(user);
                 user.email.should.equal("test@example.com");
-                user.
-                user.should.not.have("dropboxId");
-                user.albums.should.be.empty();
+                user.dropboxId.should.equal("42");
+                user.albums.should.be.empty;
                 done(err);
             });
         });
