@@ -1,17 +1,21 @@
 var should = require("should"),
+    Photo = require("../models/Photo"),
     Album = require("../models/Album"),
     User = require("../models/User"),
     mongoose = require("mongoose");
 
 
-describe("Album", function() {
-    var testAlbum,
+describe("Photo", function() {
+    var testPhoto,
+        testAlbum,
         testUser;
 
     before(function(done) {
-        mongoose.connect("mongodb://localhost/album_test");
+        mongoose.connect("mongodb://localhost/photo_test");
         User.remove({}, function(err) {
-            Album.remove({}, done);
+            Album.remove({}, function(err) {
+                Photo.remove({}, done);
+            });
         });
     });
 
@@ -32,45 +36,48 @@ describe("Album", function() {
                 name: "Test Album"
             }, function(err, album) {
                 testAlbum = album;
-                done(err);
+
+                Photo.create({
+                    url: "/testPhoto.jpg"
+                }, function(err, photo) {
+                    testPhoto = photo;
+                    done(err);
+                });
             });
         });
     });
 
     afterEach(function(done) {
         User.remove({}, function(err) {
-            Album.remove({}, done);
+            Album.remove({}, function(err) {
+                Photo.remove({}, done);
+            });
         });
     });
 
     describe("#create", function() {
-        it("should create an album with a user email and name", function(done) {
-            Album.create({ 
-                user: testUser,
-                name: "This Album"
-            }, function(err, album) {
-                should.exist(album);
-                album.user.email.should.equal("testUser@example.com");
-                album.name.should.equal("This Album");
-                album.albumId.should.equal("testUser@example.com:This Album");
-                album.photos.should.be.empty;
+        it("should create an photo with a url", function(done) {
+            Photo.create({ 
+                url: "/photo.jpg"
+            }, function(err, photo) {
+                should.exist(photo);
+                photo.photoId.should.equal("testUser@example.com:This Album/photo.jpg");
                 done(err);
             });
         });
 
-        it("should not create a album that already exists", function(done) {
-            Album.create({ 
-                user: testUser,
-                name: "Test Album"
-            }, function(err, album) {
-                should.not.exist(album);
+        it("should not create a photo that already exists", function(done) {
+            Photo.create({ 
+                url: "/testPhoto.jpg"
+            }, function(err, photo) {
+                should.not.exist(photo);
                 should.exist(err);
-                err.should.equal("album exists");
+                err.should.equal("photo exists");
                 done();
             });
         });
 
-        it("should create an album for a different user with a duplicate name", function(done) {
+        it("should create an photo for a different user with a duplicate name", function(done) {
             User.create({
                 email: "differentUser@example.com"
             }, function(err, user) {
@@ -78,11 +85,13 @@ describe("Album", function() {
                     user: user,
                     name: "Test Album"
                 }, function(err, album) {
-                    should.exist(album);
-                    album.user.email.should.equal("differentUser@example.com");
-                    album.name.should.equal("Test Album");
-                    album.albumId.should.equal("differentUser@example.com:Test Album");
-                    done(err);
+                    Photo.create({
+                        url: "/testPhoto.jpg"
+                    }, function(err, photo) {
+                        should.exist(photo);
+                        photo.photoId.should.equal("differentUser@example.com:Test Album/testPhoto.jpg");
+                        done(err);
+                    });
                 });
             });
         });
@@ -90,7 +99,7 @@ describe("Album", function() {
 
     describe("#get", function() {
         it("should get a album based on its albumId", function(done) {
-            Album.get("testUser@example.com:Test Album", function(err, album) {
+            Photo.get("testUser@example.com:Test Album", function(err, album) {
                 should.exist(album);
                 album.name.should.equal("Test Album");
                 done(err);
@@ -98,7 +107,7 @@ describe("Album", function() {
         });
 
         it("should not get a album that doesn't exist", function(done) {
-            Album.get("nosuchalbum@example.com", function(err, album) {
+            Photo.get("nosuchalbum@example.com", function(err, album) {
                 should.not.exist(album);
                 should.exist(err);
                 err.should.equal("album not found");
@@ -109,9 +118,9 @@ describe("Album", function() {
 
     describe("#update", function() {
         it("should change a album's name", function(done) {
-            testAlbum.update({ name: "New Name" }, function(err) {
-                testAlbum.name.should.equal("New Name");
-                testAlbum.user.email.should.equal("testUser@example.com");
+            testPhoto.update({ name: "New Name" }, function(err) {
+                testPhoto.name.should.equal("New Name");
+                testPhoto.user.email.should.equal("testUser@example.com");
                 done(err);
             });
         });
@@ -120,13 +129,13 @@ describe("Album", function() {
             User.create({
                 email: "newUser@example.com"
             }, function(err, newUser) {
-                testAlbum.update({
+                testPhoto.update({
                     name: "Newer Name",
                     user: newUser
                 }, function(err) {
-                    testAlbum.name.should.equal("Newer Name");
-                    testAlbum.user.email.should.equal("newUser@example.com");
-                    testAlbum.albumId.should.equal("newUser@example.com:Newer Name");
+                    testPhoto.name.should.equal("Newer Name");
+                    testPhoto.user.email.should.equal("newUser@example.com");
+                    testPhoto.albumId.should.equal("newUser@example.com:Newer Name");
                     done(err);
                 });
             });
@@ -135,8 +144,8 @@ describe("Album", function() {
 
     describe("#destroy", function() {
         it("should destroy a album", function(done) {
-            testAlbum.destroy(function(destroyErr) {
-                Album.get(testAlbum.albumId, function(err, album) {
+            testPhoto.destroy(function(destroyErr) {
+                Photo.get(testPhoto.albumId, function(err, album) {
                     should.not.exist(album);
                     should.exist(err);
                     err.should.equal("album not found");
