@@ -98,19 +98,19 @@ describe("Photo", function() {
     });
 
     describe("#get", function() {
-        it("should get a album based on its albumId", function(done) {
-            Photo.get("testUser@example.com:Test Album", function(err, album) {
-                should.exist(album);
-                album.name.should.equal("Test Album");
+        it("should get a photo based on its photoId", function(done) {
+            Photo.get("testUser@example.com:Test Album/testPhoto.jpg", function(err, photo) {
+                should.exist(photo);
+                photo.url.should.equal("/testPhoto.jpg");
                 done(err);
             });
         });
 
-        it("should not get a album that doesn't exist", function(done) {
-            Photo.get("nosuchalbum@example.com", function(err, album) {
-                should.not.exist(album);
+        it("should not get a photo that doesn't exist", function(done) {
+            Photo.get("testUser@example.com:Test Album/nophoto.jpg", function(err, photo) {
+                should.not.exist(photo);
                 should.exist(err);
-                err.should.equal("album not found");
+                err.should.equal("photo not found");
                 done();
             });
         });
