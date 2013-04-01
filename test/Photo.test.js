@@ -144,12 +144,12 @@ describe("Photo", function() {
     });
 
     describe("#destroy", function() {
-        it("should destroy a album", function(done) {
+        it("should destroy a photo", function(done) {
             testPhoto.destroy(function(destroyErr) {
-                Photo.get(testPhoto.albumId, function(err, album) {
-                    should.not.exist(album);
+                Photo.get(testPhoto.photoId, function(err, photo) {
+                    should.not.exist(photo);
                     should.exist(err);
-                    err.should.equal("album not found");
+                    err.should.equal("photo not found");
                     done(destroyErr);
                 });
             });
