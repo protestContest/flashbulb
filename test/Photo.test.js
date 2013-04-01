@@ -117,25 +117,26 @@ describe("Photo", function() {
     });
 
     describe("#update", function() {
-        it("should change a album's name", function(done) {
-            testPhoto.update({ name: "New Name" }, function(err) {
-                testPhoto.name.should.equal("New Name");
-                testPhoto.user.email.should.equal("testUser@example.com");
+        it("should change a photo's url", function(done) {
+            testPhoto.update({ url: "/newUrl.jpg" }, function(err) {
+                testPhoto.name.should.equal("/newUrl.jpg");
+                testPhoto.album.name.should.equal("Test Album");
                 done(err);
             });
         });
 
-        it("should change a album's name and user", function(done) {
-            User.create({
-                email: "newUser@example.com"
-            }, function(err, newUser) {
+        it("should change a photo's url and album", function(done) {
+            Album.create({
+                user: testUser,
+                name: "New Album"
+            }, function(err, newAlbum) {
                 testPhoto.update({
-                    name: "Newer Name",
-                    user: newUser
+                    url: "/newLocation.jpg",
+                    album: newAlbum
                 }, function(err) {
-                    testPhoto.name.should.equal("Newer Name");
-                    testPhoto.user.email.should.equal("newUser@example.com");
-                    testPhoto.albumId.should.equal("newUser@example.com:Newer Name");
+                    testPhoto.url.should.equal("/newLocation.jpg");
+                    testPhoto.album.name.should.equal("New Album");
+                    testPhoto.photoId.should.equal("newUser@example.com:New Album/newLocation.jpg");
                     done(err);
                 });
             });
