@@ -68,12 +68,12 @@ app.configure("production", function() {
 });
 
 // set up dropbox client
-dbClient = new dropbox.Client({
-    key: credentials.dropbox.appkey,
-    secret: credentials.dropbox.secret,
-    sandbox: true
-});
-dbClient.authDriver(new Dropbox.Drivers.NodeServer(8191));
+//dbClient = new dropbox.Client({
+//    key: credentials.dropbox.appkey,
+//    secret: credentials.dropbox.secret,
+//    sandbox: true
+//});
+//dbClient.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);

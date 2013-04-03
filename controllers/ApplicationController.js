@@ -13,13 +13,33 @@ var ApplicationController = function(credentials) {
     }
 
     User = require("../models/User");
+    var dClient = new Dropbox.Client({
+        key: credentials.dropbox.appkey,
+        secret: credentials.dropbox.secret,
+        sandbox: true
+    });
+    dClient.authDriver(new Dropbox.Drivers.NodeServer());
 
     this.index = function(req, res) {
         res.render("home");
     };
 
     this.login =  function(req, res) {
+        console.log("about to auth with db");
+        dClient.authenticate(function(err, client) {
+            console.log("auth'd with db");
+            if (err) {
+                res.send(err);
+            }
 
+            req.session.dropbox = client;
+            res.send(client);
+        });
+    };
+
+    this.dbCallback = function(req, res) {
+        console.log("Callback!");
+        res.send(req.params);
     };
 
 
