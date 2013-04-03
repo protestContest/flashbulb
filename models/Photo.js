@@ -4,24 +4,24 @@ var mongoose = require("mongoose"),
     Album = require("./Album");
 
 var PhotoSchema = new Schema({
+    photoId: String,
     album: Album,
     url: String
 });
 
 PhotoSchema.static("create", function(attrs, callback) {
-    if (attrs.user === undefined || attrs.user.email === undefined || 
-            attrs.name === undefined) {
+    if (attrs.album === undefined || attrs.url === undefined) {
         callback("wrong attributes");
     } else {
         Photo.findOne({
-            "albumId": attrs.user.email + ":" + attrs.name
+            "photoId": attrs.album.albumId + attrs.url
         }, function(err, album) {
             if (err) { callback(err); }
             else if (album) {
-                callback("album exists");
+                callback("photo exists");
             } else {
                 var newPhoto = new Photo(attrs);
-                newPhoto.albumId = attrs.user.email + ":" + attrs.name;
+                newPhoto.photoId = attrs.album.albumId + attrs.url;
                 newPhoto.save(function(err) {
                     if (err) { callback(err); }
                     else {
@@ -33,13 +33,13 @@ PhotoSchema.static("create", function(attrs, callback) {
     }
 });
 
-PhotoSchema.static("get", function(albumId, callback) {
-    Photo.findOne({"albumId": albumId}, function(err, album) {
+PhotoSchema.static("get", function(photoId, callback) {
+    Photo.findOne({"photoId": photoId}, function(err, photo) {
         if (err) { callback(err); }
-        else if (album) {
-            callback(null, album);
+        else if (photo) {
+            callback(null, photo);
         } else {
-            callback("album not found");
+            callback("photo not found");
         }
     });
 });
@@ -49,7 +49,7 @@ PhotoSchema.method("update", function(attrs, callback) {
         this[attr] = attrs[attr];
     }
 
-    this.albumId = this.user.email + ":" + this.name;
+    this.photoId = this.album.albumId + this.url;
 
     this.save(function(err) {
         if (err) { callback(err); }

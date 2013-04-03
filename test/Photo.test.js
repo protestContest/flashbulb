@@ -38,7 +38,8 @@ describe("Photo", function() {
                 testAlbum = album;
 
                 Photo.create({
-                    url: "/testPhoto.jpg"
+                    url: "/testPhoto.jpg",
+                    album: testAlbum
                 }, function(err, photo) {
                     testPhoto = photo;
                     done(err);
@@ -58,17 +59,19 @@ describe("Photo", function() {
     describe("#create", function() {
         it("should create an photo with a url", function(done) {
             Photo.create({ 
-                url: "/photo.jpg"
+                url: "/photo.jpg",
+                album: testAlbum
             }, function(err, photo) {
                 should.exist(photo);
-                photo.photoId.should.equal("testUser@example.com:This Album/photo.jpg");
+                photo.photoId.should.equal("testUser@example.com:Test Album/photo.jpg");
                 done(err);
             });
         });
 
         it("should not create a photo that already exists", function(done) {
             Photo.create({ 
-                url: "/testPhoto.jpg"
+                url: "/testPhoto.jpg",
+                album: testAlbum
             }, function(err, photo) {
                 should.not.exist(photo);
                 should.exist(err);
@@ -86,7 +89,8 @@ describe("Photo", function() {
                     name: "Test Album"
                 }, function(err, album) {
                     Photo.create({
-                        url: "/testPhoto.jpg"
+                        url: "/testPhoto.jpg",
+                        album: album
                     }, function(err, photo) {
                         should.exist(photo);
                         photo.photoId.should.equal("differentUser@example.com:Test Album/testPhoto.jpg");
@@ -119,7 +123,7 @@ describe("Photo", function() {
     describe("#update", function() {
         it("should change a photo's url", function(done) {
             testPhoto.update({ url: "/newUrl.jpg" }, function(err) {
-                testPhoto.name.should.equal("/newUrl.jpg");
+                testPhoto.url.should.equal("/newUrl.jpg");
                 testPhoto.album.name.should.equal("Test Album");
                 done(err);
             });
@@ -136,7 +140,7 @@ describe("Photo", function() {
                 }, function(err) {
                     testPhoto.url.should.equal("/newLocation.jpg");
                     testPhoto.album.name.should.equal("New Album");
-                    testPhoto.photoId.should.equal("newUser@example.com:New Album/newLocation.jpg");
+                    testPhoto.photoId.should.equal("testUser@example.com:New Album/newLocation.jpg");
                     done(err);
                 });
             });
