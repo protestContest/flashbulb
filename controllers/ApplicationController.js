@@ -14,25 +14,16 @@ var ApplicationController = function(credentials) {
 
     User = require("../models/User");
 
-    function createDropboxClient(token, tokenSecret) {
-        var dropbox = new Dropbox.Client({
-            key: credentials.dropbox.appkey,
-            secret: credentials.dropbox.secret,
-            sandbox: true
-        });
-
-        dropbox.oauth.setToken(token, tokenSecret);
-
-        return dropbox;
-    }
-
     this.index = function(req, res) {
-        if (req.isAuthenticated()) {
-            res.redirect("/all");
-        } else {
-            res.render("home");
-        }
+        res.render("home");
     };
+
+    this.login =  function(req, res) {
+
+    };
+
+
+/***************************/
 
     this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {
         var dropbox = createDropboxClient(token, tokenSecret);

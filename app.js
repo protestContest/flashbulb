@@ -1,15 +1,14 @@
 var express = require("express")
   , mongoose = require("mongoose")
   , credentials
+  , RedisStore = require("connect-redis")(express)
   , passport = require("passport")
   , DropboxStrategy = require("passport-dropbox").Strategy
   , FacebookStrategy = require("passport-facebook").Strategy
   , dropbox = require("dropbox")
-  , mongoServer
   , port, hostname
-  , app = express()
   , appCon, userCon, albumCon, photoCon
-  ;
+  , app = express();
 
 
 // Configuration Server
@@ -33,7 +32,7 @@ app.configure("development", function() {
     console.log("running in development environment");
     credentials = require("./credentials").development;
     app.locals.pretty = true;
-    app.use(express.session({secret: "flashbulb"}));
+    app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -59,7 +58,7 @@ app.configure("production", function() {
             "secret":   process.env.FACEBOOK_SECRET
         }
     };
-    app.use(express.session({secret: "bananahorsepancakes"}));
+    app.use(express.session({secret: "bananahorsepancakes", store: new RedisStore()}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -68,17 +67,13 @@ app.configure("production", function() {
     hostname = process.env.HOSTNAME;
 });
 
+// set up dropbox client
 dbClient = new dropbox.Client({
     key: credentials.dropbox.appkey,
     secret: credentials.dropbox.secret,
     sandbox: true
 });
-
-mongoServer = credentials.mongodb.url;
-
-app.listen(port);
-console.log("Express server listening on port %d", port);
-mongoose.connect(mongoServer);
+dbClient.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);
@@ -87,30 +82,32 @@ albumCon = require("./controllers/AlbumController")();
 photoCon = require("./controllers/PhotoController")();
 
 // configure passport
-passport.use(new DropboxStrategy({
-    consumerKey: credentials.dropbox.appkey,
-    consumerSecret: credentials.dropbox.secret,
-    callbackURL: hostname + "/auth/dropbox/success",
-    passReqToCallback: true
-}, appCon.dbAuthenticate));
-passport.use(new FacebookStrategy({
-    clientID: credentials.facebook.clientId,
-    clientSecret: credentials.facebook.secret,
-    callbackURL: hostname + "/auth/facebook/success",
-    passReqToCallback: true
-}, appCon.fbAuthenticate));
-
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-});
+//passport.use(new DropboxStrategy({
+//    consumerKey: credentials.dropbox.appkey,
+//    consumerSecret: credentials.dropbox.secret,
+//    callbackURL: hostname + "/auth/dropbox/success",
+//    passReqToCallback: true
+//}, appCon.dbAuthenticate));
+//passport.use(new FacebookStrategy({
+//    clientID: credentials.facebook.clientId,
+//    clientSecret: credentials.facebook.secret,
+//    callbackURL: hostname + "/auth/facebook/success",
+//    passReqToCallback: true
+//}, appCon.fbAuthenticate));
+//
+//passport.serializeUser(function(user, done) {
+//    done(null, user);
+//});
+//passport.deserializeUser(function(obj, done) {
+//    done(null, obj);
+//});
 
 /* Routes */
 
 // app
 app.get("/", appCon.index);
+app.get("/login", appCon.login);
+
 app.get("/auth/dropbox", passport.authenticate("dropbox"));
 app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
         appCon.loginSuccess);
@@ -160,3 +157,9 @@ app.get("/settings", [ac.auth], uc.settings);
 
 app.get("/dbtest", ac.dbTest);
 */
+
+// make things go
+mongoose.connect(credentials.mongodb.url);
+app.listen(port);
+console.log("Express server listening on port %d", port);
+
