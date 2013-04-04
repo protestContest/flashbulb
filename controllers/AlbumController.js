@@ -6,7 +6,14 @@ var AlbumController = function() {
     }
 
     this.view = function(req, res) {
-        res.send("<a href='/logout'>Coming soon!</a>");
+        var albumId = req.user.email + ":" + req.params.id;
+        Album.get(albumId, function(err, album) {
+            res.render("album", {
+                photos: album.photos.map(function(photo) {
+                    return photo.url;
+                })
+            });
+        });
     };
 
     this.create = function(req, res) {
