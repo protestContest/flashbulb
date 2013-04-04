@@ -6,59 +6,75 @@ var Dropbox = require("dropbox")
   ;
 
 var ApplicationController = function(credentials) {
-    var User;
+    var User,
+        dClient,
+        dropboxes = {};
 
     if (!(this instanceof ApplicationController)) {
         return new ApplicationController(credentials);
     }
 
     User = require("../models/User");
-    var dClient = new Dropbox.Client({
+    dClient = new Dropbox.Client({
         key: credentials.dropbox.appkey,
         secret: credentials.dropbox.secret,
         sandbox: true
     });
-    dClient.authDriver(new Dropbox.Drivers.NodeServer());
 
     this.index = function(req, res) {
         res.render("home");
     };
 
-    this.login =  function(req, res) {
-        console.log("about to auth with db");
-        dClient.authenticate(function(err, client) {
-            console.log("auth'd with db");
-            if (err) {
-                res.send(err);
-            }
-
-            req.session.dropbox = client;
-            res.send(client);
-        });
-    };
-
-    this.dbCallback = function(req, res) {
-        console.log("Callback!");
-        res.send(req.params);
-    };
-
-
-/***************************/
-
     this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {
-        var dropbox = createDropboxClient(token, tokenSecret);
-        dropbox.getUserInfo(function(err, userInfo) {
-            if (err) { done(err); }
-            else {
-                User.findOrCreate({ dropboxId: profile.id }, userInfo,
-                    function(err, user) {
-                        user.dbClient = dropbox;
-                        return done(err, user);
-                    }
-                );
-            }
+        dropboxes[profile.id] = new Dropbox.Client({
+            key: credentials.dropbox.appkey,
+            secret: credentials.dropbox.secret,
+            sandbox: true
+        });
+        dropboxes[profile.id].oauth.setToken(token, tokenSecret);
+
+
+        dropboxes[profile.id].getUserInfo(function(err, userInfo) {
+            if (err) { return done(err); }
+
+            User.findOrCreate({ dropboxId: profile.id }, userInfo,
+                function(err, user) {
+                    return done(err, user);
+                }
+            );
         });
     };
+
+    this.login = function(req, res) {
+        if (req.user) {
+            req.session.user = req.user;
+            res.redirect("/album/123");
+        } else {
+            res.redirect("/");
+        }
+    };
+
+    this.auth = function(req, res, next) {
+        if (req.session.user) {
+            next();
+        } else {
+            res.redirect("/");
+        }
+    };
+
+    this.logout = function(req, res) {
+        var dropbox = dropboxes[req.user.dropboxId];
+        dropbox.getUserInfo(function(err, info) {
+            console.log(info);
+        });
+
+        req.logout();
+        delete req.user;
+        delete req.account;
+        res.redirect("/");
+    };
+
+/***************************
 
     this.fbAuthenticate = function(req, token, tokenSecret, profile, done) {
         req.session.facebookToken = token;
@@ -70,14 +86,6 @@ var ApplicationController = function(credentials) {
 
     this.loginSuccess = function(req, res) {
         console.log(req);
-        res.redirect("/");
-    };
-
-    this.logout = function(req, res) {
-        req.logout();
-        req.user.dbClient.signOut();
-        delete req.user;
-        delete req.account;
         res.redirect("/");
     };
 
@@ -112,7 +120,7 @@ var ApplicationController = function(credentials) {
             res.redirect("/");
         }
     };
-
+    */
 }
 
 module.exports = ApplicationController;

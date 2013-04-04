@@ -32,7 +32,7 @@ app.configure("development", function() {
     console.log("running in development environment");
     credentials = require("./credentials").development;
     app.locals.pretty = true;
-    app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
+    app.use(express.session({secret: "flashbulb"})); //, store: new RedisStore()}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -82,12 +82,12 @@ albumCon = require("./controllers/AlbumController")();
 photoCon = require("./controllers/PhotoController")();
 
 // configure passport
-//passport.use(new DropboxStrategy({
-//    consumerKey: credentials.dropbox.appkey,
-//    consumerSecret: credentials.dropbox.secret,
-//    callbackURL: hostname + "/auth/dropbox/success",
-//    passReqToCallback: true
-//}, appCon.dbAuthenticate));
+passport.use(new DropboxStrategy({
+    consumerKey: credentials.dropbox.appkey,
+    consumerSecret: credentials.dropbox.secret,
+    callbackURL: hostname + "/login/success",
+    passReqToCallback: true
+}, appCon.dbAuthenticate));
 //passport.use(new FacebookStrategy({
 //    clientID: credentials.facebook.clientId,
 //    clientSecret: credentials.facebook.secret,
@@ -95,29 +95,27 @@ photoCon = require("./controllers/PhotoController")();
 //    passReqToCallback: true
 //}, appCon.fbAuthenticate));
 //
-//passport.serializeUser(function(user, done) {
-//    done(null, user);
-//});
-//passport.deserializeUser(function(obj, done) {
-//    done(null, obj);
-//});
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
 
 /* Routes */
 
 // app
 app.get("/", appCon.index);
-app.get("/login", appCon.login);
+app.get("/login", passport.authenticate("dropbox"));
+app.get("/login/success", passport.authenticate("dropbox"), 
+        appCon.login);
 
-app.get("/auth/dropbox", passport.authenticate("dropbox"));
-app.get("/auth/dropbox/success", passport.authenticate("dropbox"),
-        appCon.loginSuccess);
-app.get("/auth/facebook", passport.authorize("facebook", {
-    scope: "publish_stream",
-    failureRedirect: "/fail"
-}));
-app.get("/auth/facebook/success", passport.authorize("facebook", { 
-    failureRedirect: "/fail"
-}), appCon.fbUpload);
+//app.get("/auth/facebook", passport.authorize("facebook", { //    scope: "publish_stream",
+//    failureRedirect: "/fail"
+//}));
+//app.get("/auth/facebook/success", passport.authorize("facebook", { 
+//    failureRedirect: "/fail"
+//}), appCon.fbUpload);
 app.get("/logout", appCon.logout);
 
 // user
@@ -126,7 +124,7 @@ app.put("/user/:id", userCon.update);
 app.delete("/user/:id", userCon.destroy);
 
 // album
-app.get("/album/:id", albumCon.view);
+app.get("/album/:id", appCon.auth, albumCon.view);
 app.post("/album", albumCon.create);
 app.put("/album/:id", albumCon.update);
 app.delete("/album/:id", albumCon.destroy);

@@ -6,7 +6,7 @@ var AlbumController = function() {
     }
 
     this.view = function(req, res) {
-        res.send("Coming soon!");
+        res.send("<a href='/logout'>Coming soon!</a>");
     };
 
     this.create = function(req, res) {
