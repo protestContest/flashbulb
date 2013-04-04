@@ -119,24 +119,24 @@ app.get("/login/success", passport.authenticate("dropbox"),
 app.get("/logout", appCon.logout);
 
 // user
-app.post("/user", userCon.create);
-app.put("/user/:id", userCon.update);
-app.delete("/user/:id", userCon.destroy);
+app.post("/users", userCon.create);
+app.put("/users/:id", userCon.update);
+app.delete("/users/:id", userCon.destroy);
 
 // album
-app.get("/album/:id", appCon.auth, albumCon.view);
-app.post("/album", albumCon.create);
-app.put("/album/:id", albumCon.update);
-app.delete("/album/:id", albumCon.destroy);
+app.get("/albums/:id", appCon.auth, albumCon.view);
+app.post("/albums", albumCon.create);
+app.put("/albums/:id", albumCon.update);
+app.delete("/albums/:id", albumCon.destroy);
 
 // photo
-app.get("/photo/:id", photoCon.view);
-app.post("/photo", photoCon.create);
-app.put("/album/:id", photoCon.update);
-app.delete("/album/:id", albumCon.destroy);
+app.get("/photos/:id", photoCon.view);
+app.post("/photos", photoCon.create);
+app.put("/albums/:id", photoCon.update);
+app.delete("/albums/:id", albumCon.destroy);
 
 // shortcuts
-app.get("/all", albumCon.viewAll);
+app.get("/all", photoCon.viewAll);
 
 
 /*
