@@ -3,6 +3,7 @@ var Dropbox = require("dropbox")
   , https = require("https")
   , FB = require("fb")
   , jade = require("jade")
+  , developers = require("../developers")
   ;
 
 var ApplicationController = function(credentials) {
@@ -59,6 +60,15 @@ var ApplicationController = function(credentials) {
             next();
         } else {
             res.redirect("/");
+        }
+    };
+
+    this.devAuth = function(req, res, next) {
+        if (req.session.user && developers.indexOf(req.session.user.email) !== -1) {
+            console.log(req.session.user);
+            next();
+        } else {
+            res.send("Not auth'd");
         }
     };
 

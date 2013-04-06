@@ -30,6 +30,12 @@ var UserController = function() {
             });
         });
     };
+
+    this.listAll = function(req, res) {
+        User.getAll(function(err, users) {
+            res.send(users);
+        });
+    };
 }
 
 module.exports = UserController;

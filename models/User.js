@@ -78,6 +78,13 @@ UserSchema.method("addAlbum", function(album, callback) {
     });
 });
 
+UserSchema.static("getAll", function(callback) {
+    User.find({}, function(err, users) {
+        if (err) { return callback(err); }
+
+        callback(null, users);
+    });
+});
 
 mongoose.model('User', UserSchema);
 var User = mongoose.model('User');
