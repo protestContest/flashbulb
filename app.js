@@ -44,7 +44,6 @@ app.configure("development", function() {
 app.configure("production", function() {
     var store;
     console.log("running in production environment");
-    //credentials = require("./credentials").production;
     credentials = {
         "mongodb": {
             "url": process.env.MONGO_URL
@@ -66,14 +65,6 @@ app.configure("production", function() {
     port = process.env.PORT || 8080;
     hostname = process.env.HOSTNAME;
 });
-
-// set up dropbox client
-//dbClient = new dropbox.Client({
-//    key: credentials.dropbox.appkey,
-//    secret: credentials.dropbox.secret,
-//    sandbox: true
-//});
-//dbClient.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);
@@ -119,6 +110,8 @@ app.get("/login/success", passport.authenticate("dropbox"),
 app.get("/logout", appCon.logout);
 
 // user
+app.get("/home", appCon.auth, userCon.home);
+app.get("/users/:id", userCon.view);
 app.post("/users", userCon.create);
 app.put("/users/:id", userCon.update);
 app.delete("/users/:id", userCon.destroy);
@@ -136,7 +129,7 @@ app.put("/albums/:id", photoCon.update);
 app.delete("/albums/:id", albumCon.destroy);
 
 // shortcuts
-app.get("/all", photoCon.viewAll);
+//app.get("/all", photoCon.viewAll);
 
 
 /*
