@@ -6,8 +6,15 @@ var AlbumController = function() {
         return new AlbumController();
     }
 
+    this.viewAll = function(req, res) {
+        User.get(req.session.user.email, function(err, user) {
+            if (err) { return abort(err); }
+
+            res.send(user.albums);
+        });
+    };
+
     this.view = function(req, res) {
-        var albumId = req.user.email + ":" + req.params.id;
         Album.get(albumId, function(err, album) {
             res.render("album", {
                 photos: album.photos.map(function(photo) {

@@ -111,13 +111,14 @@ app.get("/logout", appCon.logout);
 
 // user
 app.get("/home", appCon.auth, userCon.home);
-app.get("/users", appCon.devAuth, userCon.listAll);
+app.get("/users", appCon.devAuth, userCon.viewAll);
 app.get("/users/:id", userCon.view);
 app.post("/users", userCon.create);
 app.put("/users/:id", userCon.update);
 app.delete("/users/:id", userCon.destroy);
 
 // album
+app.get("/albums", appCon.auth, albumCon.viewAll);
 app.get("/albums/:id", appCon.auth, albumCon.view);
 app.post("/albums", albumCon.create);
 app.put("/albums/:id", albumCon.update);

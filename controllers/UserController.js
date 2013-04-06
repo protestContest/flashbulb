@@ -31,7 +31,7 @@ var UserController = function() {
         });
     };
 
-    this.listAll = function(req, res) {
+    this.viewAll = function(req, res) {
         User.getAll(function(err, users) {
             res.send(users);
         });
