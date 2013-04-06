@@ -1,6 +1,7 @@
-var AlbumController = function() {
-    var Album = require("../models/Album");
+var Album = require("../models/Album"),
+    User = require("../models/User");
 
+var AlbumController = function() {
     if (!(this instanceof AlbumController)) {
         return new AlbumController();
     }
@@ -17,7 +18,15 @@ var AlbumController = function() {
     };
 
     this.create = function(req, res) {
-        res.send("Coming soon!");
+        User.get(req.user.email, function(err, user) {
+            Album.create({
+                "user": user,
+                "name": req.body.albumName
+            }, function(err, album) {
+                user.addAlbum(album);
+                res.redirect("/home");
+            });
+        });
     };
 
     this.update = function(req, res) {
