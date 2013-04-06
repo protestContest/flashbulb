@@ -76,6 +76,13 @@ UserSchema.static("findOrCreate", function(query, userInfo, callback)  {
     });
 });
 
+UserSchema.method("addAlbum", function(album, callback) {
+    this.albums.push(album);
+    this.save(function(err) {
+        callback(err);
+    });
+});
+
 
 mongoose.model('User', UserSchema);
 var User = mongoose.model('User');

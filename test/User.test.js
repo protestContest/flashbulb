@@ -1,4 +1,5 @@
 var should = require("should"),
+    Album = require("../models/Album"),
     User = require("../models/User"),
     mongoose = require("mongoose");
 
@@ -115,6 +116,21 @@ describe("User", function() {
                     should.exist(err);
                     err.should.equal("user not found");
                     done(destroyErr);
+                });
+            });
+        });
+    });
+
+    describe("#addAlbum", function() {
+        it("should add an album to a user", function(done) {
+            testUser.albums.should.be.empty;
+            Album.create({
+                "name": "Test Album"
+            }, function(err, album) {
+                testUser.addAlbum(album, function() {
+                    testUser.albums.should.include(album);
+                    testUser.albums[0].name.should.equal("Test Album");
+                    done(err);
                 });
             });
         });

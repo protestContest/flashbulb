@@ -39,7 +39,6 @@ describe("Photo", function() {
 
                 Photo.create({
                     url: "/testPhoto.jpg",
-                    album: testAlbum
                 }, function(err, photo) {
                     testPhoto = photo;
                     done(err);
@@ -59,19 +58,17 @@ describe("Photo", function() {
     describe("#create", function() {
         it("should create an photo with a url", function(done) {
             Photo.create({ 
-                url: "/photo.jpg",
-                album: testAlbum
+                url: "/photo.jpg"
             }, function(err, photo) {
                 should.exist(photo);
-                photo.photoId.should.equal("testUser@example.com:Test Album/photo.jpg");
+                photo.url.should.equal("/photo.jpg");
                 done(err);
             });
         });
 
         it("should not create a photo that already exists", function(done) {
             Photo.create({ 
-                url: "/testPhoto.jpg",
-                album: testAlbum
+                url: "/testPhoto.jpg"
             }, function(err, photo) {
                 should.not.exist(photo);
                 should.exist(err);
@@ -79,31 +76,11 @@ describe("Photo", function() {
                 done();
             });
         });
-
-        it("should create an photo for a different user with a duplicate name", function(done) {
-            User.create({
-                email: "differentUser@example.com"
-            }, function(err, user) {
-                Album.create({
-                    user: user,
-                    name: "Test Album"
-                }, function(err, album) {
-                    Photo.create({
-                        url: "/testPhoto.jpg",
-                        album: album
-                    }, function(err, photo) {
-                        should.exist(photo);
-                        photo.photoId.should.equal("differentUser@example.com:Test Album/testPhoto.jpg");
-                        done(err);
-                    });
-                });
-            });
-        });
     });
 
     describe("#get", function() {
-        it("should get a photo based on its photoId", function(done) {
-            Photo.get("testUser@example.com:Test Album/testPhoto.jpg", function(err, photo) {
+        it("should get a photo based on its url", function(done) {
+            Photo.get("/testPhoto.jpg", function(err, photo) {
                 should.exist(photo);
                 photo.url.should.equal("/testPhoto.jpg");
                 done(err);
@@ -111,7 +88,7 @@ describe("Photo", function() {
         });
 
         it("should not get a photo that doesn't exist", function(done) {
-            Photo.get("testUser@example.com:Test Album/nophoto.jpg", function(err, photo) {
+            Photo.get("/nophoto.jpg", function(err, photo) {
                 should.not.exist(photo);
                 should.exist(err);
                 err.should.equal("photo not found");
@@ -124,25 +101,18 @@ describe("Photo", function() {
         it("should change a photo's url", function(done) {
             testPhoto.update({ url: "/newUrl.jpg" }, function(err) {
                 testPhoto.url.should.equal("/newUrl.jpg");
-                testPhoto.album.name.should.equal("Test Album");
                 done(err);
             });
         });
 
-        it("should change a photo's url and album", function(done) {
-            Album.create({
-                user: testUser,
-                name: "New Album"
-            }, function(err, newAlbum) {
-                testPhoto.update({
-                    url: "/newLocation.jpg",
-                    album: newAlbum
-                }, function(err) {
-                    testPhoto.url.should.equal("/newLocation.jpg");
-                    testPhoto.album.name.should.equal("New Album");
-                    testPhoto.photoId.should.equal("testUser@example.com:New Album/newLocation.jpg");
-                    done(err);
-                });
+        it("should change a photo's url and name", function(done) {
+            testPhoto.update({
+                url: "/newLocation.jpg",
+                name: "New Name"
+            }, function(err) {
+                testPhoto.url.should.equal("/newLocation.jpg");
+                testPhoto.name.should.equal("New Name");
+                done(err);
             });
         });
     });
@@ -150,7 +120,7 @@ describe("Photo", function() {
     describe("#destroy", function() {
         it("should destroy a photo", function(done) {
             testPhoto.destroy(function(destroyErr) {
-                Photo.get(testPhoto.photoId, function(err, photo) {
+                Photo.get(testPhoto.url, function(err, photo) {
                     should.not.exist(photo);
                     should.exist(err);
                     err.should.equal("photo not found");

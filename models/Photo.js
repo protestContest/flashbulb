@@ -5,23 +5,22 @@ var mongoose = require("mongoose"),
 
 var PhotoSchema = new Schema({
     photoId: String,
-    album: Album,
-    url: String
+    url: String,
+    name: String
 });
 
 PhotoSchema.static("create", function(attrs, callback) {
-    if (attrs.album === undefined || attrs.url === undefined) {
+    if (attrs.url === undefined) {
         callback("wrong attributes");
     } else {
         Photo.findOne({
-            "photoId": attrs.album.albumId + attrs.url
-        }, function(err, album) {
+            "url": attrs.url
+        }, function(err, photo) {
             if (err) { callback(err); }
-            else if (album) {
+            else if (photo) {
                 callback("photo exists");
             } else {
                 var newPhoto = new Photo(attrs);
-                newPhoto.photoId = attrs.album.albumId + attrs.url;
                 newPhoto.save(function(err) {
                     if (err) { callback(err); }
                     else {
@@ -33,8 +32,8 @@ PhotoSchema.static("create", function(attrs, callback) {
     }
 });
 
-PhotoSchema.static("get", function(photoId, callback) {
-    Photo.findOne({"photoId": photoId}, function(err, photo) {
+PhotoSchema.static("get", function(url, callback) {
+    Photo.findOne({"url": url}, function(err, photo) {
         if (err) { callback(err); }
         else if (photo) {
             callback(null, photo);
@@ -48,8 +47,6 @@ PhotoSchema.method("update", function(attrs, callback) {
     for (var attr in attrs) {
         this[attr] = attrs[attr];
     }
-
-    this.photoId = this.album.albumId + this.url;
 
     this.save(function(err) {
         if (err) { callback(err); }
