@@ -48,7 +48,7 @@ var ApplicationController = function(credentials) {
     this.login = function(req, res) {
         if (req.user) {
             req.session.user = req.user;
-            res.redirect("/album/123");
+            res.redirect("/home");
         } else {
             res.redirect("/");
         }
