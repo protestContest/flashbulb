@@ -1,13 +1,8 @@
 var mongoose = require("mongoose"),
-    Schema = mongoose.Schema,
-    User = require("./User");
+    Schemas = require("./Schemas"),
+    PhotoSchema = Schemas.Photo,
+    User = require("./User"),
     Album = require("./Album");
-
-var PhotoSchema = new Schema({
-    photoId: String,
-    url: String,
-    name: String
-});
 
 PhotoSchema.static("create", function(attrs, callback) {
     if (attrs.url === undefined) {

@@ -128,7 +128,7 @@ describe("User", function() {
                 "name": "Test Album"
             }, function(err, album) {
                 testUser.addAlbum(album, function() {
-                    testUser.albums.should.include(album);
+                    testUser.albums.should.not.be.empty;
                     testUser.albums[0].name.should.equal("Test Album");
                     done(err);
                 });

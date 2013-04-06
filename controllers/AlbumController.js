@@ -23,8 +23,9 @@ var AlbumController = function() {
                 "user": user,
                 "name": req.body.albumName
             }, function(err, album) {
-                user.addAlbum(album);
-                res.redirect("/home");
+                user.addAlbum(album, function() {
+                    res.redirect("/home");
+                });
             });
         });
     };

@@ -1,13 +1,8 @@
 var mongoose = require("mongoose"), 
-    Schema = mongoose.Schema,
+    Schemas = require("./Schemas"),
+    AlbumSchema = Schemas.Album,
+    UserSchema = Schemas.User,
     Album = require("./Album");
-
-var UserSchema = new Schema(  {
-    email: {type:String, unique:true},
-    name: String,
-    dropboxId: String,
-    albums: [Album]
-});
 
 UserSchema.static("create", function(attrs, callback) {
     User.findOne({"email": attrs.email}, function(err, user) {

@@ -1,12 +1,9 @@
 var mongoose = require("mongoose"),
-    Schema = mongoose.Schema,
+    Schemas = require("./Schemas"),
+    PhotoSchema = Schemas.Photo,
+    AlbumSchema = Schemas.Album,
     Photo = require("./Photo"),
     User = require("./User");
-
-var AlbumSchema = new Schema({
-    name: String,
-    photos: [Photo]
-});
 
 /** creates a new album, and returns it */
 AlbumSchema.static("create", function(attrs, callback) {
