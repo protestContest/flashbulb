@@ -1,0 +1,35 @@
+block content
+  #content.main.container(data-type="gallery")
+    .row: each file, i in files
+      - trim_file = file.split('.')[0]
+      .span3.thumb 
+        i.icon-spinner.icon-spin.icon-4x
+        img(src='/file/' + file, alt=trim_file)
+        ul.overlay-buttons
+          li.overlay-button
+            a.edit(href="/edit/" + file, title="Edit")
+              i.icon-2x.icon-pencil
+          li.overlay-button
+            i.icon-2x.icon-share
+        .thumbinfo= trim_file
+
+    .span12#share.dropdown
+      #irc_pc
+      .row
+        .span3.thumb.offset1
+          img#share-image(src="", alt="Share Image")
+        .span5
+          #share-image-title
+          if access_token
+            form#shareform(action="https://graph.facebook.com/me/photos?access_token=" + access_token,
+                           enctype="multipart/formdata", method="post")
+              input#fbSource(type="hidden", name="url")
+              textarea#share-desc(name="message") Test post, please ignore
+              button#fb-submit.btn Share on Facebook
+
+          else
+            a(href="/auth/facebook") Login to Facebook to share
+
+        .span2.dropdown-controls
+          span.dropdown-title Share
+          i.close.icon-remove.icon-2x
