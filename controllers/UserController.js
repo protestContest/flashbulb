@@ -13,8 +13,11 @@ var UserController = function() {
 
     this.view = function(req, res) {
         User.get(req.params.id, function(err, user) {
-            if (err) { res.render("error", err); }
-            res.render("user/view", user);
+            if (err) { 
+                res.render("error", {"error": err}); 
+            } else {
+                res.render("user/view", {"user": user});
+            }
         });
     };
 
@@ -34,7 +37,16 @@ var UserController = function() {
     };
 
     this.update = function(req, res) {
-        res.send("Coming soon!");
+        User.get(req.params.id, function(err, user) {
+            if (err) { res.render("error", {"err": err} ); }
+            user.update(req.body, function(err) {
+                if (err) {
+                    res.render("error", {"err": err} );
+                } else {
+                    res.redirect("/users/" + req.params.id);
+                }
+            });
+        });
     };
 
     this.destroy = function(req, res) {

@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  h1= user.name
+
+  ul
+    each album in user.albums
+      li= album.name
+
+  a(href="#{user.dropboxId}/edit") Edit User
