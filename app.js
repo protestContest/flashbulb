@@ -32,7 +32,7 @@ app.configure("development", function() {
     console.log("running in development environment");
     credentials = require("./credentials").development;
     app.locals.pretty = true;
-    app.use(express.session({secret: "flashbulb"})); //, store: new RedisStore()}));
+    app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -111,9 +111,10 @@ app.get("/logout", appCon.logout);
 
 // user
 app.get("/home", appCon.auth, userCon.home);
-app.get("/users", appCon.devAuth, userCon.viewAll);
+app.get("/users", appCon.devAuth, userCon.all);
 app.get("/users/:id", userCon.view);
 app.post("/users", userCon.create);
+app.get("/users/:id/update", appCon.devAuth, userCon.updateForm);
 app.put("/users/:id", userCon.update);
 app.delete("/users/:id", userCon.destroy);
 

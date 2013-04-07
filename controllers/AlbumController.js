@@ -16,7 +16,7 @@ var AlbumController = function() {
 
     this.view = function(req, res) {
         Album.get(albumId, function(err, album) {
-            res.render("album", {
+            res.render("album/view", {
                 photos: album.photos.map(function(photo) {
                     return photo.url;
                 })
@@ -35,6 +35,10 @@ var AlbumController = function() {
                 });
             });
         });
+    };
+
+    this.updateForm = function(req, res) {
+        res.render("user/updateForm");
     };
 
     this.update = function(req, res) {

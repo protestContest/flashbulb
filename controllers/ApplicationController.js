@@ -65,7 +65,6 @@ var ApplicationController = function(credentials) {
 
     this.devAuth = function(req, res, next) {
         if (req.session.user && developers.indexOf(req.session.user.email) !== -1) {
-            console.log(req.session.user);
             next();
         } else {
             res.send("Not auth'd");
