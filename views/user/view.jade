@@ -2,6 +2,8 @@ extends ../layout
 
 block content
   h1= user.name
+  
+  p= user.email
 
   ul
     each album in user.albums
