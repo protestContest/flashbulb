@@ -120,7 +120,9 @@ app.put("/users/:id", userCon.update);
 app.delete("/users/:id", userCon.destroy);
 
 // album
-app.get("/albums", appCon.auth, albumCon.viewAll);
+app.get("/albums", appCon.devAuth, albumCon.all);
+app.get("/albums/new", appCon.auth, albumCon.createForm);
+app.get("/albums/:id/edit", appCon.auth, albumCon.updateForm);
 app.get("/albums/:id", appCon.auth, albumCon.view);
 app.post("/albums", albumCon.create);
 app.put("/albums/:id", albumCon.update);

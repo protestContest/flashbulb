@@ -6,22 +6,32 @@ var AlbumController = function() {
         return new AlbumController();
     }
 
-    this.viewAll = function(req, res) {
+    this.all = function(req, res) {
         User.get(req.session.user.email, function(err, user) {
-            if (err) { return abort(err); }
-
-            res.send(user.albums);
+            if (err) { 
+                res.render("error", {"error": err} );
+            } else {
+                res.send(user.albums);
+            }
         });
     };
 
     this.view = function(req, res) {
-        Album.get(albumId, function(err, album) {
-            res.render("album/view", {
-                photos: album.photos.map(function(photo) {
-                    return photo.url;
-                })
-            });
+        Album.get(req.session.user.email, albumId, function(err, album) {
+            if (err) {
+                res.render("error", {"error": err} );
+            } else {
+                res.render("album/view", {
+                    photos: album.photos.map(function(photo) {
+                        return photo.url;
+                    })
+                });
+            }
         });
+    };
+
+    this.createForm = function(req, res) {
+        res.render("album/create");
     };
 
     this.create = function(req, res) {
@@ -38,19 +48,39 @@ var AlbumController = function() {
     };
 
     this.updateForm = function(req, res) {
-        res.render("user/updateForm");
+        res.render("user/update");
     };
 
     this.update = function(req, res) {
-        res.send("Coming soon!");
+        Album.get(req.session.user.email, req.params.id, function(err, album) {
+            if (err) {
+                res.render("error", {"error": err} );
+            } else {
+                album.update(req.body, function(err) {
+                    if (err) {
+                        res.render("error", {"error": err} );
+                    } else {
+                        res.redirect("/albums/" + req.params.id);
+                    }
+                });
+            }
+        });
     };
 
     this.destroy = function(req, res) {
-        res.send("Coming soon!");
-    };
-
-    this.viewAll = function(req, res) {
-        res.send("Coming soon!");
+        Album.get(req.session.user.email, req.params.id, function(err, album) {
+            if (err) {
+                res.render("error", {"error": err});
+            } else {
+                album.destroy(function(err) {
+                    if (err) {
+                        res.render("error", {"error": err});
+                    } else {
+                        res.redirect("/albums");
+                    }
+                });
+            }
+        });
     };
 };
 
