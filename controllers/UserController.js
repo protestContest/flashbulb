@@ -26,7 +26,13 @@ var UserController = function() {
     };
 
     this.create = function(req, res) {
-        res.send("Coming soon!");
+        User.create(req.body, function(err, user) {
+            if (err) {
+                res.render("error", {"error": err} );
+            } else {
+                res.redirect("/users/" + user.email);
+            }
+        });
     };
 
     this.updateForm = function(req, res) {

@@ -112,6 +112,7 @@ app.get("/logout", appCon.logout);
 // user
 app.get("/home", appCon.auth, userCon.home);
 app.get("/users", appCon.devAuth, userCon.all);
+app.get("/users/new", appCon.devAuth, userCon.createForm);
 app.get("/users/:id", userCon.view);
 app.post("/users", userCon.create);
 app.get("/users/:id/edit", appCon.devAuth, userCon.updateForm);
