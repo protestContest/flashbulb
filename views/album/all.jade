@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  h1 All Albums
+  p: a(href="/albums/new") Add Album
+  ul
+    each album in albums
+      li= album
+        a(href="/albums/#{album.name}/edit") Update

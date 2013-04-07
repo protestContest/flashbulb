@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+  form(action="/albums/#{album.name}", method="post")
+    input(type="hidden", name="_method", value="put")
+    label Name
+      input(name="name", value="#{album.name}")
+    button Update Album
+
+  form(action="/albums/#{albums.name}", method="post")
+    input(type="hidden", name="_method", value="delete")
+    button Delete Album

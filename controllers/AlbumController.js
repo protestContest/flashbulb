@@ -1,5 +1,5 @@
-var Album = require("../models/Album"),
-    User = require("../models/User");
+var User = require("../models/User"),
+    Album = require("../models/Album");
 
 var AlbumController = function() {
     if (!(this instanceof AlbumController)) {
@@ -11,7 +11,7 @@ var AlbumController = function() {
             if (err) { 
                 res.render("error", {"error": err} );
             } else {
-                res.send(user.albums);
+                res.render("album/all", {"albums": user.albums});
             }
         });
     };
@@ -48,7 +48,13 @@ var AlbumController = function() {
     };
 
     this.updateForm = function(req, res) {
-        res.render("user/update");
+        Album.get(req.session.user.email, req.params.id, function(err, album) {
+            if (err) {
+                res.render("error", {"error": err});
+            } else {
+                res.render("album/update", {"album": album});
+            }
+        });
     };
 
     this.update = function(req, res) {
