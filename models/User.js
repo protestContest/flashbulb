@@ -21,8 +21,8 @@ UserSchema.static("create", function(attrs, callback) {
     });
 });
 
-UserSchema.static("get", function(email, callback) {
-    User.findOne({"email": email}, function(err, user) {
+UserSchema.static("get", function(id, callback) {
+    User.findOne({$or: [{"email": id}, {"dropboxId": id}]}, function(err, user) {
         if (err) { callback(err); }
         else if (user) {
             callback(null, user);

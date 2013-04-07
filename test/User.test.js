@@ -77,6 +77,14 @@ describe("User", function() {
             });
         });
 
+        it("should get a user based on its dropboxId", function(done) {
+            User.get("12345", function(err, user) {
+                should.exist(user);
+                user.name.should.equal("Test User");
+                done(err);
+            });
+        });
+
         it("should not get a user that doesn't exist", function(done) {
             User.get("nosuchuser@example.com", function(err, user) {
                 should.not.exist(user);
