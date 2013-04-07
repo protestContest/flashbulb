@@ -56,7 +56,19 @@ var UserController = function() {
     };
 
     this.destroy = function(req, res) {
-        res.send("Coming soon!");
+        User.get(req.params.id, function(err, user) {
+            if (err) {
+                res.render("error", {"error": err} );
+            } else {
+                user.destroy(function(err) {
+                    if (err) {
+                        res.render("error", {"error": err} );
+                    } else {
+                        res.redirect("/users");
+                    }
+                });
+            }
+        });
     };
 
     this.home = function(req, res) {
