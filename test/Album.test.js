@@ -69,8 +69,8 @@ describe("Album", function() {
     });
 
     describe("#get", function() {
-        it("should get a album based on its user and name", function(done) {
-            Album.get("testUser@example.com", "Test Album", function(err, album) {
+        it("should get a album based on its id", function(done) {
+            Album.get(testAlbum._id, function(err, album) {
                 if (err) { console.log(err); }
                 should.exist(album);
                 album.name.should.equal("Test Album");

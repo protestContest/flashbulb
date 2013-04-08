@@ -17,14 +17,21 @@ var AlbumController = function() {
     };
 
     this.view = function(req, res) {
-        Album.get(req.session.user.email, albumId, function(err, album) {
+        User.get(req.session.user.email, function(err, user) {
             if (err) {
                 res.render("error", {"error": err} );
             } else {
-                res.render("album/view", {
-                    photos: album.photos.map(function(photo) {
-                        return photo.url;
-                    })
+                user.getAlbum(req.params.id, function(err, album) {
+                    if (err) {
+                        res.render("error", {"error": err} );
+                    } else {
+                        res.render("album/view", {
+                            name: album.name,
+                            photos: album.photos.map(function(photo) {
+                                return photo.url;
+                            })
+                        });
+                    }
                 });
             }
         });
@@ -37,36 +44,41 @@ var AlbumController = function() {
     this.create = function(req, res) {
         User.get(req.user.email, function(err, user) {
             Album.create({
-                "user": user,
-                "name": req.body.albumName
+                "name": req.body.name
             }, function(err, album) {
                 user.addAlbum(album, function() {
-                    res.redirect("/home");
+                    res.redirect("/albums/" + req.body.name);
                 });
             });
         });
     };
 
     this.updateForm = function(req, res) {
-        Album.get(req.session.user.email, req.params.id, function(err, album) {
+        User.get(req.session.user.email, function(err, user) {
             if (err) {
                 res.render("error", {"error": err});
             } else {
-                res.render("album/update", {"album": album});
+                user.getAlbum(req.params.id, function(err, album) {
+                    if (err) {
+                        res.render("error", {"error": err});
+                    } else {
+                        res.render("album/update", {"album": album});
+                    }
+                });
             }
         });
     };
 
     this.update = function(req, res) {
-        Album.get(req.session.user.email, req.params.id, function(err, album) {
+        User.get(req.session.user.email, function(err, user) {
             if (err) {
                 res.render("error", {"error": err} );
             } else {
-                album.update(req.body, function(err) {
+                user.updateAlbum(req.params.id, req.body, function(err) {
                     if (err) {
                         res.render("error", {"error": err} );
                     } else {
-                        res.redirect("/albums/" + req.params.id);
+                        res.redirect("/albums");
                     }
                 });
             }

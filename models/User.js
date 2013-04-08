@@ -86,6 +86,35 @@ UserSchema.static("getAll", function(callback) {
     });
 });
 
+UserSchema.method("getAlbum", function(name, callback) {
+    var album = this.albums.filter(function(album) {
+        return album.name === name;
+    })[0];
+
+    if (album) {
+        callback(null, album);
+    } else {
+        callback("No such album");
+    }
+});
+
+UserSchema.method("updateAlbum", function(name, attrs, callback) {
+    var that = this;
+    this.getAlbum(name, function(err, album) {
+        if (err) {
+            callback(err);
+        } else {
+            for (var attr in attrs) {
+                album[attr] = attrs[attr];
+            }
+
+            that.save(function(err) {
+                callback(err);
+            });
+        }
+    });
+});
+
 mongoose.model('User', UserSchema);
 var User = mongoose.model('User');
 
