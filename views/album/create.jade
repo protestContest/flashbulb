@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  h1 Create Album
+
+  form(action="/albums", method="post")
+    label Name
+      input(name="name")
+    button Add Album

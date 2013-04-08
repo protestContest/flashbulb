@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  h1= name
+  - if (photos.length)
+    ul
+      each photo in photos
+        li= photo.url
+  - else
+    p Album is empty
