@@ -5,13 +5,14 @@ var Dropbox = require("dropbox")
   , jade = require("jade")
   , redis = require("redis")
   , developers = require("../developers")
+  , Watcher = require("../dropboxWatcher")
   ;
 
 var ApplicationController = function(credentials) {
     var User,
         dClient,
         rClient = redis.createClient(),
-        dropboxes = {};
+        watcher;
 
     if (!(this instanceof ApplicationController)) {
         return new ApplicationController(credentials);
@@ -48,6 +49,10 @@ var ApplicationController = function(credentials) {
                     return done(err, user);
                 }
             );
+        });
+
+        watcher = new Watcher(profile.id, credentials, function(err) {
+            watcher.watchDropbox(5000);
         });
     };
 
