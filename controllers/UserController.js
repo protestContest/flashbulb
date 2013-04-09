@@ -77,8 +77,16 @@ var UserController = function(credentials) {
 
     this.home = function(req, res) {
         User.get(req.session.user.email, function(err, user) {
-            res.render("user/home", {
-                "albums": user.albums || "no albums"
+            getDropbox(user.dropboxId, function(err, dropbox) {
+                dropbox.stat("/", {"readDir": true}, function(err, folderStat, stats) {
+                    res.render("user/home", {
+                        "albums": stats.filter(function(entry) {
+                            return entry.isFolder;
+                        }).map(function(entry) {
+                            return entry.name;
+                        })
+                    });
+                });
             });
         });
     };
@@ -98,6 +106,24 @@ var UserController = function(credentials) {
                             res.redirect("/home");
                         }
                     });
+                });
+            });
+        });
+    };
+
+    this.viewAlbum = function(req, res) {
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.readdir("/" + req.params.album, function(err, entries) {
+                console.log(entries.filter(function(entry) {
+                    return /.*(\.jpg|\.png|\.gif)/.test(entry);
+                }));
+                res.render("album/view", {
+                    "name": req.params.album,
+                    "photos": entries.filter(function(entry) {
+                        console.log(entry);
+                        console.log(/.*(\.jpg|\.png|\.gif)/.test(entry));
+                        return /.*(\.jpg|\.png|\.gif)/.test(entry);
+                    })
                 });
             });
         });

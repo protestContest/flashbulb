@@ -8,5 +8,5 @@ block content
     button Submit
   ul
     each album in albums
-      li= album
+      li: a(href="/albums/" + album)= album
 
