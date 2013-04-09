@@ -51,9 +51,9 @@ var ApplicationController = function(credentials) {
             );
         });
 
-        watcher = new Watcher(profile.id, credentials, function(err) {
-            watcher.watchDropbox(5000);
-        });
+        //watcher = new Watcher(profile.id, credentials, function(err) {
+        //    watcher.watchDropbox(5000);
+        //});
     };
 
     this.login = function(req, res) {

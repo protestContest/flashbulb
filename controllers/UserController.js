@@ -1,8 +1,12 @@
-var UserController = function() {
-    var User = require("../models/User");
+var redis = require("redis"),
+    Dropbox = require("dropbox");
+
+var UserController = function(credentials) {
+    var User = require("../models/User"),
+        rClient = redis.createClient();
 
     if (!(this instanceof UserController)) {
-        return new UserController();
+        return new UserController(credentials);
     }
 
     this.all = function(req, res) {
@@ -85,15 +89,33 @@ var UserController = function() {
 
     this.createAlbum = function(req, res) {
         User.get(req.user.email, function(err, user) {
-            user.addNewAlbum(req.body.name, function(err, album) {
-                if (err) {
-                    res.render("error", {"error": err});
-                } else {
-                    res.redirect("/albums/" + album.name);
-                }
+            getDropbox(user.dropboxId, function(err, dropbox) {
+                dropbox.readdir("/", function(err, entries) {
+                    dropbox.mkdir(req.body.albumName, function(err, stat) {
+                        if (err) {
+                            res.render("error", {"error": err});
+                        } else {
+                            res.redirect("/home");
+                        }
+                    });
+                });
             });
         });
     };
+
+    function getDropbox(dropboxId, callback) {
+        rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
+            var tokens = JSON.parse(tokenStr),
+                dropbox = new Dropbox.Client({
+                    key: credentials.dropbox.appkey,
+                    secret: credentials.dropbox.secret,
+                    sandbox: true
+                });
+
+            dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
+            callback(err, dropbox);
+        });
+    }
 
 }
 

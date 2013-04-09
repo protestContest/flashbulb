@@ -68,7 +68,7 @@ app.configure("production", function() {
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);
-userCon = require("./controllers/UserController")();
+userCon = require("./controllers/UserController")(credentials);
 albumCon = require("./controllers/AlbumController")();
 photoCon = require("./controllers/PhotoController")();
 
@@ -126,7 +126,7 @@ app.get("/albums", appCon.devAuth, albumCon.all);
 app.get("/albums/new", appCon.auth, albumCon.createForm);
 app.get("/albums/:id/edit", appCon.auth, albumCon.updateForm);
 app.get("/albums/:id", appCon.auth, albumCon.view);
-app.post("/albums", albumCon.create);
+app.post("/albums", userCon.createAlbum);
 app.put("/albums/:id", albumCon.update);
 app.delete("/albums/:id", albumCon.destroy);
 
