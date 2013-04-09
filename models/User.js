@@ -60,6 +60,7 @@ UserSchema.static("findOrCreate", function(query, userInfo, callback)  {
             var u = new User(query);
             u.email = userInfo.email;
             u.name = userInfo.name;
+            u.albums = [];
             u.save(function(error)  {
                 if(error)  {
                     callback(error);
@@ -71,10 +72,29 @@ UserSchema.static("findOrCreate", function(query, userInfo, callback)  {
     });
 });
 
+/********************************************/
+
 UserSchema.method("addAlbum", function(album, callback) {
     this.albums.push(album);
     this.save(function(err) {
         callback(err);
+    });
+});
+
+UserSchema.method("addNewAlbum", function(name, callback) {
+    var that = this;
+    Album.create({
+        "name": name,
+        "user": this.email
+    }, function(err, album) {
+        if (err) {
+            callback(err);
+        } else {
+            that.albums.push(name);
+            that.save(function(err) {
+                callback(err, album);
+            });
+        }
     });
 });
 
@@ -86,29 +106,44 @@ UserSchema.static("getAll", function(callback) {
     });
 });
 
-UserSchema.method("getAlbum", function(name, callback) {
-    var album = this.albums.filter(function(album) {
-        return album.name === name;
-    })[0];
-
-    if (album) {
-        callback(null, album);
-    } else {
-        callback("No such album");
-    }
-});
-
 UserSchema.method("updateAlbum", function(name, attrs, callback) {
     var that = this;
-    this.getAlbum(name, function(err, album) {
+    Album.get(this.email, name, function(err, album) {
         if (err) {
             callback(err);
         } else {
-            for (var attr in attrs) {
-                album[attr] = attrs[attr];
+            if (attrs.name !== undefined) {
+                this.albums[this.albums.indexOf(name)] = attrs.name;
             }
+            if (attrs.user !== undefined) {
+                this.albums.splice(this.albums.indexOf(name), 1);
+                User.get(attrs.user, function(err, user) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        user.addAlbum(album, function(err) {
+                            album.update(attrs, function(err) {
+                                callback(err);
+                            });
+                        });
+                    }
+                });
+            } else {
+                album.update(attrs, function(err) {
+                    callback(err);
+                });
+            }
+        }
+    });
+});
 
-            that.save(function(err) {
+UserSchema.method("removeAlbum", function(name, callback) {
+    Album.get(this.email, name, function(err, album) {
+        if (err) {
+            callback(err);
+        } else {
+            this.albums.splice(this.albums.indexOf(name), 1);
+            album.destroy(function(err) {
                 callback(err);
             });
         }

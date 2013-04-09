@@ -17,21 +17,15 @@ var AlbumController = function() {
     };
 
     this.view = function(req, res) {
-        User.get(req.session.user.email, function(err, user) {
+        Album.get(req.session.user.email, req.params.id, function(err, album) {
             if (err) {
                 res.render("error", {"error": err} );
             } else {
-                user.getAlbum(req.params.id, function(err, album) {
-                    if (err) {
-                        res.render("error", {"error": err} );
-                    } else {
-                        res.render("album/view", {
-                            name: album.name,
-                            photos: album.photos.map(function(photo) {
-                                return photo.url;
-                            })
-                        });
-                    }
+                res.render("album/view", {
+                    name: album.name,
+                    photos: album.photos.map(function(photo) {
+                        return photo.url;
+                    })
                 });
             }
         });
@@ -42,14 +36,18 @@ var AlbumController = function() {
     };
 
     this.create = function(req, res) {
-        User.get(req.user.email, function(err, user) {
-            Album.create({
-                "name": req.body.name
-            }, function(err, album) {
-                user.addAlbum(album, function() {
-                    res.redirect("/albums/" + req.body.name);
+        User.get(req.session.user.email, function(err, user) {
+            if (err) {
+                res.render("error", {"error": err});
+            } else {
+                user.addNewAlbum(req.body.albumName, function(err, album) {
+                    if (err) {
+                        res.render("error", {"error": err});
+                    } else {
+                        res.redirect("/albums/" + album.name);
+                    }
                 });
-            });
+            }
         });
     };
 
@@ -86,11 +84,11 @@ var AlbumController = function() {
     };
 
     this.destroy = function(req, res) {
-        Album.get(req.session.user.email, req.params.id, function(err, album) {
+        User.get(req.session.user.email, function(err, user) {
             if (err) {
                 res.render("error", {"error": err});
             } else {
-                album.destroy(function(err) {
+                user.removeAlbum(req.params.id, function(err) {
                     if (err) {
                         res.render("error", {"error": err});
                     } else {

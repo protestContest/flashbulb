@@ -114,8 +114,10 @@ app.get("/home", appCon.auth, userCon.home);
 app.get("/users", appCon.devAuth, userCon.all);
 app.get("/users/new", appCon.devAuth, userCon.createForm);
 app.get("/users/:id/edit", appCon.devAuth, userCon.updateForm);
+app.get("/users/:id/albums/new", appCon.auth, userCon.createAlbumForm);
 app.get("/users/:id", userCon.view);
 app.post("/users", userCon.create);
+app.post("/users/:id/albums", userCon.createAlbum);
 app.put("/users/:id", userCon.update);
 app.delete("/users/:id", userCon.destroy);
 

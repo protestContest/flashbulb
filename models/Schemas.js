@@ -4,19 +4,21 @@ var mongoose = require("mongoose"),
 var PhotoSchema = new Schema({
     photoId: String,
     url: String,
-    name: String
+    name: String,
+    album: String
 });
 
 var AlbumSchema = new Schema({
     name: String,
-    photos: [PhotoSchema]
+    photos: [String],
+    user: String
 });
 
 var UserSchema = new Schema(  {
     email: {type:String, unique:true},
     name: String,
     dropboxId: String,
-    albums: [AlbumSchema]
+    albums: [String]
 });
 
 module.exports = {

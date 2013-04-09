@@ -5,7 +5,7 @@ var mongoose = require("mongoose"),
     Album = require("./Album");
 
 PhotoSchema.static("create", function(attrs, callback) {
-    if (attrs.url === undefined) {
+    if (attrs.url === undefined || attrs.album === undefined) {
         callback("wrong attributes");
     } else {
         Photo.findOne({
@@ -27,8 +27,8 @@ PhotoSchema.static("create", function(attrs, callback) {
     }
 });
 
-PhotoSchema.static("get", function(url, callback) {
-    Photo.findOne({"url": url}, function(err, photo) {
+PhotoSchema.static("get", function(album, url, callback) {
+    Photo.findOne({$and: [{"album": album}, {"url": url}]}, function(err, photo) {
         if (err) { callback(err); }
         else if (photo) {
             callback(null, photo);

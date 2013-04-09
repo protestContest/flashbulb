@@ -81,6 +81,22 @@ var UserController = function() {
         });
     };
 
+    this.createAlbumForm = function(req, res) {
+        res.render("user/createAlbum");
+    };
+
+    this.createAlbum = function(req, res) {
+        User.get(req.user.email, function(err, user) {
+            user.addNewAlbum(req.body.name, function(err, album) {
+                if (err) {
+                    res.render("error", {"error": err});
+                } else {
+                    res.redirect("/albums/" + album.name);
+                }
+            });
+        });
+    };
+
 }
 
 module.exports = UserController;
