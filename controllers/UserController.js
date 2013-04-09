@@ -74,9 +74,7 @@ var UserController = function() {
     this.home = function(req, res) {
         User.get(req.user.email, function(err, user) {
             res.render("user/home", {
-                "albums": user.albums.map(function(album) {
-                    return album.name;
-                }) || "no albums"
+                "albums": user.albums || "no albums"
             });
         });
     };
