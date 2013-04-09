@@ -106,6 +106,12 @@ UserSchema.static("getAll", function(callback) {
     });
 });
 
+UserSchema.method("getAlbums", function(callback) {
+    Album.find({"user": this.email}, function(err, albums) {
+        callback(err, albums);
+    });
+});
+
 UserSchema.method("updateAlbum", function(name, attrs, callback) {
     var that = this;
     Album.get(this.email, name, function(err, album) {
