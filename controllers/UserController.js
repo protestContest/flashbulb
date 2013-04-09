@@ -72,7 +72,7 @@ var UserController = function() {
     };
 
     this.home = function(req, res) {
-        User.get(req.user.email, function(err, user) {
+        User.get(req.session.user.email, function(err, user) {
             res.render("user/home", {
                 "albums": user.albums || "no albums"
             });
