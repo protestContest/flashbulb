@@ -3,12 +3,14 @@ var Dropbox = require("dropbox")
   , https = require("https")
   , FB = require("fb")
   , jade = require("jade")
+  , redis = require("redis")
   , developers = require("../developers")
   ;
 
 var ApplicationController = function(credentials) {
     var User,
         dClient,
+        rClient = redis.createClient(),
         dropboxes = {};
 
     if (!(this instanceof ApplicationController)) {
@@ -27,15 +29,18 @@ var ApplicationController = function(credentials) {
     };
 
     this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {
-        dropboxes[profile.id] = new Dropbox.Client({
+        var dropbox = new Dropbox.Client({
             key: credentials.dropbox.appkey,
             secret: credentials.dropbox.secret,
             sandbox: true
         });
-        dropboxes[profile.id].oauth.setToken(token, tokenSecret);
+        dropbox.oauth.setToken(token, tokenSecret);
+        rClient.hset("dropboxes", profile.id, JSON.stringify({
+            "token": token,
+            "secret": tokenSecret
+        }));
 
-
-        dropboxes[profile.id].getUserInfo(function(err, userInfo) {
+        dropbox.getUserInfo(function(err, userInfo) {
             if (err) { return done(err); }
 
             User.findOrCreate({ dropboxId: profile.id }, userInfo,
@@ -72,9 +77,19 @@ var ApplicationController = function(credentials) {
     };
 
     this.logout = function(req, res) {
-        var dropbox = dropboxes[req.user.dropboxId];
-        dropbox.getUserInfo(function(err, info) {
-            console.log(info);
+        // test storage of dropbox client
+        rClient.hget("dropboxes", req.session.user.dropboxId, function(err, tokenStr) {
+            var tokens = JSON.parse(tokenStr);
+            var dropbox = new Dropbox.Client({
+                key: credentials.dropbox.appkey,
+                secret: credentials.dropbox.secret,
+                sandbox: true
+            });
+            dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
+
+            dropbox.getUserInfo(function(err, info) {
+                console.log(info);
+            });
         });
 
         req.logout();
