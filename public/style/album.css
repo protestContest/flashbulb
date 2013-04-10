@@ -1,0 +1,19 @@
+.span3.thumb {
+  position: relative;
+  height: 220px;
+  text-align: center;
+  line-height: 200px;
+}
+.span3.thumb .title {
+  position: absolute;
+  font-size: 26px;
+  line-height: 16px;
+  bottom: 10px;
+  width: 100%;
+}
+.main.container a {
+  color: #222222;
+}
+.main.container a:hover {
+  color: #999999;
+}

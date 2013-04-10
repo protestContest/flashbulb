@@ -1,0 +1,68 @@
+.thumb {
+  position: relative;
+  margin-bottom: 20px;
+  height: 220px;
+  overflow: hidden;
+}
+.thumb img {
+  min-height: 220px;
+  min-width: 220px;
+}
+.thumb > i.icon-spinner {
+  position: absolute;
+  margin: auto;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 50px;
+  height: 50px;
+  z-index: -1;
+}
+.thumbinfo {
+  position: absolute;
+  display: none;
+  bottom: 0px;
+  background-color: rgba(50, 50, 50, 0.67);
+  color: #eeeeee;
+  padding: 5px;
+  width: 100%;
+}
+ul.overlay-buttons {
+  position: absolute;
+  display: none;
+  top: 0px;
+  color: rgba(50, 50, 50, 0.67);
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+li.overlay-button {
+  float: left;
+  padding: 5px;
+  padding-right: 0px;
+  color: rgba(50, 50, 50, 0.67);
+  text-shadow: 1px 1px #eeeeee;
+  cursor: pointer;
+}
+li.overlay-button a {
+  text-decoration: none;
+  color: rgba(50, 50, 50, 0.67);
+}
+li.overlay-button:hover,
+li.overlay-button:hover a {
+  color: #eeeeee;
+  text-shadow: 1px 1px rgba(50, 50, 50, 0.67);
+}
+#share-image-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+#share-desc {
+  display: block;
+}
+#messages {
+  text-align: center;
+  font-style: italic;
+}
