@@ -6,6 +6,10 @@
 @dim: rgba(50, 50, 50, 0.67);
 @container-width: 940px;
 
+body {
+    background: @white;
+}
+
 .logo {
     font-size: 2em;
     float: left;
@@ -141,12 +145,11 @@ a.logo:hover {
 
 aside {
     text-align: center;
-    display: none;
     position: fixed;
     right: 0px;
     top: 200px;
     background: url("/image/darknoise.png") repeat scroll 0% 0% rgb(51, 51, 51);
-    width: 300px;
+    width: 200px;
     color: @white;
     padding: 20px;
     border-top-left-radius: 15px;
@@ -160,6 +163,14 @@ aside .album {
     border-bottom: 1px solid black;
     font-size: 16px;
     padding: 10px 10px;
+}
+
+aside .album:first-child {
+    margin-top: 15px;
+}
+
+aside .album:last-child {
+    border-bottom: none;
 }
 
 aside .album.dragOver {

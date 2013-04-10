@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    setTimeout(function() {
+        $("aside").hide("slide", {direction: "right"}, 100);
+    }, 2000);
+
     $("img").each(function(i, el) {
         el.setAttribute("draggable", "true");
         addEvent(el, "dragstart", function(e) {
@@ -47,8 +51,11 @@ $(document).ready(function() {
             $("*[src='" + data.src + "']").css("opacity", "0.5");
 
             $.post("/move", data, function(postdata, status) {
-                console.log("Moved file: " + status);
-                $("*[src='" + data.src + "']").closest(".thumb").fadeOut();
+                if (/albums/.test(window.location.href)) {
+                    $("*[src='" + data.src + "']").closest(".thumb").fadeOut();
+                } else {
+                    $("*[src='" + data.src + "']").css("opacity", "1");
+                }
             });
 
             return false;
