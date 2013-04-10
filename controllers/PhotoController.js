@@ -9,6 +9,21 @@ var PhotoController = function(credentials) {
         return new PhotoController(credentials);
     }
 
+    this.all = function(req, res) {
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.findByName("/", ".jpg", function(err, photos) {
+                if (err) {
+                    res.render("error", {"error": err});
+                } else {
+                    res.render("photo/all", {
+                        "name": "All Photos",
+                        "photos": photos
+                    });
+                }
+            });
+        });
+    };
+
     this.view = function(req, res) {
         res.send("Coming soon!");
     };

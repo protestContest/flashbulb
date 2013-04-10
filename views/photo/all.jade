@@ -1,0 +1,14 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet", href="/style/user.css")
+  script(src="/script/app.js")
+
+block toolbar
+  ul.nav.span3
+    li.active All Pictures
+    li.toolbar-link(data-href="/albums") Albums
+  #messages.span6 asd
+
+block content
+  include ../gallery

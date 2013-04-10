@@ -1,8 +1,34 @@
-doctype 5
+!!!
 html(lang="en")
-  meta(charset="utf-8")
-  link(rel="stylesheet", href="/styles/default.css")
-  block head
-
+  head
+    title Flashbulb
+    link(rel="stylesheet", href="/style/lib/bootstrap.min.css")
+    link(rel="stylesheet", href="/style/lib/font-awesome.min.css")
+    link(rel="stylesheet", href="/style/default.css")
+    script(src="//code.jquery.com/jquery-1.9.1.min.js")
+    script(src="/script/lib/bootstrap.min.js")
+    block head
+  
   body
+    .primary.navbar.navbar-inverse
+      .navbar-inner
+        .container
+          a.logo(href="/")
+            i.icon-camera-retro 
+            | Flashbulb
+          ul.nav.pull-right
+            li
+              a(href="/settings", title="Settings")
+                i.icon-cog.icon-large
+                | Settings
+            li
+              a(href='/logout', title='Logout')
+                i.icon-signout.icon-large
+                | Logout
+
+  #toolbar.toolbar.navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container
+        block toolbar
+
     block content

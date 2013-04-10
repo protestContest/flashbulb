@@ -128,6 +128,7 @@ app.post("/albums", albumCon.create);
 app.delete("/albums/:album", albumCon.destroy);
 
 // photo
+app.get("/photos/all", photoCon.all);
 app.get("/photos/:album/:photo", photoCon.get);
 app.get("/photos/:photo", photoCon.get);
 app.post("/move", photoCon.move);

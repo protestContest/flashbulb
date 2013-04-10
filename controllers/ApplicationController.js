@@ -54,10 +54,6 @@ var ApplicationController = function(credentials) {
                 }
             );
         });
-
-        //watcher = new Watcher(profile.id, credentials, function(err) {
-        //    watcher.watchDropbox(5000);
-        //});
     };
 
     this.login = function(req, res) {
@@ -86,24 +82,11 @@ var ApplicationController = function(credentials) {
     };
 
     this.logout = function(req, res) {
-        // test storage of dropbox client
-        rClient.hget("dropboxes", req.session.user.dropboxId, function(err, tokenStr) {
-            var tokens = JSON.parse(tokenStr);
-            var dropbox = new Dropbox.Client({
-                key: credentials.dropbox.appkey,
-                secret: credentials.dropbox.secret,
-                sandbox: true
-            });
-            dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
-
-            dropbox.getUserInfo(function(err, info) {
-                console.log(info);
-            });
-        });
 
         req.logout();
         delete req.user;
         delete req.account;
+        delete req.session;
         res.redirect("/");
     };
 
