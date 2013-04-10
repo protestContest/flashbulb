@@ -129,10 +129,6 @@ app.delete("/albums/:album", userCon.deleteAlbum);
 // photo
 app.get("/photos/:album/:photo", userCon.getPhoto);
 app.get("/photos/:photo", userCon.getPhoto);
-app.post("/photos", photoCon.create);
-app.put("/albums/:id", photoCon.update);
-app.delete("/albums/:id", albumCon.destroy);
-
 app.post("/move", userCon.movePhoto);
 
 // shortcuts
