@@ -76,19 +76,7 @@ var UserController = function(credentials) {
     };
 
     this.home = function(req, res) {
-        User.get(req.session.user.email, function(err, user) {
-            getDropbox(user.dropboxId, function(err, dropbox) {
-                dropbox.stat("/", {"readDir": true}, function(err, folderStat, stats) {
-                    res.render("user/home", {
-                        "albums": stats.filter(function(entry) {
-                            return entry.isFolder;
-                        }).map(function(entry) {
-                            return entry.name;
-                        })
-                    });
-                });
-            });
-        });
+        res.redirect("/photos/all");
     };
 
     this.createAlbumForm = function(req, res) {
