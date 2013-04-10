@@ -44,6 +44,8 @@ $(document).ready(function() {
             var data = JSON.parse(e.dataTransfer.getData("Text"));
             data.to = "/" + $(el).html();
 
+            $("*[src='" + data.src + "']").css("opacity", "0.5");
+
             $.post("/move", data, function(postdata, status) {
                 console.log("Moved file: " + status);
                 $("*[src='" + data.src + "']").closest(".thumb").fadeOut();

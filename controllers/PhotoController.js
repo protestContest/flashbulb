@@ -1,9 +1,11 @@
 var redis = require("redis"),
     Dropbox = require("dropbox"),
-    Photo = require("../models/Photo");
+    Photo = require("../models/Photo"),
+    AlbumCon = require("./AlbumController.js");
 
 var PhotoController = function(credentials) {
-    var rClient = redis.createClient();
+    var rClient = redis.createClient(),
+        Album = new AlbumCon(credentials);
 
     if (!(this instanceof PhotoController)) {
         return new PhotoController(credentials);
@@ -15,9 +17,14 @@ var PhotoController = function(credentials) {
                 if (err) {
                     res.render("error", {"error": err});
                 } else {
-                    res.render("photo/all", {
-                        "name": "All Photos",
-                        "photos": photos
+                    Album.getAlbumList(dropbox, function(err, albums) {
+                        res.render("photo/all", {
+                            "name": "All Photos",
+                            "photos": photos,
+                            "albums": albums.map(function(album) {
+                                return album.name;
+                            })
+                        });
                     });
                 }
             });
