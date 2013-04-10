@@ -124,12 +124,16 @@ app.delete("/users/:id", userCon.destroy);
 // album
 app.get("/albums/:album", userCon.viewAlbum);
 app.post("/albums", userCon.createAlbum);
+app.delete("/albums/:album", userCon.deleteAlbum);
 
 // photo
-app.get("/photos/:id", photoCon.view);
+app.get("/photos/:album/:photo", userCon.getPhoto);
+app.get("/photos/:photo", userCon.getPhoto);
 app.post("/photos", photoCon.create);
 app.put("/albums/:id", photoCon.update);
 app.delete("/albums/:id", albumCon.destroy);
+
+app.post("/move", userCon.movePhoto);
 
 // shortcuts
 //app.get("/all", photoCon.viewAll);

@@ -8,5 +8,9 @@ block content
     button Submit
   ul
     each album in albums
-      li: a(href="/albums/" + album)= album
+      li
+        a(href="/albums/" + album)= album
+        form(action="/albums/" + album, method="post")
+          input(type="hidden", name="_method", value="delete")
+          input(type="submit")
 

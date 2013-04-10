@@ -112,19 +112,57 @@ var UserController = function(credentials) {
     };
 
     this.viewAlbum = function(req, res) {
+        var albumPath = req.params.album;
+        if (req.params.album === "unsorted") {
+            albumPath = "";
+        }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
-            dropbox.readdir("/" + req.params.album, function(err, entries) {
-                console.log(entries.filter(function(entry) {
-                    return /.*(\.jpg|\.png|\.gif)/.test(entry);
-                }));
+            dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
                 res.render("album/view", {
                     "name": req.params.album,
                     "photos": entries.filter(function(entry) {
-                        console.log(entry);
-                        console.log(/.*(\.jpg|\.png|\.gif)/.test(entry));
-                        return /.*(\.jpg|\.png|\.gif)/.test(entry);
+                        return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
                     })
                 });
+            });
+        });
+    };
+
+    this.getPhoto = function(req, res) {
+        var path = (req.params.album ? "/" + req.params.album : "" ) + "/" + req.params.photo;
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.readFile(path, {"buffer": true}, function(err, data) {
+                if (err) {
+                    res.end();
+                } else {
+                    res.setHeader("Content-type", "image");
+                    res.send(data);
+                }
+            });
+        });
+    };
+
+    this.deleteAlbum = function(req, res) {
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.unlink("/" + req.params.album, function(err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.redirect("/home");
+                }
+            });
+        });
+    };
+
+    this.movePhoto = function(req, res) {
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.move(req.body.from + req.body.photo, req.body.to + req.body.photo,
+                    function(err) {
+                if (err) {
+                    res.render("error", {"error": err});
+                } else {
+                    res.redirect("/albums" + req.body.from);
+                }
             });
         });
     };
