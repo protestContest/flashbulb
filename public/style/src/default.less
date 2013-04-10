@@ -151,7 +151,7 @@ aside {
     background: url("/image/darknoise.png") repeat scroll 0% 0% rgb(51, 51, 51);
     width: 200px;
     color: @white;
-    padding: 20px;
+    padding: 20px 0px;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     font-size: 20px;
@@ -171,8 +171,11 @@ aside .album:first-child {
 
 aside .album:last-child {
     border-bottom: none;
+    padding-bottom: 11px;
 }
 
 aside .album.dragOver {
-    background: white;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0) inset;
+    border-bottom: none;
+    padding-bottom: 11px;
 }

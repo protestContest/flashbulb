@@ -13,12 +13,17 @@ $(document).ready(function() {
             clearTimeout(window.asideTimeout);
             $(el).addClass("dragElement");
             $("aside").show("slide", {direction: "right"}, 100);
+
+            var dragIcon = document.createElement("img");
+            dragIcon.src = "/image/drag.png";
+            e.dataTransfer.setDragImage(dragIcon, 25, 25);
             e.dataTransfer.effectAllowed = "copy";
             e.dataTransfer.setData("Text", JSON.stringify({
                 "from": "/" + album,
                 "photo": "/" + photo,
                 "src": $(el).attr("src")
             }));
+
             return false;
         });
 
@@ -57,6 +62,7 @@ $(document).ready(function() {
                 } else {
                     $("*[src='" + data.src + "']").css("opacity", "1");
                 }
+                window.page.showMessage("Photo moved", 2000);
             });
 
             return false;

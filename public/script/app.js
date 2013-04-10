@@ -37,7 +37,7 @@ function Toolbar(page, html) {
      */
     this.updateMessage = function(message) {
         html.find("#messages").fadeOut(function() {
-           $(this).html(message).fadeIn(); 
+           $(this).html(message).fadeIn("fast"); 
         });
     };
 
