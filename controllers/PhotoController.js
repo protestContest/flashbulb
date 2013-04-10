@@ -62,6 +62,10 @@ var PhotoController = function(credentials) {
     };
 
     this.move = function(req, res) {
+        console.log(req.body.to);
+        if (req.body.to === "/Unsorted") {
+            req.body.to = "";
+        }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.move(req.body.from + req.body.photo, req.body.to + req.body.photo,
                     function(err) {

@@ -75,20 +75,24 @@ var AlbumController = function(credentials) {
     };
 
     this.create = function(req, res) {
-        User.get(req.session.user.email, function(err, user) {
-            getDropbox(user.dropboxId, function(err, dropbox) {
-                dropbox.readdir("/", function(err, entries) {
-                    console.log(req.body);
-                    dropbox.mkdir(req.body.name, function(err, stat) {
-                        if (err) {
-                            res.render("error", {"error": err});
-                        } else {
-                            res.redirect("/albums");
-                        }
+        if (req.body.name === "Unsorted") {
+            res.render("error", {"error": "Album name is reserved"});
+        } else {
+            User.get(req.session.user.email, function(err, user) {
+                getDropbox(user.dropboxId, function(err, dropbox) {
+                    dropbox.readdir("/", function(err, entries) {
+                        console.log(req.body);
+                        dropbox.mkdir(req.body.name, function(err, stat) {
+                            if (err) {
+                                res.render("error", {"error": err});
+                            } else {
+                                res.redirect("/albums");
+                            }
+                        });
                     });
                 });
             });
-        });
+        }
     };
 
     this.updateForm = function(req, res) {

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    setTimeout(function() {
+    window.asideTimeout = setTimeout(function() {
         $("aside").hide("slide", {direction: "right"}, 100);
     }, 2000);
 
@@ -10,6 +10,7 @@ $(document).ready(function() {
                 album = (srcSplit.length === 4) ? srcSplit[2] : "",
                 photo = (srcSplit.length === 4) ? srcSplit[3] : srcSplit[2];
 
+            clearTimeout(window.asideTimeout);
             $(el).addClass("dragElement");
             $("aside").show("slide", {direction: "right"}, 100);
             e.dataTransfer.effectAllowed = "copy";
