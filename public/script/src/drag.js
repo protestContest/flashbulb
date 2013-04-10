@@ -10,8 +10,9 @@ $(document).ready(function() {
             e.dataTransfer.effectAllowed = "copy";
             e.dataTransfer.setData("Text", JSON.stringify({
                 "from": "/" + album,
-                "photo": "/" + photo
-            }));//$(el).attr("src"));
+                "photo": "/" + photo,
+                "src": $(el).attr("src")
+            }));
             return false;
         });
 
@@ -36,12 +37,16 @@ $(document).ready(function() {
             if (e.stopPropagation) e.stopPropagation();
             e.preventDefault();
 
+            this.className = "album";
+
             var data = JSON.parse(e.dataTransfer.getData("Text"));
             data.to = "/" + $(el).html();
-            console.log(data);
 
-            $.post("/move", data, function(data, status) {
+            console.log(data.src);
+
+            $.post("/move", data, function(postdata, status) {
                 console.log("Moved file: " + status);
+                $("*[src='" + data.src + "']").find(".thumb").fadeOut();
             });
 
             return false;

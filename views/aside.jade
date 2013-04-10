@@ -1,7 +1,9 @@
-script(src="//code.jquery.com/ui/1.10.2/jquery-ui.js")
-script(src="/script/lib/h5utils.js")
-script(src="/script/src/drag.js")
+mixin aside(albums, name)
+  script(src="//code.jquery.com/ui/1.10.2/jquery-ui.js")
+  script(src="/script/lib/h5utils.js")
+  script(src="/script/src/drag.js")
 
-aside Move to album
-  .album asdf
-  .album qwer
+  aside Move to album
+    each album in albums
+      if (album !== name)
+        .album= album

@@ -13,14 +13,18 @@ var AlbumController = function(credentials) {
         User.get(req.session.user.email, function(err, user) {
             getDropbox(user.dropboxId, function(err, dropbox) {
                 dropbox.stat("/", {"readDir": true}, function(err, folderStat, stats) {
-                    res.render("album/all", {
-                        "user": user.name,
-                        "albums": stats.filter(function(entry) {
-                            return entry.isFolder;
-                        }).map(function(entry) {
-                            return entry.name;
-                        })
-                    });
+                    if (err) {
+                        res.render("error", {"error": err});
+                    } else {
+                        res.render("album/all", {
+                            "user": user.name,
+                            "albums": stats.filter(function(entry) {
+                                return entry.isFolder;
+                            }).map(function(entry) {
+                                return entry.name;
+                            })
+                        });
+                    }
                 });
             });
         });
@@ -36,14 +40,33 @@ var AlbumController = function(credentials) {
                 if (err) {
                     res.render("error", {"error": err});
                 } else {
-                    res.render("album/view", {
-                        "name": req.params.album,
-                        "photos": entries.filter(function(entry) {
-                            return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
-                        })
+                    getAlbumList(dropbox, function(err, albums) {
+                        res.render("album/view", {
+                            "name": req.params.album,
+                            "photos": entries.filter(function(entry) {
+                                return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
+                            }),
+                            "albums": albums.map(function(album) {
+                                return album.name;
+                            })
+                        });
                     });
                 }
             });
+        });
+    };
+
+    this.getAlbumList = getAlbumList;
+    
+    function getAlbumList(dropbox, callback) {
+        dropbox.readdir("/", function(err, names, folder, folderEntries) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, folderEntries.filter(function(entry) {
+                    return entry.isFolder;
+                }));
+            }
         });
     };
 

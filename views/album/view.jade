@@ -1,4 +1,6 @@
 extends ../layout
+include ../gallery
+include ../aside
 
 block head
   link(rel="stylesheet", href="/style/user.css")
@@ -13,5 +15,5 @@ block toolbar
 block content
   #content.main.container(data-type="gallery")
     h1= name
-    include ../gallery
-    include ../aside
+    mixin gallery(photos)
+    mixin aside(albums, name)
