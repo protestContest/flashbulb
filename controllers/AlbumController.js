@@ -32,7 +32,7 @@ var AlbumController = function(credentials) {
 
     this.view = function(req, res) {
         var albumPath = req.params.album;
-        if (req.params.album === "unsorted") {
+        if (req.params.album === "Unsorted") {
             albumPath = "";
         }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {

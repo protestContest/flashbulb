@@ -13,9 +13,10 @@ block toolbar
   #messages.span6
 
   ul.nav.span1.tools
-    li.tool-link
-      a(id="delete-album-button", data-delete="#{name}", href="javascript:void(0)", title="Delete album")
-        i.icon-trash
+    if name != "Unsorted"
+      li.tool-link
+        a(id="delete-album-button", data-delete="#{name}", href="javascript:void(0)", title="Delete album")
+          i.icon-trash
 
 block content
   #content.main.container(data-type="gallery")

@@ -3,8 +3,10 @@ mixin aside(albums, name)
   script(src="/script/lib/h5utils.js")
   script(src="/script/src/drag.js")
 
-  aside Move to album
-    each album in albums
-      if (album !== name)
-        .album= album
-    .album Unsorted
+  if (albums.length || name !== "Unsorted")
+    aside Move to album
+      each album in albums
+        if (album !== name)
+          .album= album
+      if (name !== "Unsorted")
+        .album Unsorted
