@@ -75,14 +75,15 @@ var AlbumController = function(credentials) {
     };
 
     this.create = function(req, res) {
-        User.get(req.user.email, function(err, user) {
+        User.get(req.session.user.email, function(err, user) {
             getDropbox(user.dropboxId, function(err, dropbox) {
                 dropbox.readdir("/", function(err, entries) {
-                    dropbox.mkdir(req.body.albumName, function(err, stat) {
+                    console.log(req.body);
+                    dropbox.mkdir(req.body.name, function(err, stat) {
                         if (err) {
                             res.render("error", {"error": err});
                         } else {
-                            res.redirect("/home");
+                            res.redirect("/albums");
                         }
                     });
                 });

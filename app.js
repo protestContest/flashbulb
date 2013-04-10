@@ -123,6 +123,7 @@ app.delete("/users/:id", appCon.devAuth, userCon.destroy);
 
 // album
 app.get("/albums", albumCon.all);
+app.get("/albums/new", albumCon.createForm);
 app.get("/albums/:album", albumCon.view);
 app.post("/albums", albumCon.create);
 app.delete("/albums/:album", albumCon.destroy);

@@ -1,4 +1,8 @@
 extends ../layout
+include ../gallery
+
+block head
+  link(rel="stylesheet", href="/style/album.css")
 
 block toolbar
   ul.nav.span3
@@ -7,6 +11,18 @@ block toolbar
   #messages.span6
 
 block content
+  #content.main.container(data-type="gallery")
+    .row 
+      a(href="/albums/new")
+        .span3.thumb
+          i.icon-4x.icon-plus
+          .thumbinfo New Album
+      each item, i in albums
+        a(href="/albums/" + item)
+          .span3.thumb 
+            i.icon-book.icon-4x
+            .thumbinfo= item
+//
   h1= user
   form(action="/albums", method="post")
     label New album
