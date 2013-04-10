@@ -96,33 +96,6 @@ var UserController = function(credentials) {
     };
 
 
-    this.getPhoto = function(req, res) {
-        var path = (req.params.album ? "/" + req.params.album : "" ) + "/" + req.params.photo;
-        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
-            dropbox.readFile(path, {"buffer": true}, function(err, data) {
-                if (err) {
-                    res.end();
-                } else {
-                    res.setHeader("Content-type", "image");
-                    res.send(data);
-                }
-            });
-        });
-    };
-
-    this.movePhoto = function(req, res) {
-        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
-            dropbox.move(req.body.from + req.body.photo, req.body.to + req.body.photo,
-                    function(err) {
-                if (err) {
-                    res.render("error", {"error": err});
-                } else {
-                    res.redirect("/albums" + req.body.from);
-                }
-            });
-        });
-    };
-
     function getDropbox(dropboxId, callback) {
         rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
             var tokens = JSON.parse(tokenStr),
