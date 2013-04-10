@@ -1,24 +1,31 @@
 extends ../layout
 
+block head
+  link(rel="stylesheet", href="/style/user.css")
+  script(src="/script/app.js")
+
 block toolbar
   ul.nav.span3
-    li.active All Pictures
-    li.toolbar-link(data-href="/albums") Albums
+    li.toolbar-link(data-href="/photos/all") All Pictures
+    li.active Albums
   #messages.span6
 
 block content
-  h1= name
-  - if (photos.length)
-    ul
-      each photo in photos
-        li
-          img(src="/photos" + photo.path)
-          p= photo.name
-          form(action="/move", method="post")
-            input(type="hidden", name="from", value="/" + name)
-            input(type="hidden", name="photo", value="/" + photo.name)
-            label Move to album:
-              input(name="to")
-            button Move
-  - else
-    p Album is empty
+  #content.main.container(data-type="gallery")
+    h1= name
+    include ../gallery
+  //
+    - if (photos.length)
+      ul
+        each photo in photos
+          li
+            img(src="/photos" + photo.path)
+            p= photo.name
+            form(action="/move", method="post")
+              input(type="hidden", name="from", value="/" + name)
+              input(type="hidden", name="photo", value="/" + photo.name)
+              label Move to album:
+                input(name="to")
+              button Move
+    - else
+      p Album is empty

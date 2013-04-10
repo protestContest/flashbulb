@@ -8,7 +8,8 @@ block toolbar
   ul.nav.span3
     li.active All Pictures
     li.toolbar-link(data-href="/albums") Albums
-  #messages.span6 asd
+  #messages.span6
 
 block content
-  include ../gallery
+  #content.main.container(data-type="gallery")
+    include ../gallery
