@@ -25,7 +25,7 @@ var PhotoController = function(credentials) {
         res.send("Coming soon!");
     };
 
-    this.getPhoto = function(req, res) {
+    this.get = function(req, res) {
         var path = (req.params.album ? "/" + req.params.album : "" ) + "/" + req.params.photo;
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.readFile(path, {"buffer": true}, function(err, data) {
@@ -39,7 +39,7 @@ var PhotoController = function(credentials) {
         });
     };
 
-    this.movePhoto = function(req, res) {
+    this.move = function(req, res) {
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.move(req.body.from + req.body.photo, req.body.to + req.body.photo,
                     function(err) {

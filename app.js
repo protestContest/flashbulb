@@ -128,9 +128,9 @@ app.post("/albums", albumCon.create);
 app.delete("/albums/:album", albumCon.destroy);
 
 // photo
-app.get("/photos/:album/:photo", photoCon.getPhoto);
-app.get("/photos/:photo", photoCon.getPhoto);
-app.post("/move", photoCon.movePhoto);
+app.get("/photos/:album/:photo", photoCon.get);
+app.get("/photos/:photo", photoCon.get);
+app.post("/move", photoCon.move);
 
 // shortcuts
 //app.get("/all", photoCon.viewAll);
