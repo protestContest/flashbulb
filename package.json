@@ -7,7 +7,7 @@
   "version": "0.0.0-29",
   "engines": {
     "node": "0.6.x",
-    "npm": "1.2.x"
+    "npm": "1.1.x"
   },
   "dependencies": {
     "dropbox": "0.9.x",
