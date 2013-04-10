@@ -1,5 +1,11 @@
 extends ../layout
 
+block toolbar
+  ul.nav.span3
+    li.toolbar-link: a(href="/photos/all") All Pictures
+    li.active Albums
+  #messages.span6
+
 block content
   h1= user
   form(action="/albums", method="post")
