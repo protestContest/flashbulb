@@ -19,6 +19,7 @@ function Toolbar(page, html) {
             html.css("top", Math.max(0, 52 - $(window).scrollTop()));
         });
 
+        // links on the left
         html.find(".toolbar-link").each(function(i, link) {
             if (! $(this).clickBound) {
                 $(this).clickBound = true;
@@ -26,6 +27,25 @@ function Toolbar(page, html) {
                     var href = $(link).attr("data-href");
 
                     //page.load(href);
+                });
+            }
+        });
+
+        // buttons on the right
+        html.find(".tool-link").each(function(i, link) {
+            if (! $(this).clickBound) {
+                $(this).clickBound = true;
+                $(this).click(function() {
+                    console.log("Deleting");
+                    if (confirm("Delete this album?")) {
+                        var album = $(link).attr("data-href");
+                        $.post("/albums/" + album, {
+                            "_method": "delete"
+                        }, function(data, status) {
+                            console.log("Album deleted: " + status);
+                            page.showMessage("Album deleted", 2000);
+                        });
+                    }
                 });
             }
         });
