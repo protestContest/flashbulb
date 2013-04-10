@@ -7,6 +7,8 @@ block content
       input(type="text", name="albumName")
     button Submit
   ul
+    li
+      a(href="/albums/unsorted") Unsorted
     each album in albums
       li
         a(href="/albums/" + album)= album
