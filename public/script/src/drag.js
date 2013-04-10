@@ -6,6 +6,7 @@ $(document).ready(function() {
                 album = (srcSplit.length === 4) ? srcSplit[2] : "",
                 photo = (srcSplit.length === 4) ? srcSplit[3] : srcSplit[2];
 
+            $(el).addClass("dragElement");
             $("aside").show("slide", {direction: "right"}, 100);
             e.dataTransfer.effectAllowed = "copy";
             e.dataTransfer.setData("Text", JSON.stringify({
@@ -17,6 +18,7 @@ $(document).ready(function() {
         });
 
         addEvent(el, "dragend", function(e) {
+            $(".dragElement").removeClass("dragElement");
             $("aside").hide("slide", {direction: "right"}, 100);
         });
     });
@@ -42,11 +44,9 @@ $(document).ready(function() {
             var data = JSON.parse(e.dataTransfer.getData("Text"));
             data.to = "/" + $(el).html();
 
-            console.log(data.src);
-
             $.post("/move", data, function(postdata, status) {
                 console.log("Moved file: " + status);
-                $("*[src='" + data.src + "']").find(".thumb").fadeOut();
+                $("*[src='" + data.src + "']").closest(".thumb").fadeOut();
             });
 
             return false;
