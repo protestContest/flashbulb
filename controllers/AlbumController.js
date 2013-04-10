@@ -33,12 +33,16 @@ var AlbumController = function(credentials) {
         }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
-                res.render("album/view", {
-                    "name": req.params.album,
-                    "photos": entries.filter(function(entry) {
-                        return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
-                    })
-                });
+                if (err) {
+                    res.render("error", {"error": err});
+                } else {
+                    res.render("album/view", {
+                        "name": req.params.album,
+                        "photos": entries.filter(function(entry) {
+                            return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
+                        })
+                    });
+                }
             });
         });
     };
