@@ -8,7 +8,8 @@ var express = require("express")
   , dropbox = require("dropbox")
   , port, hostname
   , appCon, userCon, albumCon, photoCon
-  , app = express();
+  , app = express()
+  , url = require("url");
 
 
 // Configuration Server
@@ -42,7 +43,8 @@ app.configure("development", function() {
 });
 
 app.configure("production", function() {
-    var store;
+    var store,
+        redisURL = url.parse(process.env.REDISTOGO_URL);
     console.log("running in production environment");
     credentials = {
         "mongodb": {
@@ -55,9 +57,19 @@ app.configure("production", function() {
         "facebook": {
             "clientId": process.env.FACEBOOK_CLIENTID,
             "secret":   process.env.FACEBOOK_SECRET
+        },
+        "redis": {
+            "host": redisURL.hostname,
+            "port": redisURL.port,
+            "auth": redisURL.auth.split(":")[1]
         }
     };
-    app.use(express.session({secret: "bananahorsepancakes", store: new RedisStore()}));
+    store = new RedisStore({
+        "host": credentials.redis.host,
+        "port": credentials.redis.port,
+        "pass": credentials.redis.auth
+    });
+    app.use(express.session({"secret": "bananahorsepancakes", "store": store}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);

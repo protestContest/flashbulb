@@ -3,7 +3,10 @@ var redis = require("redis"),
 
 var UserController = function(credentials) {
     var User = require("../models/User"),
-        rClient = redis.createClient();
+        rClient = redis.createClient(credentials.redis.port,
+                    credentials.redis.host);
+
+    rClient.auth(credentials.redis.auth);
 
     if (!(this instanceof UserController)) {
         return new UserController(credentials);

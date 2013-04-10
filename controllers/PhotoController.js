@@ -4,8 +4,11 @@ var redis = require("redis"),
     AlbumCon = require("./AlbumController.js");
 
 var PhotoController = function(credentials) {
-    var rClient = redis.createClient(),
-        Album = new AlbumCon(credentials);
+    var Album = new AlbumCon(credentials),
+        rClient = redis.createClient(credentials.redis.port,
+                    credentials.redis.host);
+
+    rClient.auth(credentials.redis.auth);
 
     if (!(this instanceof PhotoController)) {
         return new PhotoController(credentials);

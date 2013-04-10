@@ -3,7 +3,10 @@ var User = require("../models/User"),
     Dropbox = require("dropbox");
 
 var AlbumController = function(credentials) {
-    var rClient = redis.createClient();
+    var rClient = redis.createClient(credentials.redis.port,
+                    credentials.redis.host);
+
+    rClient.auth(credentials.redis.auth);
 
     if (!(this instanceof AlbumController)) {
         return new AlbumController(credentials);

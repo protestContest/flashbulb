@@ -11,8 +11,10 @@ var Dropbox = require("dropbox")
 var ApplicationController = function(credentials) {
     var User,
         dClient,
-        rClient = redis.createClient(),
-        watcher;
+        rClient = redis.createClient(credentials.redis.port,
+                    credentials.redis.host);
+
+    rClient.auth(credentials.redis.auth);
 
     if (!(this instanceof ApplicationController)) {
         return new ApplicationController(credentials);
