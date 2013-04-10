@@ -3,7 +3,7 @@
     - trim_file = photo.name.split('.')[0]
     .span3.thumb 
       i.icon-spinner.icon-spin.icon-4x
-      img(src='/photos' + photo.path, alt=trim_file)
+      img(src='/photos' + photo.path, alt=photo.name)
       ul.overlay-buttons
         li.overlay-button
           a.edit(href="/edit" + photo.path, title="Edit")

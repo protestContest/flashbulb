@@ -2,9 +2,16 @@ $(document).ready(function() {
     $("img").each(function(i, el) {
         el.setAttribute("draggable", "true");
         addEvent(el, "dragstart", function(e) {
+            var srcSplit = $(el).attr("src").split("/"),
+                album = (srcSplit.length === 4) ? srcSplit[2] : "",
+                photo = (srcSplit.length === 4) ? srcSplit[3] : srcSplit[2];
+
             $("aside").show("slide", {direction: "right"}, 100);
             e.dataTransfer.effectAllowed = "copy";
-            e.dataTransfer.setData("Text", $(el).attr("src"));
+            e.dataTransfer.setData("Text", JSON.stringify({
+                "from": "/" + album,
+                "photo": "/" + photo
+            }));//$(el).attr("src"));
             return false;
         });
 
@@ -27,9 +34,15 @@ $(document).ready(function() {
 
         addEvent(el, "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
+            e.preventDefault();
 
-            var url = e.dataTransfer.getData("Text");
-            console.log(url);
+            var data = JSON.parse(e.dataTransfer.getData("Text"));
+            data.to = "/" + $(el).html();
+            console.log(data);
+
+            $.post("/move", data, function(data, status) {
+                console.log("Moved file: " + status);
+            });
 
             return false;
         });
