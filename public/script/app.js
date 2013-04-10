@@ -32,11 +32,24 @@ function Toolbar(page, html) {
         });
 
         // buttons on the right
-        html.find(".tool-link a").each(function(i, link) {
+        $(".tool-link a").each(function(i, link) {
+            console.log("asdf");
+            console.log($(link).html());
+            if (! $(this).hoverBound) {
+                $(this).hoverBound = true;
+                $(this).hover(function() {
+                    var title = $(link).attr("title");
+                    window.page.showMessage(title);
+                }, function() {
+                    window.page.showMessage("");
+                });
+            }
+        });
+
+        $("#delete-album-button").each(function(i, link) {
             if (! $(this).clickBound) {
                 $(this).clickBound = true;
                 $(this).click(function() {
-                    console.log("Deleting");
                     if (confirm("Delete this album?")) {
                         var album = $(link).attr("data-delete");
                         console.log(album);
@@ -58,7 +71,7 @@ function Toolbar(page, html) {
      */
     this.updateMessage = function(message) {
         html.find("#messages").fadeOut(function() {
-           $(this).html(message).fadeIn("fast"); 
+           $(this).html(message).fadeIn(100); 
         });
     };
 
@@ -246,5 +259,5 @@ function Page(toolbarRef, contentRef) {
 $(document).ready(function() {
     window.page = new Page($("#toolbar"), $("#content"));
     page.init();
-    page.showMessage("Drag photos to organize", 2000);
+    //page.showMessage("Drag photos to organize", 2000);
 });

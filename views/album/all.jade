@@ -3,6 +3,7 @@ include ../gallery
 
 block head
   link(rel="stylesheet", href="/style/album.css")
+  script(src="/script/app.js", type="text/javascript")
 
 block toolbar
   ul.nav.span3
@@ -10,22 +11,22 @@ block toolbar
     li.active Albums
   #messages.span6
 
+  ul.nav.span1.tools
+    li.tool-link
+      a(href="/albums/new", title="New album"): i.icon-plus
+
 block content
   #content.main.container(data-type="gallery")
     .row 
-      a(href="/albums/new")
-        .span3.thumb
-          i.icon-4x.icon-plus
-          .thumbinfo New Album
       each item, i in albums
         a(href="/albums/" + item)
           .span3.thumb 
             i.icon-book.icon-4x
-            .thumbinfo= item
+            .title= item
       a(href="/albums/Unsorted")
         .span3.thumb
           i.icon-copy.icon-4x
-          .thumbinfo Unsorted
+          .title Unsorted
 //
   h1= user
   form(action="/albums", method="post")
