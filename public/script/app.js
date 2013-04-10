@@ -32,13 +32,14 @@ function Toolbar(page, html) {
         });
 
         // buttons on the right
-        html.find(".tool-link").each(function(i, link) {
+        html.find(".tool-link a").each(function(i, link) {
             if (! $(this).clickBound) {
                 $(this).clickBound = true;
                 $(this).click(function() {
                     console.log("Deleting");
                     if (confirm("Delete this album?")) {
-                        var album = $(link).attr("data-href");
+                        var album = $(link).attr("data-delete");
+                        console.log(album);
                         $.post("/albums/" + album, {
                             "_method": "delete"
                         }, function(data, status) {

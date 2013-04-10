@@ -128,6 +128,7 @@ var AlbumController = function(credentials) {
     };
 
     this.destroy = function(req, res) {
+        console.log("Deleting an album: " + req.params.album);
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.unlink("/" + req.params.album, function(err) {
                 if (err) {
