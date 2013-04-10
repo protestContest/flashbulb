@@ -140,17 +140,26 @@ a.logo:hover {
 }
 
 aside {
-    display: none;
+    text-align: center;
+    //display: none;
     position: fixed;
     right: 0px;
     top: 200px;
-    background: gray;
+    background: url("/image/darknoise.png") repeat scroll 0% 0% rgb(51, 51, 51);
     width: 300px;
+    color: @white;
+    padding: 20px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    font-size: 20px;
+    box-shadow: -2px 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 aside .album {
+    text-align: left;
     border-bottom: 1px solid black;
     font-size: 16px;
+    padding: 10px 10px;
 }
 
 aside .album.dragOver {
