@@ -69,8 +69,8 @@ app.configure("production", function() {
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);
 userCon = require("./controllers/UserController")(credentials);
-albumCon = require("./controllers/AlbumController")();
-photoCon = require("./controllers/PhotoController")();
+albumCon = require("./controllers/AlbumController")(credentials);
+photoCon = require("./controllers/PhotoController")(credentials);
 
 // configure passport
 passport.use(new DropboxStrategy({
@@ -114,17 +114,18 @@ app.get("/home", appCon.auth, userCon.home);
 app.get("/users", appCon.devAuth, userCon.all);
 app.get("/users/new", appCon.devAuth, userCon.createForm);
 app.get("/users/:id/edit", appCon.devAuth, userCon.updateForm);
-app.get("/users/:id/albums/new", appCon.auth, userCon.createAlbumForm);
+
+//app.get("/users/:id/albums/new", appCon.auth, userCon.createAlbumForm);
 app.get("/users/:id", userCon.view);
-app.post("/users", userCon.create);
-app.post("/users/:id/albums", userCon.createAlbum);
-app.put("/users/:id", userCon.update);
-app.delete("/users/:id", userCon.destroy);
+app.post("/users", appCon.devAuth, userCon.create);
+app.put("/users/:id", appCon.devAuth, userCon.update);
+app.delete("/users/:id", appCon.devAuth, userCon.destroy);
 
 // album
-app.get("/albums/:album", userCon.viewAlbum);
-app.post("/albums", userCon.createAlbum);
-app.delete("/albums/:album", userCon.deleteAlbum);
+app.get("/albums", albumCon.all);
+app.get("/albums/:album", albumCon.view);
+app.post("/albums", albumCon.create);
+app.delete("/albums/:album", albumCon.destroy);
 
 // photo
 app.get("/photos/:album/:photo", userCon.getPhoto);

@@ -26,7 +26,11 @@ var ApplicationController = function(credentials) {
     });
 
     this.index = function(req, res) {
-        res.render("home");
+        if (req.session.user) {
+            res.redirect("/home");
+        } else {
+            res.render("index");
+        }
     };
 
     this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {

@@ -1,33 +1,45 @@
 var User = require("../models/User"),
-    Album = require("../models/Album");
+    redis = require("redis"),
+    Dropbox = require("dropbox");
 
-var AlbumController = function() {
+var AlbumController = function(credentials) {
+    var rClient = redis.createClient();
+
     if (!(this instanceof AlbumController)) {
-        return new AlbumController();
+        return new AlbumController(credentials);
     }
 
     this.all = function(req, res) {
         User.get(req.session.user.email, function(err, user) {
-            if (err) { 
-                res.render("error", {"error": err} );
-            } else {
-                res.render("album/all", {"albums": user.albums});
-            }
+            getDropbox(user.dropboxId, function(err, dropbox) {
+                dropbox.stat("/", {"readDir": true}, function(err, folderStat, stats) {
+                    res.render("album/all", {
+                        "user": user.name,
+                        "albums": stats.filter(function(entry) {
+                            return entry.isFolder;
+                        }).map(function(entry) {
+                            return entry.name;
+                        })
+                    });
+                });
+            });
         });
     };
 
     this.view = function(req, res) {
-        Album.get(req.session.user.email, req.params.id, function(err, album) {
-            if (err) {
-                res.render("error", {"error": err} );
-            } else {
+        var albumPath = req.params.album;
+        if (req.params.album === "unsorted") {
+            albumPath = "";
+        }
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
                 res.render("album/view", {
-                    name: album.name,
-                    photos: album.photos.map(function(photo) {
-                        return photo.url;
+                    "name": req.params.album,
+                    "photos": entries.filter(function(entry) {
+                        return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
                     })
                 });
-            }
+            });
         });
     };
 
@@ -36,18 +48,18 @@ var AlbumController = function() {
     };
 
     this.create = function(req, res) {
-        User.get(req.session.user.email, function(err, user) {
-            if (err) {
-                res.render("error", {"error": err});
-            } else {
-                user.addNewAlbum(req.body.albumName, function(err, album) {
-                    if (err) {
-                        res.render("error", {"error": err});
-                    } else {
-                        res.redirect("/albums/" + album.name);
-                    }
+        User.get(req.user.email, function(err, user) {
+            getDropbox(user.dropboxId, function(err, dropbox) {
+                dropbox.readdir("/", function(err, entries) {
+                    dropbox.mkdir(req.body.albumName, function(err, stat) {
+                        if (err) {
+                            res.render("error", {"error": err});
+                        } else {
+                            res.redirect("/home");
+                        }
+                    });
                 });
-            }
+            });
         });
     };
 
@@ -84,20 +96,30 @@ var AlbumController = function() {
     };
 
     this.destroy = function(req, res) {
-        User.get(req.session.user.email, function(err, user) {
-            if (err) {
-                res.render("error", {"error": err});
-            } else {
-                user.removeAlbum(req.params.id, function(err) {
-                    if (err) {
-                        res.render("error", {"error": err});
-                    } else {
-                        res.redirect("/albums");
-                    }
-                });
-            }
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.unlink("/" + req.params.album, function(err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.redirect("/home");
+                }
+            });
         });
     };
+
+    function getDropbox(dropboxId, callback) {
+        rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
+            var tokens = JSON.parse(tokenStr),
+                dropbox = new Dropbox.Client({
+                    key: credentials.dropbox.appkey,
+                    secret: credentials.dropbox.secret,
+                    sandbox: true
+                });
+
+            dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
+            callback(err, dropbox);
+        });
+    }
 };
 
 module.exports = AlbumController;

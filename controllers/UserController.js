@@ -95,38 +95,6 @@ var UserController = function(credentials) {
         res.render("user/createAlbum");
     };
 
-    this.createAlbum = function(req, res) {
-        User.get(req.user.email, function(err, user) {
-            getDropbox(user.dropboxId, function(err, dropbox) {
-                dropbox.readdir("/", function(err, entries) {
-                    dropbox.mkdir(req.body.albumName, function(err, stat) {
-                        if (err) {
-                            res.render("error", {"error": err});
-                        } else {
-                            res.redirect("/home");
-                        }
-                    });
-                });
-            });
-        });
-    };
-
-    this.viewAlbum = function(req, res) {
-        var albumPath = req.params.album;
-        if (req.params.album === "unsorted") {
-            albumPath = "";
-        }
-        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
-            dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
-                res.render("album/view", {
-                    "name": req.params.album,
-                    "photos": entries.filter(function(entry) {
-                        return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
-                    })
-                });
-            });
-        });
-    };
 
     this.getPhoto = function(req, res) {
         var path = (req.params.album ? "/" + req.params.album : "" ) + "/" + req.params.photo;
@@ -137,18 +105,6 @@ var UserController = function(credentials) {
                 } else {
                     res.setHeader("Content-type", "image");
                     res.send(data);
-                }
-            });
-        });
-    };
-
-    this.deleteAlbum = function(req, res) {
-        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
-            dropbox.unlink("/" + req.params.album, function(err) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.redirect("/home");
                 }
             });
         });

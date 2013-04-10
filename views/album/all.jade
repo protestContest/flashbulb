@@ -1,9 +1,16 @@
 extends ../layout
 
 block content
-  h1 All Albums
-  p: a(href="/albums/new") Add Album
+  h1= user
+  form(action="/albums", method="post")
+    label New album
+      input(type="text", name="albumName")
+    button Submit
   ul
     each album in albums
-      li= album
-        a(href="/albums/#{album.name}/edit") Update
+      li
+        a(href="/albums/" + album)= album
+        form(action="/albums/" + album, method="post")
+          input(type="hidden", name="_method", value="delete")
+          button Delete Album
+
