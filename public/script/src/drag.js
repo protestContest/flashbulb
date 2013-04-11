@@ -38,8 +38,49 @@ $(document).ready(function() {
     });
 
     $(".gallery").each(function(i, el) {
+        addEvent(el, "dragover", function(e) {
+            if (e.preventDefault) e.preventDefault();
+            e.dataTransfer.dropEffect = "copy";
+            return false;
+        });
+
         addEvent(el, "drop", function(e) {
-            // handle file drop here
+            if (e.stopPropagation) e.stopPropagation();
+            e.preventDefault();
+
+            var files = e.dataTransfer.files;
+            console.log(files[0]);
+
+            var album,
+                album_match = location.pathname.match(/\/albums\/(.*)/);
+            if (album_match) {
+                album = album_match[1];
+            } else {
+                album = "Unsorted";
+            }
+
+            var formData = new FormData();
+
+            for(var i = 0; i < files.length; i++) {
+                if (/(.jpg|.png|.gif)$/.test(files[i].name)) {
+                    formData.append("file-" + i, files[i]);
+                }
+            }
+
+            $.ajax({
+                "url": "/photos/" + album,
+                "data": formData,
+                "cache": false,
+                "contentType": false,
+                "processData": false,
+                "type": "POST",
+                "success": function(data, status) {
+                    console.log("Uploaded files: " + status);
+                    console.log(data);
+                }
+            });
+
+            return false;
         });
     });
 

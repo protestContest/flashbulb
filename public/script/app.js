@@ -33,8 +33,6 @@ function Toolbar(page, html) {
 
         // buttons on the right
         $(".tool-link a").each(function(i, link) {
-            console.log("asdf");
-            console.log($(link).html());
             if (! $(this).hoverBound) {
                 $(this).hoverBound = true;
                 $(this).hover(function() {

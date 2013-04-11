@@ -105,6 +105,7 @@ var PhotoController = function(credentials) {
             album = req.params.album;
         }
         // do upload here
+        console.log("Uploading file to " + album);
 
         res.send("STUB: Uploaded to " + album);
     };
