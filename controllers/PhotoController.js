@@ -15,8 +15,6 @@ var PhotoController = function(credentials) {
     }
 
     this.all = function(req, res) {
-        console.log("All photos");
-        console.log(req.isAuthenticated());
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.findByName("/", ".jpg", function(err, photos) {
                 if (err) {
@@ -68,7 +66,6 @@ var PhotoController = function(credentials) {
     };
 
     this.move = function(req, res) {
-        console.log(req.body.to);
         if (req.body.to === "/Unsorted") {
             req.body.to = "";
         }
@@ -79,6 +76,24 @@ var PhotoController = function(credentials) {
                     res.render("error", {"error": err});
                 } else {
                     res.redirect("/albums" + req.body.from);
+                }
+            });
+        });
+    };
+
+    this.getPublicUrl = function(req, res) {
+        if (req.params.path.substr(0, 5) === "/file") {
+            req.params.path = req.params.path.substr(5);
+        }
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            dropbox.makeUrl(req.params.path, {
+                "download": true,
+                "downloadHack": true
+            }, function(err, url) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(url);
                 }
             });
         });

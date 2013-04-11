@@ -158,12 +158,15 @@ function showDropdown(that) {
 
         // facebook upload sumbit
         $("#fb-submit").click(function(evt) {
+            console.log("Submit to facebook");
             evt.preventDefault();
 
             $(this).html("<i class='icon-spinner icon-spin'></i> Sharing...");
             $(this).attr("disabled", "disabled");
 
+            console.log(imgPath);
             $.get("/public" + imgPath, function(publicUrl, status) {
+                console.log("Got url: " + publicUrl.url);
                 var formData = new FormData();
                 formData.append("url", publicUrl.url);
                 formData.append("message", $("#share-desc").val());

@@ -101,10 +101,11 @@ var ApplicationController = function(credentials) {
     };
 
     this.fbUpload = function(req, res) {
+        console.log("Uploading to Facebook");
         if (req.account && req.session.share) {
 
             // post to fb
-            FB.setAccessToken(req.session.facebook.access_token);
+            FB.setAccessToken(req.session.fbToken);
             FB.api("me/photos", "post", {
                 "message": "Test post, please ignore",
                 "source": loadFile(req.session.share.url),  // get actual file here, in a buffer

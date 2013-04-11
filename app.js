@@ -148,6 +148,8 @@ app.get("/photos/:album/:photo", appCon.auth, photoCon.get);
 app.get("/photos/:photo", appCon.auth, photoCon.get);
 app.post("/move", appCon.auth, photoCon.move);
 
+app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
+
 // shortcuts
 //app.get("/all", photoCon.viewAll);
 
@@ -162,7 +164,6 @@ app.get("/albums.json", [ac.auth], ac.albumsJson);
 
 app.get("/file/:path", [ac.auth], ac.getFile);
 app.get("/edit/:path", [ac.auth], ac.editFile);
-app.get("/public/file/:path", [ac.auth], ac.getPublicUrl);
 
 app.get("/settings", [ac.auth], uc.settings);
 
