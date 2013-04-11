@@ -28,7 +28,7 @@ var ApplicationController = function(credentials) {
     });
 
     this.index = function(req, res) {
-        if (req.session.user) {
+        if (req.isAuthenticated()) {
             res.redirect("/home");
         } else {
             res.render("index");
@@ -68,7 +68,7 @@ var ApplicationController = function(credentials) {
     };
 
     this.auth = function(req, res, next) {
-        if (req.session.user) {
+        if (req.isAuthenticated()) {
             next();
         } else {
             res.redirect("/");
@@ -84,18 +84,12 @@ var ApplicationController = function(credentials) {
     };
 
     this.logout = function(req, res) {
-
         req.logout();
-        delete req.user;
-        delete req.account;
-        delete req.session;
         res.redirect("/");
     };
 
-/***************************
-
     this.fbAuthenticate = function(req, token, tokenSecret, profile, done) {
-        req.session.facebookToken = token;
+        req.session.fbToken = token;
         req.session.facebook = { };
         req.session.facebook.id = profile.id;
         req.session.facebook.access_token = token;
@@ -103,18 +97,7 @@ var ApplicationController = function(credentials) {
     };
 
     this.loginSuccess = function(req, res) {
-        console.log(req);
         res.redirect("/");
-    };
-
-    this.dbTest = function(req, res) {
-        req.user.dbClient.getUserInfo(function(err, info) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(info);
-            }
-        });
     };
 
     this.fbUpload = function(req, res) {
@@ -138,7 +121,10 @@ var ApplicationController = function(credentials) {
             res.redirect("/");
         }
     };
-    */
+
+    this.error = function(req, res) {
+        res.render("error", {"error": req.body});
+    };
 }
 
 module.exports = ApplicationController;

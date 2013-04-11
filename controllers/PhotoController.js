@@ -15,6 +15,8 @@ var PhotoController = function(credentials) {
     }
 
     this.all = function(req, res) {
+        console.log("All photos");
+        console.log(req.isAuthenticated());
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.findByName("/", ".jpg", function(err, photos) {
                 if (err) {
@@ -26,7 +28,8 @@ var PhotoController = function(credentials) {
                             "photos": photos,
                             "albums": albums.map(function(album) {
                                 return album.name;
-                            })
+                            }),
+                            "fbToken": req.session.fbToken
                         });
                     });
                 }

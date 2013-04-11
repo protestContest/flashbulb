@@ -91,13 +91,13 @@ passport.use(new DropboxStrategy({
     callbackURL: hostname + "/login/success",
     passReqToCallback: true
 }, appCon.dbAuthenticate));
-//passport.use(new FacebookStrategy({
-//    clientID: credentials.facebook.clientId,
-//    clientSecret: credentials.facebook.secret,
-//    callbackURL: hostname + "/auth/facebook/success",
-//    passReqToCallback: true
-//}, appCon.fbAuthenticate));
-//
+passport.use(new FacebookStrategy({
+    clientID: credentials.facebook.clientId,
+    clientSecret: credentials.facebook.secret,
+    callbackURL: hostname + "/auth/facebook/success",
+    passReqToCallback: true
+}, appCon.fbAuthenticate));
+
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -109,16 +109,18 @@ passport.deserializeUser(function(obj, done) {
 
 // app
 app.get("/", appCon.index);
+app.get("/error", appCon.error);
 app.get("/login", passport.authenticate("dropbox"));
 app.get("/login/success", passport.authenticate("dropbox"), 
         appCon.login);
 
-//app.get("/auth/facebook", passport.authorize("facebook", { //    scope: "publish_stream",
-//    failureRedirect: "/fail"
-//}));
-//app.get("/auth/facebook/success", passport.authorize("facebook", { 
-//    failureRedirect: "/fail"
-//}), appCon.fbUpload);
+app.get("/auth/facebook", passport.authorize("facebook", { 
+    scope: "publish_stream",
+    failureRedirect: "/error"
+}));
+app.get("/auth/facebook/success", passport.authorize("facebook", { 
+    failureRedirect: "/error"
+}), appCon.fbUpload);
 app.get("/logout", appCon.logout);
 
 // user
@@ -134,17 +136,17 @@ app.put("/users/:id", appCon.devAuth, userCon.update);
 app.delete("/users/:id", appCon.devAuth, userCon.destroy);
 
 // album
-app.get("/albums", albumCon.all);
-app.get("/albums/new", albumCon.createForm);
-app.get("/albums/:album", albumCon.view);
-app.post("/albums", albumCon.create);
-app.delete("/albums/:album", albumCon.destroy);
+app.get("/albums", appCon.auth, albumCon.all);
+app.get("/albums/new", appCon.auth, albumCon.createForm);
+app.get("/albums/:album", appCon.auth, albumCon.view);
+app.post("/albums", appCon.auth, albumCon.create);
+app.delete("/albums/:album", appCon.auth, albumCon.destroy);
 
 // photo
-app.get("/photos/all", photoCon.all);
-app.get("/photos/:album/:photo", photoCon.get);
-app.get("/photos/:photo", photoCon.get);
-app.post("/move", photoCon.move);
+app.get("/photos/all", appCon.auth, photoCon.all);
+app.get("/photos/:album/:photo", appCon.auth, photoCon.get);
+app.get("/photos/:photo", appCon.auth, photoCon.get);
+app.post("/move", appCon.auth, photoCon.move);
 
 // shortcuts
 //app.get("/all", photoCon.viewAll);

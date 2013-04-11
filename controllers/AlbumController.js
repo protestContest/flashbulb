@@ -51,7 +51,8 @@ var AlbumController = function(credentials) {
                             }),
                             "albums": albums.map(function(album) {
                                 return album.name;
-                            })
+                            }),
+                            "fbToken": req.session.fbToken
                         });
                     });
                 }
