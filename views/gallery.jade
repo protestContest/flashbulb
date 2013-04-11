@@ -1,6 +1,6 @@
 mixin gallery(items)
   - if (items.length)
-    .row: each item, i in items
+    .row.gallery: each item, i in items
       - trim_file = item.name.split('.')[0]
       .span3.thumb 
         i.icon-spinner.icon-spin.icon-4x

@@ -99,6 +99,16 @@ var PhotoController = function(credentials) {
         });
     };
 
+    this.upload = function(req, res) {
+        var album = "Unsorted";
+        if (req.params.album) {
+            album = req.params.album;
+        }
+        // do upload here
+
+        res.send("STUB: Uploaded to " + album);
+    };
+
     function getDropbox(dropboxId, callback) {
         rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
             var tokens = JSON.parse(tokenStr),

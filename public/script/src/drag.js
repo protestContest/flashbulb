@@ -37,6 +37,12 @@ $(document).ready(function() {
         });
     });
 
+    $(".gallery").each(function(i, el) {
+        addEvent(el, "drop", function(e) {
+            // handle file drop here
+        });
+    });
+
     $("aside .album").each(function(i, el) {
         addEvent(el, "dragover", function(e) {
             if (e.preventDefault) e.preventDefault();
