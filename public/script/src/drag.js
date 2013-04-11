@@ -4,7 +4,11 @@ $(document).ready(function() {
     }, 2000);
 
     $("img").each(function(i, el) {
-        el.setAttribute("draggable", "true");
+        if ($(el).hasClass("nodrag")) {
+            el.setAttribute("draggable", "false");
+        } else {
+            el.setAttribute("draggable", "true");
+        }
         addEvent(el, "dragstart", function(e) {
             var srcSplit = $(el).attr("src").split("/"),
                 album = (srcSplit.length === 4) ? srcSplit[2] : "",

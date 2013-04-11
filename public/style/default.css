@@ -11,6 +11,10 @@ a.logo:hover {
   color: #eeeeee;
   text-decoration: none;
 }
+a.logo:active {
+  color: #eeeeee;
+  text-decoration: none;
+}
 .logo i {
   margin-right: 10px;
 }
@@ -155,4 +159,8 @@ ul.nav.tools {
 #messages {
   text-align: center;
   font-style: italic;
+}
+.span6.watermark {
+  opacity: 0.5;
+  text-align: center;
 }
