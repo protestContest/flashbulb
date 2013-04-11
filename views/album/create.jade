@@ -1,9 +1,16 @@
 extends ../layout
 
-block content
-  h1 Create Album
+block toolbar
+  ul.nav.span3
+    li.toolbar-link: a(href="/photos/all") All Pictures
+    li.toolbar-link: a(href="/albums") Albums
+  #messages.span6
 
-  form(action="/albums", method="post")
-    label Name
-      input(name="name")
-    button Add Album
+block content
+  .container
+    .row
+      .span6.offset3
+        form.bigform(action="/albums", method="post")
+          h1 Create Album
+          input(name="name", placeholder="My new album", required)
+          button.btn.btn-secondary.btn-large Add Album
