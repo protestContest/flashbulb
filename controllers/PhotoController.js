@@ -1,7 +1,8 @@
 var redis = require("redis"),
     Dropbox = require("dropbox"),
     Photo = require("../models/Photo"),
-    AlbumCon = require("./AlbumController.js");
+    AlbumCon = require("./AlbumController.js"),
+    fs = require("fs");
 
 var PhotoController = function(credentials) {
     var Album = new AlbumCon(credentials),
@@ -100,14 +101,28 @@ var PhotoController = function(credentials) {
     };
 
     this.upload = function(req, res) {
-        var album = "Unsorted";
-        if (req.params.album) {
+        var album = "";
+        if (req.params.album && req.params.album !== "Unsorted") {
             album = req.params.album;
         }
-        // do upload here
-        console.log("Uploading file to " + album);
 
-        res.send("STUB: Uploaded to " + album);
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            if (err) { res.send("Upload error: " + err); }
+            else {
+                for (var fn in req.files) {
+                    var file = req.files[fn];
+                    fileData = fs.readFileSync(file.path);
+                    dropbox.writeFile("/" + album + "/" + file.name, fileData, {
+                        "noOverwrite": true
+                    }, function(err, stat) {
+                        if (err) { res.send("Write error: " + err); }
+                        else {
+                            res.send("Upload success");
+                        }
+                    });
+                }
+            }
+        });
     };
 
     function getDropbox(dropboxId, callback) {

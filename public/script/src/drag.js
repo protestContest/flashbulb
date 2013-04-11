@@ -62,7 +62,7 @@ $(document).ready(function() {
             var formData = new FormData();
 
             for(var i = 0; i < files.length; i++) {
-                if (/(.jpg|.png|.gif)$/.test(files[i].name)) {
+                if (/image\/(jpeg|png|gif)$/.test(files[i].type)) {
                     formData.append("file-" + i, files[i]);
                 }
             }
