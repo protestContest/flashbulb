@@ -4,7 +4,7 @@ mixin gallery(items)
       - trim_file = item.name.split('.')[0]
       .span3.thumb 
         i.icon-spinner.icon-spin.icon-4x
-        img(src='/photos' + item.path, alt=item.name)
+        img(src='/photos' + item.path, alt=trim_file)
         ul.overlay-buttons
           li.overlay-button
             a.edit(href="/edit" + item.path, title="Edit")
@@ -20,12 +20,12 @@ mixin gallery(items)
           img#share-image(src="", alt="Share Image")
         .span5
           #share-image-title
-          p= fbToken
           if fbToken
             form#shareform(action="https://graph.facebook.com/me/photos?access_token=" + fbToken,
                            enctype="multipart/formdata", method="post")
               input#fbSource(type="hidden", name="url")
-              textarea#share-desc(name="message") Test post, please ignore
+              p Share this photo on Facebook with a caption:
+              textarea#share-desc(name="message")
               button#fb-submit.btn Share on Facebook
 
           else

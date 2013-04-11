@@ -166,7 +166,6 @@ function showDropdown(that) {
 
             console.log(imgPath);
             $.get("/public" + imgPath, function(publicUrl, status) {
-                console.log("Got url: " + publicUrl.url);
                 var formData = new FormData();
                 formData.append("url", publicUrl.url);
                 formData.append("message", $("#share-desc").val());
@@ -180,6 +179,7 @@ function showDropdown(that) {
                     "type": "POST",
                     "success": function(data) {
                         $("#fb-submit").html("Shared!");
+                        window.page.showMessage("Photo shared", 2000);
                         setTimeout($("#share.dropdown").slideUp(), 1500);
                     }
                 });
