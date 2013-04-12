@@ -45,22 +45,21 @@ $(document).ready(function() {
         });
 
         addEvent(el, "drop", function(e) {
+            var files = e.dataTransfer.files,
+                album,
+                formData = new FormData(),
+                album_match = location.pathname.match(/\/albums\/(.*)/);
+
             if (e.stopPropagation) e.stopPropagation();
             e.preventDefault();
 
-            var files = e.dataTransfer.files;
-            console.log(files[0]);
-
-            var album,
-                album_match = location.pathname.match(/\/albums\/(.*)/);
             if (album_match) {
                 album = album_match[1];
             } else {
                 album = "Unsorted";
             }
 
-            var formData = new FormData();
-
+            var tpl = Handlebars.compile($("#thumb-tpl").html());
             for(var i = 0; i < files.length; i++) {
                 if (/image\/(jpeg|png|gif)$/.test(files[i].type)) {
                     formData.append("file-" + i, files[i]);
@@ -75,8 +74,7 @@ $(document).ready(function() {
                 "processData": false,
                 "type": "POST",
                 "success": function(data, status) {
-                    console.log("Uploaded files: " + status);
-                    console.log(data);
+                    window.page.showMessage("Photo" + (files.length > 1 ? "s" : "") + " uploaded");
                 }
             });
 
