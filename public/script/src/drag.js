@@ -59,7 +59,7 @@ $(document).ready(function() {
                 album = "Unsorted";
             }
 
-            var tpl = Handlebars.compile($("#thumb-tpl").html());
+            //var tpl = Handlebars.compile($("#thumb-tpl").html());
             for(var i = 0; i < files.length; i++) {
                 if (/image\/(jpeg|png|gif)$/.test(files[i].type)) {
                     formData.append("file-" + i, files[i]);

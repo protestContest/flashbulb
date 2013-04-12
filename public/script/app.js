@@ -20,16 +20,17 @@ function Toolbar(page, html) {
         });
 
         // links on the left
-        html.find(".toolbar-link").each(function(i, link) {
-            if (! $(this).clickBound) {
-                $(this).clickBound = true;
-                $(this).click(function() {
-                    var href = $(link).attr("data-href");
-
-                    //page.load(href);
-                });
-            }
-        });
+        //html.find(".toolbar-link a").each(function(i, link) {
+        //    if (! $(this).clickBound) {
+        //        $(this).clickBound = true;
+        //        $(this).click(function(e) {
+        //            e.preventDefault();
+        //            var href = $(link).attr("href");
+        //            console.log("Loading " + href);
+        //            page.load(href);
+        //        });
+        //    }
+        //});
 
         // buttons on the right
         $(".tool-link a").each(function(i, link) {
