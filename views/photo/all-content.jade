@@ -1,0 +1,13 @@
+include ../gallery
+include ../aside
+
+block head
+  link(rel="stylesheet", href="/style/user.css")
+  script(src="/script/app.js")
+  script(src="/script/src/album.js")
+
+block content
+  #content.main.container(data-type="gallery")
+    mixin gallery(photos)
+    mixin aside(albums, "")
+

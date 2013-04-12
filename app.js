@@ -1,4 +1,5 @@
 var express = require("express")
+  , pjax = require("express-pjax")
   , mongoose = require("mongoose")
   , credentials
   , RedisStore = require("connect-redis")(express)
@@ -17,6 +18,7 @@ app.configure(function() {
     app.engine("jade", require("jade").__express);
     app.set("views", __dirname + "/views");
     app.set("view engine", "jade");
+    app.use(pjax());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(require("less-middleware")({
@@ -151,6 +153,7 @@ app.post("/photos/:album", appCon.auth, photoCon.upload);
 app.post("/move", appCon.auth, photoCon.move);
 
 app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
+app.get("/ajax/allphotos", appCon.auth, photoCon.allContent);
 
 // shortcuts
 //app.get("/all", photoCon.viewAll);

@@ -20,14 +20,23 @@ function Toolbar(page, html) {
         });
 
         // links on the left
+        $(document).pjax(".toolbar-link a", "#content");
+        $(document).on("pjax:send", function() {
+            $("#content").fadeOut();
+        });
+        $(document).on("pjax:timeout", function(e) {
+        });
+        $(document).on("pjax:end", function() {
+            $("#content").fadeIn();
+        });
         //html.find(".toolbar-link a").each(function(i, link) {
         //    if (! $(this).clickBound) {
         //        $(this).clickBound = true;
         //        $(this).click(function(e) {
         //            e.preventDefault();
-        //            var href = $(link).attr("href");
-        //            console.log("Loading " + href);
-        //            page.load(href);
+        //            //var href = $(link).attr("href");
+        //            //console.log("Loading " + href);
+        //            //page.load(href);
         //        });
         //    }
         //});

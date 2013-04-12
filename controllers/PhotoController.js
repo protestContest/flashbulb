@@ -16,23 +16,44 @@ var PhotoController = function(credentials) {
     }
 
     this.all = function(req, res) {
+        var view = "photo/all";
+        if (req.headers["x-pjax"]) {
+            view += "-content";
+            res.setHeader("X-PJAX-Version", "v123");
+        }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.findByName("/", ".jpg", function(err, photos) {
                 if (err) {
                     res.render("error", {"error": err});
                 } else {
                     Album.getAlbumList(dropbox, function(err, albums) {
-                        res.render("photo/all", {
+                        var data = {
                             "name": "All Photos",
                             "photos": photos,
                             "albums": albums.map(function(album) {
                                 return album.name;
                             }),
                             "fbToken": req.session.fbToken
-                        });
+                        };
+                        if (req.headers["x-pjax"]) {
+                            console.log("Pjax view");
+                            res.renderPjax(view, data);
+                        } else {
+                            console.log("Normal view");
+                            res.render(view, data);
+                        }
                     });
                 }
             });
+        });
+    };
+
+    this.allContent = function(req, res) {
+        res.render("photo/all-content", {
+            "name": "All Photos",
+            "photos": [],
+            "albums": [],
+            "fbToken": ""
         });
     };
 
