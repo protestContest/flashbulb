@@ -5,6 +5,7 @@ block head
   link(rel="stylesheet", href="/style/editor.css")
   script(src="/script/app.js")
   script(src="/script/src/album.js")
+  script(src="/script/src/editor.js")
 
 block toolbar
   ul.nav.span3
@@ -20,4 +21,4 @@ block content
   #content.main.container(data-type="editor")
     .row
       .span12.editor
-        img(src="/photos" + path)
+        canvas#editor(data-img="#{path}")
