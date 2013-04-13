@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $("#editor").height($(window).height() - 150);
     var ctx = document.getElementById("editor").getContext("2d"),
         height = $("#editor img").height(),
         width = $("#editor img").width(),
@@ -10,6 +11,7 @@ $(document).ready(function() {
         width = img.width;
         height = img.height;
         filters = createFilters();
+        $("#editor").width($("#editor").height() * (width/height));
 
         // scale canvas to image size
         $("#editor").attr("width", width);

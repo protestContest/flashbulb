@@ -24,9 +24,6 @@ block content
   #content.main.container(data-type="editor")
     .row
       .span12.editor
-        - path_split = path.split("/")
-        - trim_name = path_split[path_split.length - 1].split(".")[0]
-        h1= trim_name
         canvas#editor(width="1000", height="500")
           img.editorImg(src=path)
     - filters = ["xpro", "bright", "none"]
