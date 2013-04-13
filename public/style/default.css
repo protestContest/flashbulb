@@ -111,39 +111,6 @@ a.logo:active {
 .main.container {
   padding-top: 20px;
 }
-aside {
-  text-align: center;
-  position: fixed;
-  right: 0px;
-  top: 200px;
-  background: url("/image/darknoise.png") repeat scroll 0% 0% #333333;
-  width: 200px;
-  color: #eeeeee;
-  padding: 20px 0px;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  font-size: 20px;
-  box-shadow: -2px 1px 4px rgba(0, 0, 0, 0.5);
-}
-aside .album {
-  text-align: left;
-  border-bottom: 1px solid black;
-  font-size: 16px;
-  padding: 10px 10px;
-}
-aside .album:first-child {
-  margin-top: 15px;
-}
-aside .album:last-child {
-  border-bottom: none;
-  padding-bottom: 11px;
-  font-style: italic;
-}
-aside .album.dragOver {
-  box-shadow: 0px 0px 10px #000000 inset;
-  border-bottom: none;
-  padding-bottom: 11px;
-}
 ul.nav.tools {
   float: right;
   margin-right: 0px;

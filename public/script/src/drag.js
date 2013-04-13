@@ -83,23 +83,23 @@ $(document).ready(function() {
         });
     });
 
-    $("aside .album").each(function(i, el) {
+    $("aside .item").each(function(i, el) {
         addEvent(el, "dragover", function(e) {
             if (e.preventDefault) e.preventDefault();
-            this.className = "dragOver album";
+            $(this).addClass("hover");
             e.dataTransfer.dropEffect = "copy";
             return false;
         });
 
         addEvent(el, "dragleave", function() {
-            this.className = "album";
+            $(this).removeClass("hover");
         });
 
         addEvent(el, "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
             e.preventDefault();
 
-            this.className = "album";
+            $(this).removeClass("hover");
 
             var data = JSON.parse(e.dataTransfer.getData("Text"));
             data.to = "/" + $(el).html();

@@ -1,12 +1,14 @@
-mixin aside(albums, name)
+mixin aside(items, title, asideClass, exclude)
+  link(rel="stylesheet", href="/style/aside.css")
   script(src="//code.jquery.com/ui/1.10.2/jquery-ui.js")
-  script(src="/script/lib/h5utils.js")
-  script(src="/script/src/drag.js")
+  if asideClass === "albumList"
+    script(src="/script/lib/h5utils.js")
+    script(src="/script/src/drag.js")
 
-  if (albums.length || name !== "Unsorted")
-    aside Move to album
-      each album in albums
-        if (album !== name)
-          .album= album
-      if (name !== "Unsorted")
-        .album Unsorted
+  if (items.length || exclude !== "Unsorted")
+    aside(class=asideClass)= title
+      each item in items
+        if (item !== exclude)
+          .item= item
+      if (asideClass === "albumList" && exclude !== "Unsorted")
+        .item.em Unsorted

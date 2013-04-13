@@ -1,0 +1,60 @@
+@primary: #de5e31;
+@primary-light: (@primary - #222);
+@white: #eee;
+@offwhite: #999;
+@span3: 220px;
+@dim: rgba(50, 50, 50, 0.67);
+@container-width: 940px;
+
+aside {
+    display: none;
+    text-align: center;
+    position: fixed;
+    right: 0px;
+    top: 200px;
+    background: url("/image/darknoise.png") repeat scroll 0% 0% rgb(51, 51, 51);
+    width: 200px;
+    color: @white;
+    padding: 20px 0px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    font-size: 20px;
+    box-shadow: -2px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+aside.albumList {
+    display: block;
+}
+
+aside .item {
+    text-align: left;
+    border-bottom: 1px solid black;
+    font-size: 16px;
+    padding: 10px 10px;
+}
+
+aside .item:first-child {
+    margin-top: 15px;
+}
+
+aside .item:last-child {
+    border-bottom: none;
+    padding-bottom: 11px;
+}
+aside .item.em {
+    font-style: italic;
+}
+
+aside .item.hover, aside .item:hover {
+    box-shadow: 0px 0px 10px rgb(0, 0, 0) inset;
+    border-bottom: none;
+    padding-bottom: 11px;
+}
+
+aside .item:hover {
+    cursor: pointer;
+}
+
+aside .item.selected {
+    font-weight: bold;
+}

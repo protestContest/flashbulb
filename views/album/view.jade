@@ -4,6 +4,7 @@ include ../aside
 
 block head
   link(rel="stylesheet", href="/style/user.css")
+  link(rel="stylesheet", href="/style/aside.css")
   script(src="/script/app.js")
   script(src="/script/src/album.js")
   script(src="/script/lib/handlebars.min.js")
@@ -24,4 +25,4 @@ block content
   #content.main.container(data-type="gallery")
     h1= name
     mixin gallery(photos)
-    mixin aside(albums, name)
+    mixin aside(albums, 'Move to album', 'albumList', name)

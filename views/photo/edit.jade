@@ -1,4 +1,5 @@
 extends ../layout
+include ../aside
 
 block head
   link(rel="stylesheet", href="/style/user.css")
@@ -13,10 +14,12 @@ block toolbar
     li.toolbar-link: a(href="/albums") Albums
   #messages.span6
 
-  ul.nav.span1.tools
+  ul.nav.span3.tools
     li.tool-link
       a.save(href="/photos" + path + "/save", title="Save photo")
         i.icon-save.icon-large
+    li.tool-link
+      i.icon-filter.icon-large
 
 block content
   #content.main.container(data-type="editor")
@@ -24,3 +27,5 @@ block content
       .span12.editor
         canvas#editor(width="1000", height="500")
           img.editorImg(src=path)
+    - filters = ["xpro", "bright", "none"]
+    mixin aside(filters, "Filters", "name")

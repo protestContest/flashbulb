@@ -23,6 +23,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
+    // filter functions
     function createFilters() {
         var filters = {};
 
@@ -36,11 +37,32 @@ $(document).ready(function() {
         xpro.addColorStop(1, "rgba(0, 0, 0, 1)");
         filters["xpro"] = xpro;
 
+        // lo-fi filter
+        filters["bright"] = "rgba(255, 255, 255, 0.2)";
+
         return filters;
     }
 
     window.addFilter = function(filter) {
-        ctx.fillStyle = filters[filter];
-        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0);
+         if (filters[filter]) {
+            ctx.fillStyle = filters[filter];
+            ctx.fillRect(0, 0, width, height);
+        }
     }
+
+    // bind tool buttons
+    $(".tool-link .icon-filter").click(function() {
+        $("aside").toggle("slide", {"direction": "right"}, "fast");
+    });
+
+    $("aside .item").click(function() {
+        if ($(this).hasClass("selected")) {
+            return;
+        }
+        $("aside .item").removeClass("selected");
+        $(this).addClass("selected");
+        var filter = $(this).html();
+        addFilter(filter);
+    });
 });
