@@ -1,4 +1,19 @@
 extends ../layout
+include ../gallery
+include ../aside
+
+block head
+  link(rel="stylesheet", href="/style/user.css")
+  script(src="/script/app.js")
+  script(src="/script/src/album.js")
+
+block toolbar
+  ul.nav.span3
+    li.active All Pictures
+    li.toolbar-link: a(href="/albums") Albums
+  #messages.span6
 
 block content
-  include all-content
+  #content.main.container(data-type="gallery")
+    mixin gallery(photos)
+    mixin aside(albums, "")

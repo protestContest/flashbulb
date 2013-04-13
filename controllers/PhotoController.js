@@ -16,11 +16,6 @@ var PhotoController = function(credentials) {
     }
 
     this.all = function(req, res) {
-        var view = "photo/all";
-        if (req.headers["x-pjax"]) {
-            view += "-content";
-            res.setHeader("X-PJAX-Version", "v124");
-        }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.findByName("/", ".jpg", function(err, photos) {
                 if (err) {
@@ -35,13 +30,7 @@ var PhotoController = function(credentials) {
                             }),
                             "fbToken": req.session.fbToken
                         };
-                        if (req.headers["x-pjax"]) {
-                            console.log("Pjax view");
-                            res.renderPjax(view, data);
-                        } else {
-                            console.log("Normal view");
-                            res.render(view, data);
-                        }
+                        res.render("photo/all", data);
                     });
                 }
             });

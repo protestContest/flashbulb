@@ -2,13 +2,11 @@
 html(lang="en")
   head
     title Flashbulb
-    meta(http-equiv="x-pjax-version", content="v124")
     link(rel="stylesheet", href="/style/lib/bootstrap.min.css")
     link(rel="stylesheet", href="/style/lib/font-awesome.min.css")
     link(rel="stylesheet", href="/style/default.css")
     script(src="//code.jquery.com/jquery-1.9.1.min.js")
     script(src="/script/lib/bootstrap.min.js")
-    script(src="//raw.github.com/defunkt/jquery-pjax/master/jquery.pjax.js")
     block head
   
   body
@@ -24,6 +22,9 @@ html(lang="en")
                 i.icon-signout.icon-large
                 | Logout
 
-    block toolbar
+    #toolbar.toolbar.navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          block toolbar
 
     block content

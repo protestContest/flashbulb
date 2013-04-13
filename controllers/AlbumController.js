@@ -34,13 +34,9 @@ var AlbumController = function(credentials) {
     };
 
     this.view = function(req, res) {
-        var albumPath = req.params.album,
-            view = "album/view";
+        var albumPath = req.params.album;
         if (req.params.album === "Unsorted") {
             albumPath = "";
-        }
-        if (req.headers["x-pjax"]) {
-            res.setHeader("X-PJAX-Version", "v123");
         }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
@@ -58,11 +54,7 @@ var AlbumController = function(credentials) {
                             }),
                             "fbToken": req.session.fbToken
                         };
-                        if (req.headers["x-pjax"]) {
-                            res.renderPjax(view, data);
-                        } else {
-                            res.render(view, data);
-                        }
+                        res.render("album/view", data);
                     });
                 }
             });
