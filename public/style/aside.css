@@ -38,9 +38,17 @@ aside:not(.albumList) .item:hover {
   border-bottom: none;
   padding-bottom: 11px;
 }
+aside .item.control:hover {
+  box-shadow: none;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
 aside .item:hover {
   cursor: pointer;
 }
 aside .item.selected {
   font-weight: bold;
+}
+aside .item.control input {
+  width: 175px;
 }

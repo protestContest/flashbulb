@@ -6,6 +6,7 @@ block head
   link(rel="stylesheet", href="/style/editor.css")
   script(src="/script/app.js")
   script(src="/script/src/editor.js")
+  script(src="/script/lib/html5slider.js")
 
 block toolbar
   ul.nav.span3
@@ -19,6 +20,8 @@ block toolbar
         i.icon-save.icon-large
     li.tool-link
       i.icon-filter.icon-large
+    li.tool-link
+      i.icon-adjust.icon-large
 
 block content
   #content.main.container(data-type="editor")
@@ -27,4 +30,13 @@ block content
         canvas#editor(width="1000", height="500")
           img.editorImg(src=path)
     - filters = ["X-Pro", "Warm", "clear", "Black and White", "None"]
-    mixin aside(filters, "Filters", "name")
+    mixin aside(filters, "Filters", "filters")
+
+    aside.colors Color
+      .item.control Red
+        input#red(type="range")
+      .item.control Green
+        input#green(type="range")
+      .item.control Blue
+        input#blue(type="range")
+

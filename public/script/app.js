@@ -25,9 +25,9 @@ function Toolbar(page, html) {
                 $(this).hoverBound = true;
                 $(this).hover(function() {
                     var title = $(link).attr("title");
-                    window.page.showMessage(title);
+                    //window.page.showMessage(title);
                 }, function() {
-                    window.page.showMessage("");
+                    //window.page.showMessage("");
                 });
             }
         });

@@ -108,10 +108,15 @@ $(document).ready(function() {
 
     // bind tool buttons
     $(".tool-link .icon-filter").click(function() {
-        $("aside").toggle("slide", {"direction": "right"}, "fast");
+        $("aside").hide("slide", {"direction": "right"}, "fast");
+        $("aside.filters").toggle("slide", {"direction": "right"}, "fast");
+    });
+    $(".tool-link .icon-adjust").click(function() {
+        $("aside").hide("slide", {"direction": "right"}, "fast");
+        $("aside.colors").toggle("slide", {"direction": "right"}, "fast");
     });
 
-    $("aside .item").click(function() {
+    $("aside.filters .item").click(function() {
         if ($(this).hasClass("selected")) {
             return;
         }
@@ -119,5 +124,10 @@ $(document).ready(function() {
         $(this).addClass("selected");
         var filter = $(this).html();
         addFilter(filter);
+    });
+
+    // bind color sliders
+    $("#red, #green, #blue").change(function() {
+        
     });
 });
