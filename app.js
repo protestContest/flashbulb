@@ -153,7 +153,7 @@ app.post("/photos/:album", appCon.auth, photoCon.upload);
 app.post("/move", appCon.auth, photoCon.move);
 
 app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
-app.get("/ajax/allphotos", appCon.auth, photoCon.allContent);
+//app.get("/ajax/allphotos", appCon.auth, photoCon.allContent);
 
 // shortcuts
 //app.get("/all", photoCon.viewAll);

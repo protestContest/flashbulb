@@ -6,10 +6,13 @@ block head
   script(src="/script/app.js", type="text/javascript")
 
 block toolbar
-  ul.nav.span3
-    li.toolbar-link: a(href="/photos/all") All Pictures
-    li.active Albums
-  #messages.span6
+  #toolbar.toolbar.navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container
+        ul.nav.span3
+          li.toolbar-link: a(href="/photos/all") All Pictures
+          li.active Albums
+        #messages.span6
 
   ul.nav.span1.tools
     li.tool-link
@@ -19,27 +22,12 @@ block content
   #content.main.container(data-type="gallery")
     .row 
       each item, i in albums
-        a(href="/albums/" + item)
+        a.album(href="/albums/" + item)
           .span3.thumb 
             i.icon-book.icon-4x
             .title= item
-      a(href="/albums/Unsorted")
+      a.album(href="/albums/Unsorted")
         .span3.thumb
           i.icon-copy.icon-4x
           .title Unsorted
-//
-  h1= user
-  form(action="/albums", method="post")
-    label New album
-      input(type="text", name="albumName")
-    button Submit
-  ul
-    li
-      a(href="/albums/unsorted") Unsorted
-    each album in albums
-      li
-        a(href="/albums/" + album)= album
-        form(action="/albums/" + album, method="post")
-          input(type="hidden", name="_method", value="delete")
-          button Delete Album
 

@@ -34,9 +34,13 @@ var AlbumController = function(credentials) {
     };
 
     this.view = function(req, res) {
-        var albumPath = req.params.album;
+        var albumPath = req.params.album,
+            view = "album/view";
         if (req.params.album === "Unsorted") {
             albumPath = "";
+        }
+        if (req.headers["x-pjax"]) {
+            res.setHeader("X-PJAX-Version", "v123");
         }
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.stat("/" + albumPath, {"readDir": true}, function(err, folder, entries) {
@@ -44,7 +48,7 @@ var AlbumController = function(credentials) {
                     res.render("error", {"error": err});
                 } else {
                     getAlbumList(dropbox, function(err, albums) {
-                        res.render("album/view", {
+                        var data = {
                             "name": req.params.album,
                             "photos": entries.filter(function(entry) {
                                 return /.*(\.jpg|\.png|\.gif)/.test(entry.name);
@@ -53,7 +57,12 @@ var AlbumController = function(credentials) {
                                 return album.name;
                             }),
                             "fbToken": req.session.fbToken
-                        });
+                        };
+                        if (req.headers["x-pjax"]) {
+                            res.renderPjax(view, data);
+                        } else {
+                            res.render(view, data);
+                        }
                     });
                 }
             });
