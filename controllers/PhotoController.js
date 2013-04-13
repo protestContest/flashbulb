@@ -38,7 +38,21 @@ var PhotoController = function(credentials) {
     };
 
     this.update = function(req, res) {
-        res.send("Coming soon!");
+        var path = "/" + req.params.photo;
+        if (req.params.album) {
+            path = "/" + req.params.album + path;
+        }
+        getDropbox(req.session.user.dropboxId, function(err, dropbox) {
+            var encodedImg = req.body.image.split(",")[1],
+                buffer = new Buffer(encodedImg, "base64");
+            dropbox.writeFile(path, buffer, function(err, stat) {
+                if (err) {
+                    res.send("Error saving photo");
+                } else {
+                    res.send("Photo saved");
+                }
+            });
+        });
     };
 
     this.get = function(req, res) {

@@ -21,6 +21,29 @@ $(document).ready(function() {
 
     $(".save").click(function(e) {
         e.preventDefault();
+        var url = $(this).attr("href"),
+            canvas = document.getElementById("editor");
+        console.log(url);
+        var data = canvas.toDataURL("image/jpeg"),
+            formData = new FormData();
+
+        
+        formData.append("_method", "put");
+        formData.append("image", data);
+
+        $.ajax({
+            "url": url,
+            "data": formData,
+            "cache": false,
+            "contentType": false,
+            "processData": false,
+            "type": "POST",
+            "complete": function(res, status) {
+                console.log("Saved image: " + status);
+                window.page.showMessage(res);
+            }
+        });
+
     });
 
     // filter functions
