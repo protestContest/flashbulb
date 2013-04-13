@@ -64,7 +64,7 @@ $(document).ready(function() {
         xpro.addColorStop(0.5, "rgba(0, 0, 0, 0.2");
         xpro.addColorStop(0.7, "rgba(0, 0, 0, 0.5");
         xpro.addColorStop(1, "rgba(0, 0, 0, 1)");
-        filters["xpro"] = function() {
+        filters["X-Pro"] = function() {
             ctx.fillStyle = xpro;
             ctx.fillRect(0, 0, width, height);
         };
@@ -74,7 +74,7 @@ $(document).ready(function() {
         warm.addColorStop(0.5, "rgba(255, 136, 10, 0.2");
         warm.addColorStop(0.7, "rgba(0, 0, 0, 0.2");
         warm.addColorStop(1, "rgba(0, 0, 0, 0.5)");
-        filters["warm"] = function() {
+        filters["Warm"] = function() {
             ctx.fillStyle = warm;
             ctx.fillRect(0, 0, width, height);
         };
