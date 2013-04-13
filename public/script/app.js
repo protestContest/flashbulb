@@ -109,12 +109,18 @@ function showDropdown(that) {
         imgPath = img.attr("src");
         imgTitle = img.attr("alt");
 
-        // find the image at the beginning of this row
+        // find the image at the end of this row
         imgIndex = $(".thumb").index(that.closest(".thumb"));
+        allThumbs = that.closest(".row").children();
+        lastImgIndex = allThumbs.length - 1;
         imgRowTailIndex = Math.ceil((imgIndex + 1) / 4) * 4 - 1;
+        realImgRowTailIndex = Math.min(imgRowTailIndex, lastImgIndex);
         imgIndexInRow = imgIndex - (imgRowTailIndex - 3);
-        imgRowTail = that.closest(".row").children()[imgRowTailIndex];
+        imgRowTail = allThumbs[realImgRowTailIndex];
         ircpcOffset = 240 * imgIndexInRow + 100;
+
+        console.log(allThumbs.length);
+        console.log(imgRowTailIndex);
 
         // put dropdown after row's last image
         shareDropdown.insertAfter(imgRowTail);
