@@ -7,10 +7,8 @@ body {
   line-height: 50px;
   color: #eeeeee;
 }
-a.logo:hover {
-  color: #eeeeee;
-  text-decoration: none;
-}
+a.logo:visited,
+a.logo:hover,
 a.logo:active {
   color: #eeeeee;
   text-decoration: none;
