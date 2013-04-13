@@ -33,7 +33,7 @@ aside .item.em {
   font-style: italic;
 }
 aside .item.hover,
-aside .item:hover {
+aside:not(.albumList) .item:hover {
   box-shadow: 0px 0px 10px #000000 inset;
   border-bottom: none;
   padding-bottom: 11px;
