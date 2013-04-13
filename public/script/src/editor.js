@@ -42,6 +42,7 @@ $(document).ready(function() {
             "success": function(res, status) {
                 console.log("Saved image: " + status);
                 window.page.showMessage("Photo saved");
+                $(".item.selected").removeClass("selected");
             },
             "error": function(xhr, status) {
                 console.warn("Image not saved: " + status);
@@ -63,19 +64,45 @@ $(document).ready(function() {
         xpro.addColorStop(0.5, "rgba(0, 0, 0, 0.2");
         xpro.addColorStop(0.7, "rgba(0, 0, 0, 0.5");
         xpro.addColorStop(1, "rgba(0, 0, 0, 1)");
-        filters["xpro"] = xpro;
+        filters["xpro"] = function() {
+            ctx.fillStyle = xpro;
+            ctx.fillRect(0, 0, width, height);
+        };
 
-        // lo-fi filter
-        filters["bright"] = "rgba(255, 255, 255, 0.2)";
+        var warm = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
+        warm.addColorStop(0, "rgba(255, 136, 10, 0.5)");
+        warm.addColorStop(0.5, "rgba(255, 136, 10, 0.2");
+        warm.addColorStop(0.7, "rgba(0, 0, 0, 0.2");
+        warm.addColorStop(1, "rgba(0, 0, 0, 0.5)");
+        filters["warm"] = function() {
+            ctx.fillStyle = warm;
+            ctx.fillRect(0, 0, width, height);
+        };
+
+        filters["Black and White"] = function() {
+            var imgData = ctx.getImageData(0, 0, width, height),
+                pixels = imgData.data;
+            for (var i = 0, n = pixels.length; i < n; i += 4) {
+                var val = Math.max(pixels[i], pixels[i+1], pixels[i+2]);
+                pixels[i] = val;
+                pixels[i+1] = val;
+                pixels[i+2] = val;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        };
+
+        filters["clear"] = function() {
+            ctx.fillStyle = "rgb(255, 255, 255)";
+            ctx.fillRect(0, 0, width, height);
+        };
 
         return filters;
     }
 
     window.addFilter = function(filter) {
         ctx.drawImage(img, 0, 0);
-         if (filters[filter]) {
-            ctx.fillStyle = filters[filter];
-            ctx.fillRect(0, 0, width, height);
+        if (filters[filter]) {
+            filters[filter]();
         }
     }
 

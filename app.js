@@ -149,8 +149,8 @@ app.get("/photos/:photo", appCon.auth, photoCon.get);
 app.post("/photos", appCon.auth, photoCon.upload);
 app.post("/photos/:album", appCon.auth, photoCon.upload);
 app.post("/move", appCon.auth, photoCon.move);
-//app.put("/photos/:album/:photo", photoCon.update);
-//app.put("/photos/:photo", photoCon.update);
+app.put("/photos/:album/:photo", photoCon.update);
+app.put("/photos/:photo", photoCon.update);
 
 app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
 app.get("/edit/:album/:photo", appCon.auth, photoCon.edit);
