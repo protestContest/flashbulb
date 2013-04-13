@@ -153,10 +153,11 @@ app.post("/photos/:album", appCon.auth, photoCon.upload);
 app.post("/move", appCon.auth, photoCon.move);
 
 app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
-//app.get("/ajax/allphotos", appCon.auth, photoCon.allContent);
+app.get("/edit/:album/:photo", appCon.auth, photoCon.edit);
+app.get("/edit/:photo", appCon.auth, photoCon.edit);
 
 // shortcuts
-//app.get("/all", photoCon.viewAll);
+app.get("/all", photoCon.all);
 
 
 /*

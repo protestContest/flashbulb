@@ -37,19 +37,7 @@ var PhotoController = function(credentials) {
         });
     };
 
-    this.view = function(req, res) {
-        res.send("Coming soon!");
-    };
-
-    this.create = function(req, res) {
-        res.send("Coming soon!");
-    };
-
     this.update = function(req, res) {
-        res.send("Coming soon!");
-    };
-
-    this.destroy = function(req, res) {
         res.send("Coming soon!");
     };
 
@@ -123,6 +111,17 @@ var PhotoController = function(credentials) {
                     });
                 }
             }
+        });
+    };
+
+    this.edit = function(req, res) {
+        var path = "/" + req.params.photo;
+        if (req.params.album) {
+            path = "/" + req.params.album + "/" + req.params.photo;
+        }
+
+        res.render("photo/edit", {
+            "path": path
         });
     };
 

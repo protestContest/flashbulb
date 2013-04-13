@@ -1,0 +1,23 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet", href="/style/user.css")
+  link(rel="stylesheet", href="/style/editor.css")
+  script(src="/script/app.js")
+  script(src="/script/src/album.js")
+
+block toolbar
+  ul.nav.span3
+    li.toolbar-link: a(href="/all") All Pictures
+    li.toolbar-link: a(href="/albums") Albums
+  #messages.span6
+
+  ul.nav.span1.tools
+    li.tool-link
+      a(href="/photos" + path + "/save"): i.icon-save.icon-large
+
+block content
+  #content.main.container(data-type="editor")
+    .row
+      .span12.editor
+        img(src="/photos" + path)
