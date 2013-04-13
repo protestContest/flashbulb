@@ -80,7 +80,7 @@ function Content (page, html) {
             $(this).find(".overlay-buttons").toggle();
         });
 
-        $(".icon-share").click(function(evt) {
+        $(".icon-facebook-sign").click(function(evt) {
             showDropdown($(this));
         });
     };

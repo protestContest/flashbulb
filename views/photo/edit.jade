@@ -15,10 +15,12 @@ block toolbar
 
   ul.nav.span1.tools
     li.tool-link
-      a(href="/photos" + path + "/save"): i.icon-save.icon-large
+      a.save(href="/photos" + path + "/save", title="Save photo")
+        i.icon-save.icon-large
 
 block content
   #content.main.container(data-type="editor")
     .row
       .span12.editor
-        canvas#editor(data-img="#{path}")
+        canvas#editor(width="1000", height="500")
+          img.editorImg(src=path)
