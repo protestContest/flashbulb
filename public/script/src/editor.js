@@ -24,9 +24,8 @@ $(document).ready(function() {
     $(".save").click(function(e) {
         e.preventDefault();
         var url = $(this).attr("href"),
-            canvas = document.getElementById("editor");
-        console.log(url);
-        var data = canvas.toDataURL("image/jpeg"),
+            canvas = document.getElementById("editor"),
+            data = canvas.toDataURL("image/jpeg"),
             formData = new FormData();
 
         
@@ -40,9 +39,13 @@ $(document).ready(function() {
             "contentType": false,
             "processData": false,
             "type": "POST",
-            "complete": function(res, status) {
+            "success": function(res, status) {
                 console.log("Saved image: " + status);
-                window.page.showMessage(res);
+                window.page.showMessage("Photo saved");
+            },
+            "error": function(xhr, status) {
+                console.warn("Image not saved: " + status);
+                window.page.showMessage("<i class='icon-warning-sign'></i> Photo not saved", 2000);
             }
         });
 

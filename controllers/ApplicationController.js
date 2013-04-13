@@ -126,6 +126,10 @@ var ApplicationController = function(credentials) {
     this.error = function(req, res) {
         res.render("error", {"error": req.body});
     };
+
+    this.help = function(req, res) {
+        res.render("help");
+    };
 }
 
 module.exports = ApplicationController;

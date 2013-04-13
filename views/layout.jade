@@ -17,10 +17,12 @@ html(lang="en")
             i.icon-camera-retro 
             | Flashbulb
           ul.nav.pull-right
-            li
-              a(href='/logout', title='Logout')
-                i.icon-signout.icon-large
-                | Logout
+            li: a(href="/help")
+              i.icon-question-sign
+              | Help
+            li: a(href='/logout', title='Logout')
+              i.icon-signout.icon-large
+              | Logout
 
     #toolbar.toolbar.navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner

@@ -1,0 +1,43 @@
+extends layout
+
+block toolbar
+  ul.nav.span3
+    li.toolbar-link: a(href="/all") All Pictures
+    li.toolbar-link: a(href="/albums") Albums
+  #messages.span6
+
+block content
+  #content.main.container
+    .row
+      .span8
+        h1 Help
+        h2 Organizing Photos
+        p At first there will probably be no photos in Flashbulb.  You can add
+          | photos in two ways:  by dragging photos from your computer onto
+          | the flashbulb site, or by adding photos in your Dropbox in the 
+          | folder "Apps/Flashbulb."
+        p Photos can be organized into different albums.  To create an album,
+          | go to "Albums", and click the "+" on the toolbar.  After an album is
+          | created, you can put photos into it.  To do this, drag an image to
+          | the right, and a list of your albums will appear.  Drop the image
+          | onto the album you wish to place it in.
+        p You can view the photos in your albums by going to "Albums" on the
+          | toolbar, and then selecting an album.  You can also go to "All
+          | Photos" to see all of the photos in the Flashbulb folder.
+
+        h2 Editing Photos
+        p To edit a photo, find it in an album (or in "All Photos") and click
+          | the pencil icon to bring up the editor.  From here, you can use
+          | the buttons on the right side of the toolbar to edit the photo.
+        p Editing a photo here does not automatically save your changes.  Make
+          | sure to click the save icon to keep any changes you make.  If you 
+          | change something but want to go back to a previous version of the
+          | photo, you can do this at dropbox.com.
+
+        h2 Sharing Photos
+        p You can post any of your photos to Facebook.  To do this, find it in
+          | an album (or in "All Photos") and click the Facebook icon.  If there
+          | is a link asking you to login to Facebook, click it and log in.
+          | Once you are logged into Facebook, there will be a form here
+          | instead.  Enter a caption (or leave it blank) and click the "Share
+          | on Facebook" button.  The photo will now be on your Facebook feed.
