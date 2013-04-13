@@ -1,5 +1,4 @@
 var express = require("express")
-  , pjax = require("express-pjax")
   , mongoose = require("mongoose")
   , credentials
   , RedisStore = require("connect-redis")(express)
