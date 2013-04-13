@@ -17,7 +17,6 @@ app.configure(function() {
     app.engine("jade", require("jade").__express);
     app.set("views", __dirname + "/views");
     app.set("view engine", "jade");
-    app.use(pjax());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(require("less-middleware")({
