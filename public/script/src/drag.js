@@ -3,6 +3,9 @@ $(document).ready(function() {
         $("aside").hide("slide", {direction: "right"}, 100);
     }, 2000);
 
+    var dragIcon = document.createElement("img");
+    dragIcon.src = "/image/drag.png";
+
     $("img").each(function(i, el) {
         if ($(el).hasClass("nodrag")) {
             el.setAttribute("draggable", "false");
@@ -18,8 +21,6 @@ $(document).ready(function() {
             $(el).addClass("dragElement");
             $("aside").show("slide", {direction: "right"}, 100);
 
-            var dragIcon = document.createElement("img");
-            dragIcon.src = "/image/drag.png";
             e.dataTransfer.setDragImage(dragIcon, 25, 25);
             e.dataTransfer.effectAllowed = "copy";
             e.dataTransfer.setData("Text", JSON.stringify({
