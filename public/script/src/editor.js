@@ -6,7 +6,6 @@ $(document).ready(function() {
         img = new Image(),
         filters;
 
-    img.src = "/photos" + $("#editor img").attr("src");
     img.onload = function() {
         width = img.width;
         height = img.height;
@@ -17,9 +16,8 @@ $(document).ready(function() {
         $("#editor").attr("width", width);
         $("#editor").attr("height", height);
         ctx.drawImage(img, 0, 0);
-
     };
-
+    img.src = $("#editor img").attr("src");
 
     $(".save").click(function(e) {
         e.preventDefault();
@@ -56,26 +54,25 @@ $(document).ready(function() {
     function createFilters() {
         var filters = {};
 
-        // x-pro filter
         var gradWidth = width,
             gradHeight = height;
-        var xpro = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
-        xpro.addColorStop(0, "rgba(0, 0, 0, 0)");
-        xpro.addColorStop(0.5, "rgba(0, 0, 0, 0.2");
-        xpro.addColorStop(0.7, "rgba(0, 0, 0, 0.5");
-        xpro.addColorStop(1, "rgba(0, 0, 0, 1)");
+
+        // x-pro filter
         filters["X-Pro"] = function() {
-            ctx.fillStyle = xpro;
+            ctx.fillStyle = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
+            ctx.fillStyle.addColorStop(0, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle.addColorStop(0.5, "rgba(0, 0, 0, 0.2");
+            ctx.fillStyle.addColorStop(0.7, "rgba(0, 0, 0, 0.5");
+            ctx.fillStyle.addColorStop(1, "rgba(0, 0, 0, 1)");
             ctx.fillRect(0, 0, width, height);
         };
 
-        var warm = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
-        warm.addColorStop(0, "rgba(255, 136, 10, 0.5)");
-        warm.addColorStop(0.5, "rgba(255, 136, 10, 0.2");
-        warm.addColorStop(0.7, "rgba(0, 0, 0, 0.2");
-        warm.addColorStop(1, "rgba(0, 0, 0, 0.5)");
         filters["Warm"] = function() {
-            ctx.fillStyle = warm;
+            ctx.fillStyle = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
+            ctx.fillStyle.addColorStop(0, "rgba(255, 136, 10, 0.5)");
+            ctx.fillStyle.addColorStop(0.5, "rgba(255, 136, 10, 0.2");
+            ctx.fillStyle.addColorStop(0.7, "rgba(0, 0, 0, 0.2");
+            ctx.fillStyle.addColorStop(1, "rgba(0, 0, 0, 0.5)");
             ctx.fillRect(0, 0, width, height);
         };
 
@@ -89,11 +86,6 @@ $(document).ready(function() {
                 pixels[i+2] = val;
             }
             ctx.putImageData(imgData, 0, 0);
-        };
-
-        filters["clear"] = function() {
-            ctx.fillStyle = "rgb(255, 255, 255)";
-            ctx.fillRect(0, 0, width, height);
         };
 
         return filters;

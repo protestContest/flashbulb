@@ -28,8 +28,8 @@ block content
     .row
       .span12.editor
         canvas#editor(width="1000", height="500")
-          img.editorImg(src=path)
-    - filters = ["X-Pro", "Warm", "clear", "Black and White", "None"]
+          img.editorImg(src="/photos" + path)
+    - filters = ["X-Pro", "Warm", "Black and White", "None"]
     mixin aside(filters, "Filters", "filters")
 
     aside.colors Color
