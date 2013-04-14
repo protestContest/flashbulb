@@ -11,7 +11,7 @@ $(document).ready(function() {
         width = img.width;
         height = img.height;
         filters = createFilters();
-        $("#editor").width($("#editor").height() * (width/height));
+        $("#editor").width($("#editor").height() * (width/height)),
 
         // scale canvas to image size
         $("#editor").attr("width", width);
@@ -107,22 +107,22 @@ $(document).ready(function() {
     }
 
     // colorize
-    function colorize(color, scale) {
+    function colorize(colors) {
+        ctx.drawImage(img, 0, 0);
         var imgData = ctx.getImageData(0, 0, width, height),
-            pixels = imgData.data,
-            indexOffset = 0;
-        scale = scale / 100;
+            pixels = imgData.data;
 
-        if (color === "green") { indexOffset = 1; }
-        if (color === "blue")  { indexOffset = 2; }
         for (var i = 0, n = pixels.length; i < n; i += 4) {
-            var val = pixels[i + indexOffset];
-            if (scale > 0) {
-                val += scale*(255 - val);
-            } else if (scale < 0) {
-                val = -scale*val;
+            for (var indexOffset = 0; indexOffset < 3; indexOffset++) {
+                var scale = colors[indexOffset] / 100;
+                var val = pixels[i + indexOffset];
+                if (scale > 0) {
+                    val += scale * (255 - val);
+                } else if (scale < 0) {
+                    val -= -scale*val;
+                }
+                pixels[i + indexOffset] = val;
             }
-            pixels[i + indexOffset] = val;
         }
         ctx.putImageData(imgData, 0, 0);
     }
@@ -151,8 +151,7 @@ $(document).ready(function() {
     ["red", "green", "blue"].forEach(function(color) {
         //document.getElementById(color).onchange = function() {
         $("#" + color).mouseup(function() {
-            console.log(color + ": " + $(this).val());
-            colorize(color, this.value);
+            colorize([$("#red").val(), $("#green").val(), $("#blue").val()]);
         });
     });
 });
