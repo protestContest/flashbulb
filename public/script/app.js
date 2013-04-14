@@ -36,7 +36,7 @@ function Toolbar(page, html) {
             if (! $(this).clickBound) {
                 $(this).clickBound = true;
                 $(this).click(function() {
-                    if (confirm("Delete this album?")) {
+                    if (confirm("Delete this album? All photos in this album will also be deleted.")) {
                         var album = $(link).attr("data-delete");
                         console.log(album);
                         $.post("/albums/" + album, {
@@ -87,8 +87,6 @@ function Content (page, html) {
         $(".gallery .thumb img").each(function(i, img) {
             if ($(this).width() > $(this).height()) {
                 $(this).css("max-height", "100%");
-                $(this).css("position", "relative");
-                $(this).css("left", (220 - $(this).width()) / 2);
             } else {
                 $(this).css("max-width", "100%");
             }

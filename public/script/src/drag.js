@@ -80,6 +80,7 @@ $(document).ready(function() {
                 "type": "POST",
                 "success": function(data, status) {
                     window.page.showMessage("Photo" + (files.length > 1 ? "s" : "") + " uploaded");
+                    setTimeout(window.location.reload(), 1000);
                 }
             });
 
