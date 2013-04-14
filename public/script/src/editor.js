@@ -106,6 +106,27 @@ $(document).ready(function() {
         }
     }
 
+    // colorize
+    function colorize(color, scale) {
+        var imgData = ctx.getImageData(0, 0, width, height),
+            pixels = imgData.data,
+            indexOffset = 0;
+        scale = scale / 100;
+
+        if (color === "green") { indexOffset = 1; }
+        if (color === "blue")  { indexOffset = 2; }
+        for (var i = 0, n = pixels.length; i < n; i += 4) {
+            var val = pixels[i + indexOffset];
+            if (scale > 0) {
+                val += scale*(255 - val);
+            } else if (scale < 0) {
+                val = -scale*val;
+            }
+            pixels[i + indexOffset] = val;
+        }
+        ctx.putImageData(imgData, 0, 0);
+    }
+
     // bind tool buttons
     $(".tool-link .icon-filter").click(function() {
         $("aside").hide("slide", {"direction": "right"}, "fast");
@@ -127,7 +148,11 @@ $(document).ready(function() {
     });
 
     // bind color sliders
-    $("#red, #green, #blue").change(function() {
-        
+    ["red", "green", "blue"].forEach(function(color) {
+        //document.getElementById(color).onchange = function() {
+        $("#" + color).mouseup(function() {
+            console.log(color + ": " + $(this).val());
+            colorize(color, this.value);
+        });
     });
 });
