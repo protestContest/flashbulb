@@ -5,7 +5,6 @@ var Dropbox = require("dropbox")
   , jade = require("jade")
   , redis = require("redis")
   , developers = require("../developers")
-  , Watcher = require("../dropboxWatcher")
   ;
 
 var ApplicationController = function(credentials) {

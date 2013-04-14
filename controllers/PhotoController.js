@@ -1,6 +1,5 @@
 var redis = require("redis"),
     Dropbox = require("dropbox"),
-    Photo = require("../models/Photo"),
     AlbumCon = require("./AlbumController.js"),
     fs = require("fs");
 
