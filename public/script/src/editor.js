@@ -61,7 +61,7 @@ $(document).ready(function() {
         // x-pro filter
         filters["X-Pro"] = function() {
             ctx.fillStyle = ctx.createRadialGradient(gradWidth/2, gradHeight/2, 0, gradWidth/2, gradHeight/2, Math.min(gradWidth, gradHeight));
-            ctx.fillStyle.addColorStop(0, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle.addColorStop(0, "rgba(255, 255, 255, 0.2)");
             ctx.fillStyle.addColorStop(0.5, "rgba(0, 0, 0, 0.2");
             ctx.fillStyle.addColorStop(0.7, "rgba(0, 0, 0, 0.5");
             ctx.fillStyle.addColorStop(1, "rgba(0, 0, 0, 1)");
