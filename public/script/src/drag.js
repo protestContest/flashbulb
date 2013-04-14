@@ -54,6 +54,10 @@ $(document).ready(function() {
             if (e.stopPropagation) e.stopPropagation();
             e.preventDefault();
 
+            if (e.dataTransfer.files.length === 0) {
+                return false;
+            }
+
             if (album_match) {
                 album = album_match[1];
             } else {
