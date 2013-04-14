@@ -1,9 +1,0 @@
-extends ../layout
-
-block content
-  h1 All Users
-  p: a(href="/users/new") Add User
-  ul
-    each user in users
-      li= user
-        a(href="#{user.dropboxId}/edit") Update
