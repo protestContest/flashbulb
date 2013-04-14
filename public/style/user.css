@@ -7,6 +7,8 @@
 .thumb img {
   min-height: 220px;
   min-width: 220px;
+  max-width: none;
+  max-height: none;
 }
 .thumb > i.icon-spinner {
   position: absolute;
