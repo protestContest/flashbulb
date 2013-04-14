@@ -16,6 +16,7 @@ $(document).ready(function() {
         $("#editor").attr("width", width);
         $("#editor").attr("height", height);
         ctx.drawImage(img, 0, 0);
+        $("#reset").click();
     };
     img.src = $("#editor img").attr("src");
 
@@ -121,12 +122,18 @@ $(document).ready(function() {
 
     // bind tool buttons
     $(".tool-link .icon-filter").click(function() {
+        var wasVisible = $("aside.filters").is(":visible");
         $("aside").hide("slide", {"direction": "right"}, "fast");
-        $("aside.filters").toggle("slide", {"direction": "right"}, "fast");
+        if (!wasVisible) {
+            $("aside.filters").show("slide", {"direction": "right"}, "fast");
+        }
     });
-    $(".tool-link .icon-adjust").click(function() {
+    $(".tool-link .icon-tint").click(function() {
+        var wasVisible = $("aside.colors").is(":visible");
         $("aside").hide("slide", {"direction": "right"}, "fast");
-        $("aside.colors").toggle("slide", {"direction": "right"}, "fast");
+        if (!wasVisible) {
+            $("aside.colors").show("slide", {"direction": "right"}, "fast");
+        }
     });
 
     $("aside.filters .item").click(function() {
@@ -145,5 +152,9 @@ $(document).ready(function() {
         $("#" + color).mouseup(function() {
             colorize([$("#red").val(), $("#green").val(), $("#blue").val()]);
         });
+    });
+    $("#reset").click(function() {
+        $("#red, #green, #blue").val(0);
+        colorize([0, 0, 0]);
     });
 });
