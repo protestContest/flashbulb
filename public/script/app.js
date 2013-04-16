@@ -1,10 +1,5 @@
-
-// included: script/src/Page.js
-
-// included: script/src/Toolbar.js
 /**
  * Manages a toolbar jQuery object
- * @constructor
  * @param {Page} page that controls this toolbar
  * @param {object} jQuery object this controls
  */
@@ -17,37 +12,6 @@ function Toolbar(page, html) {
     this.init = function() {
         $(window).scroll(function() {
             html.css("top", Math.max(0, 52 - $(window).scrollTop()));
-        });
-
-        // buttons on the right
-        $(".tool-link a").each(function(i, link) {
-            if (! $(this).hoverBound) {
-                $(this).hoverBound = true;
-                $(this).hover(function() {
-                    var title = $(link).attr("title");
-                    //window.page.showMessage(title);
-                }, function() {
-                    //window.page.showMessage("");
-                });
-            }
-        });
-
-        $("#delete-album-button").each(function(i, link) {
-            if (! $(this).clickBound) {
-                $(this).clickBound = true;
-                $(this).click(function() {
-                    if (confirm("Delete this album? All photos in this album will also be deleted.")) {
-                        var album = $(link).attr("data-delete");
-                        console.log(album);
-                        $.post("/albums/" + album, {
-                            "_method": "delete"
-                        }, function(data, status) {
-                            console.log("Album deleted: " + status);
-                            page.showMessage("Album deleted", 2000);
-                        });
-                    }
-                });
-            }
         });
     };
 
@@ -69,8 +33,9 @@ function Toolbar(page, html) {
 
 };
 
-
-// included: script/src/Content.js
+/**
+ * Manages a jQuery object representing the content area
+ */
 function Content (page, html) {
     var self = this;
 
@@ -103,6 +68,7 @@ function Content (page, html) {
     };
 }
 
+// handles animation of share dropdown
 function showDropdown(that) {
 
     $("#share.dropdown").slideUp("fast", function() {
@@ -194,7 +160,6 @@ function showDropdown(that) {
 /**
  * Manages the current contents of the page
  *
- * @constructor
  * @param {object} jQuery object of toolbar
  * @param {object} jQuery object of content
  */
@@ -210,13 +175,6 @@ function Page(toolbarRef, contentRef) {
         toolbar.init();
         content.init();
 
-        //window.onpopstate = function(evt) {
-        //    if (evt.state === null) {
-        //        self.load("/all");
-        //    } else {
-        //        self.update(evt.state);
-        //    }
-        //};
     };
 
     /**

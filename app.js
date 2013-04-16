@@ -128,8 +128,6 @@ app.get("/home", appCon.auth, userCon.home);
 app.get("/users", appCon.devAuth, userCon.all);
 app.get("/users/new", appCon.devAuth, userCon.createForm);
 app.get("/users/:id/edit", appCon.devAuth, userCon.updateForm);
-
-//app.get("/users/:id/albums/new", appCon.auth, userCon.createAlbumForm);
 app.get("/users/:id", userCon.view);
 app.post("/users", appCon.devAuth, userCon.create);
 app.put("/users/:id", appCon.devAuth, userCon.update);
@@ -158,23 +156,6 @@ app.get("/edit/:photo", appCon.auth, photoCon.edit);
 
 app.get("/all", appCon.auth, photoCon.all);
 app.get("/help", appCon.help);
-
-
-/*
-app.get("/", ac.index);
-app.get("/all", ac.all);
-app.get("/albums", ac.albums);
-app.get("/all.json", [ac.auth], ac.allJson);
-app.get("/albums.json", [ac.auth], ac.albumsJson);
-
-
-app.get("/file/:path", [ac.auth], ac.getFile);
-app.get("/edit/:path", [ac.auth], ac.editFile);
-
-app.get("/settings", [ac.auth], uc.settings);
-
-app.get("/dbtest", ac.dbTest);
-*/
 
 // make things go
 mongoose.connect(credentials.mongodb.url);
