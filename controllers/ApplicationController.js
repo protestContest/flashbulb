@@ -1,40 +1,37 @@
-var Dropbox = require("dropbox")
-  , crypto = require("crypto")
-  , https = require("https")
+var credentials
+  , Dropbox = require("dropbox")
   , FB = require("fb")
-  , jade = require("jade")
   , redis = require("redis")
   , developers = require("../developers")
+  , User = require("../models/User")
+  , dClient
+  , rClient
   ;
 
-var ApplicationController = function(credentials) {
-    var User,
-        dClient,
-        rClient = redis.createClient(credentials.redis.port,
-                    credentials.redis.host);
-
-    rClient.auth(credentials.redis.auth);
-
-    if (!(this instanceof ApplicationController)) {
-        return new ApplicationController(credentials);
-    }
-
-    User = require("../models/User");
+// constructor
+module.exports = function(creds) {
+    credentials = creds;
     dClient = new Dropbox.Client({
-        key: credentials.dropbox.appkey,
-        secret: credentials.dropbox.secret,
-        sandbox: true
+        "key": credentials.dropbox.appkey,
+        "secret": credentials.dropbox.secret,
+        "sandbox": true
     });
+    rClient = redis.createClient(credentials.redis.port,
+                                 credentials.redis.host);
+    return ApplicationController;
+}
 
-    this.index = function(req, res) {
+// public API
+var ApplicationController = {
+    "index": function(req, res) {
         if (req.isAuthenticated()) {
             res.redirect("/home");
         } else {
             res.render("index");
         }
-    };
+    },
 
-    this.dbAuthenticate = function(req, token, tokenSecret, profile, done) {
+    "dbAuthenticate": function(req, token, tokenSecret, profile, done) {
         var dropbox = new Dropbox.Client({
             key: credentials.dropbox.appkey,
             secret: credentials.dropbox.secret,
@@ -55,51 +52,51 @@ var ApplicationController = function(credentials) {
                 }
             );
         });
-    };
-
-    this.login = function(req, res) {
+    },
+    
+    "login": function(req, res) {
         if (req.user) {
             req.session.user = req.user;
             res.redirect("/home");
         } else {
             res.redirect("/");
         }
-    };
+    },
 
-    this.auth = function(req, res, next) {
+    "auth": function(req, res, next) {
         if (req.isAuthenticated()) {
             next();
         } else {
             res.redirect("/");
         }
-    };
+    },
 
-    this.devAuth = function(req, res, next) {
+    "devAuth": function(req, res, next) {
         if (req.session.user && developers.indexOf(req.session.user.email) !== -1) {
             next();
         } else {
             res.send("Not auth'd");
         }
-    };
+    },
 
-    this.logout = function(req, res) {
+    "logout": function(req, res) {
         req.logout();
         res.redirect("/");
-    };
+    },
 
-    this.fbAuthenticate = function(req, token, tokenSecret, profile, done) {
+    "fbAuthenticate": function(req, token, tokenSecret, profile, done) {
         req.session.fbToken = token;
         req.session.facebook = { };
         req.session.facebook.id = profile.id;
         req.session.facebook.access_token = token;
         return done(null, req.user);
-    };
+    },
 
-    this.loginSuccess = function(req, res) {
+    "loginSuccess": function(req, res) {
         res.redirect("/");
-    };
+    },
 
-    this.fbUpload = function(req, res) {
+    "fbUpload": function(req, res) {
         console.log("Uploading to Facebook");
         if (req.account && req.session.share) {
 
@@ -120,15 +117,14 @@ var ApplicationController = function(credentials) {
         } else {
             res.redirect("/");
         }
-    };
+    },
 
-    this.error = function(req, res) {
+    "error": function(req, res) {
         res.render("error", {"error": req.body});
-    };
+    },
 
-    this.help = function(req, res) {
+    "help": function(req, res) {
         res.render("help");
-    };
-}
+    },
+};
 
-module.exports = ApplicationController;
