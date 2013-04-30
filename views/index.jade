@@ -1,16 +1,23 @@
-extends base-layout
-
-block head
-  link(rel="stylesheet", href="/style/home.css")
-
-block content
-  .container
-    .hero-unit
-      .row
-        .span5.well
-          h1 Flashbulb
-          p.lead Discover a whole new way to manage your photos
-          p Flashbulb allows you to organize your favorite photos into albums,
-            | correct color balance, add filters, and share your favorite moments on
-            | Facebook.
-          p: a.btn.btn-large.pull-right(href="/login") Sign in with Dropbox
+!!!
+html(lang="en")
+  head
+    title Flashbulb
+    link(rel="stylesheet", href="/style/lib/bootstrap.min.css")
+    link(rel="stylesheet", href="/style/lib/font-awesome.min.css")
+    link(rel="stylesheet", href="/style/default.css")
+    script(src="//code.jquery.com/jquery-1.9.1.min.js")
+    script(src="/script/lib/bootstrap.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.0/dropbox.min.js")
+    link(rel="stylesheet", href="/style/home.css")
+  
+  body
+    .container
+      .hero-unit
+        .row
+          .span5.well
+            h1 Flashbulb
+            p.lead Discover a whole new way to manage your photos
+            p Flashbulb allows you to organize your favorite photos into albums,
+              | correct color balance, add filters, and share your favorite moments on
+              | Facebook.
+            p: a.btn.btn-large.pull-right(href="/login") Sign in with Dropbox
