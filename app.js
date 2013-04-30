@@ -79,7 +79,6 @@ app.configure("production", function() {
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(credentials);
-userCon = require("./controllers/UserController")(credentials);
 albumCon = require("./controllers/AlbumController")(credentials);
 photoCon = require("./controllers/PhotoController")(credentials);
 
