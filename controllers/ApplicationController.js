@@ -31,29 +31,6 @@ var ApplicationController = {
         }
     },
 
-    "dbAuthenticate": function(req, token, tokenSecret, profile, done) {
-        var dropbox = new Dropbox.Client({
-            key: credentials.dropbox.appkey,
-            secret: credentials.dropbox.secret,
-            sandbox: true
-        });
-        dropbox.oauth.setToken(token, tokenSecret);
-        rClient.hset("dropboxes", profile.id, JSON.stringify({
-            "token": token,
-            "secret": tokenSecret
-        }));
-
-        dropbox.getUserInfo(function(err, userInfo) {
-            if (err) { return done(err); }
-
-            User.findOrCreate({ dropboxId: profile.id }, userInfo,
-                function(err, user) {
-                    return done(err, user);
-                }
-            );
-        });
-    },
-    
     "login": function(req, res) {
         if (req.user) {
             req.session.user = req.user;
@@ -84,16 +61,35 @@ var ApplicationController = {
         res.redirect("/");
     },
 
+    "dbAuthenticate": function(req, token, tokenSecret, profile, done) {
+        var dropbox = new Dropbox.Client({
+            key: credentials.dropbox.appkey,
+            secret: credentials.dropbox.secret,
+            sandbox: true
+        });
+        dropbox.oauth.setToken(token, tokenSecret);
+        rClient.hset("dropboxes", profile.id, JSON.stringify({
+            "token": token,
+            "secret": tokenSecret
+        }));
+
+        dropbox.getUserInfo(function(err, userInfo) {
+            if (err) { return done(err); }
+
+            User.findOrCreate({ dropboxId: profile.id }, userInfo,
+                function(err, user) {
+                    return done(err, user);
+                }
+            );
+        });
+    },
+    
     "fbAuthenticate": function(req, token, tokenSecret, profile, done) {
         req.session.fbToken = token;
         req.session.facebook = { };
         req.session.facebook.id = profile.id;
         req.session.facebook.access_token = token;
         return done(null, req.user);
-    },
-
-    "loginSuccess": function(req, res) {
-        res.redirect("/");
     },
 
     "fbUpload": function(req, res) {
