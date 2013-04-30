@@ -1,20 +1,38 @@
-var redis = require("redis"),
-    Dropbox = require("dropbox"),
-    AlbumCon = require("./AlbumController.js"),
-    fs = require("fs");
+var redis = require("redis")
+  , rClient
+  , Album
+  , credentials
+  , Dropbox = require("dropbox")
+  , AlbumCon = require("./AlbumController.js")
+  , fs = require("fs")
+  ;
 
-var PhotoController = function(credentials) {
-    var Album = new AlbumCon(credentials),
-        rClient = redis.createClient(credentials.redis.port,
-                    credentials.redis.host);
-
+module.exports = function(creds) {
+    credentials = creds;
+    Album = new AlbumCon(credentials),
+    rClient = redis.createClient(credentials.redis.port,
+                                 credentials.redis.host);
     rClient.auth(credentials.redis.auth);
 
-    if (!(this instanceof PhotoController)) {
-        return new PhotoController(credentials);
-    }
+    return PhotoController;
+}
 
-    this.all = function(req, res) {
+function getDropbox(dropboxId, callback) {
+    rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
+        var tokens = JSON.parse(tokenStr),
+            dropbox = new Dropbox.Client({
+                key: credentials.dropbox.appkey,
+                secret: credentials.dropbox.secret,
+                sandbox: true
+            });
+
+        dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
+        callback(err, dropbox);
+    });
+}
+
+var PhotoController = {
+    "all": function(req, res) {
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.findByName("/", ".jpg", function(err, photos) {
                 if (err) {
@@ -34,9 +52,9 @@ var PhotoController = function(credentials) {
                 }
             });
         });
-    };
+    },
 
-    this.update = function(req, res) {
+    "update": function(req, res) {
         var path = "/" + req.params.photo;
         if (req.params.album) {
             path = "/" + req.params.album + path;
@@ -52,9 +70,9 @@ var PhotoController = function(credentials) {
                 }
             });
         });
-    };
+    },
 
-    this.get = function(req, res) {
+    "get": function(req, res) {
         var path = (req.params.album ? "/" + req.params.album : "" ) + "/" + req.params.photo;
         getDropbox(req.session.user.dropboxId, function(err, dropbox) {
             dropbox.readFile(path, {"buffer": true}, function(err, data) {
@@ -66,9 +84,9 @@ var PhotoController = function(credentials) {
                 }
             });
         });
-    };
+    },
 
-    this.move = function(req, res) {
+    "move": function(req, res) {
         if (req.body.to === "/Unsorted") {
             req.body.to = "";
         }
@@ -82,9 +100,9 @@ var PhotoController = function(credentials) {
                 }
             });
         });
-    };
+    },
 
-    this.getPublicUrl = function(req, res) {
+    "getPublicUrl": function(req, res) {
         if (req.params.path.substr(0, 5) === "/file") {
             req.params.path = req.params.path.substr(5);
         }
@@ -100,9 +118,9 @@ var PhotoController = function(credentials) {
                 }
             });
         });
-    };
+    },
 
-    this.upload = function(req, res) {
+    "upload": function(req, res) {
         var album = "";
         if (req.params.album && req.params.album !== "Unsorted") {
             album = req.params.album;
@@ -125,9 +143,9 @@ var PhotoController = function(credentials) {
                 }
             }
         });
-    };
+    },
 
-    this.edit = function(req, res) {
+    "edit": function(req, res) {
         var path = "/" + req.params.photo;
         if (req.params.album) {
             path = "/" + req.params.album + "/" + req.params.photo;
@@ -136,21 +154,7 @@ var PhotoController = function(credentials) {
         res.render("photo/edit", {
             "path": path
         });
-    };
+    },
 
-    function getDropbox(dropboxId, callback) {
-        rClient.hget("dropboxes", dropboxId, function(err, tokenStr) {
-            var tokens = JSON.parse(tokenStr),
-                dropbox = new Dropbox.Client({
-                    key: credentials.dropbox.appkey,
-                    secret: credentials.dropbox.secret,
-                    sandbox: true
-                });
-
-            dropbox.oauth.setToken(tokens["token"], tokens["secret"]);
-            callback(err, dropbox);
-        });
-    }
 };
 
-module.exports = PhotoController;
