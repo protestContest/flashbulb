@@ -31,6 +31,10 @@ var ApplicationController = {
         }
     },
 
+    "home": function(req, res) {
+        res.redirect("/photos/all");
+    },
+
     "login": function(req, res) {
         if (req.user) {
             req.session.user = req.user;

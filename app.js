@@ -108,6 +108,7 @@ passport.deserializeUser(function(obj, done) {
 
 // app
 app.get("/", appCon.index);
+app.get("/home", appCon.auth, appCon.home);
 app.get("/error", appCon.error);
 app.get("/login", passport.authenticate("dropbox"));
 app.get("/login/success", passport.authenticate("dropbox"), 
@@ -122,15 +123,6 @@ app.get("/auth/facebook/success", passport.authorize("facebook", {
 }), appCon.fbUpload);
 app.get("/logout", appCon.logout);
 
-// user
-app.get("/home", appCon.auth, userCon.home);
-app.get("/users", appCon.devAuth, userCon.all);
-app.get("/users/new", appCon.devAuth, userCon.createForm);
-app.get("/users/:id/edit", appCon.devAuth, userCon.updateForm);
-app.get("/users/:id", userCon.view);
-app.post("/users", appCon.devAuth, userCon.create);
-app.put("/users/:id", appCon.devAuth, userCon.update);
-app.delete("/users/:id", appCon.devAuth, userCon.destroy);
 
 // album
 app.get("/albums", appCon.auth, albumCon.all);
