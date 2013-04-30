@@ -105,11 +105,7 @@ passport.deserializeUser(function(obj, done) {
 
 /* Routes */
 
-// app
-app.get("/", appCon.index);
-app.get("/home", appCon.auth, appCon.home);
-app.get("/error", appCon.error);
-app.get("/login", passport.authenticate("dropbox"));
+// authentication
 app.get("/login/success", passport.authenticate("dropbox"), 
         appCon.login);
 
@@ -122,6 +118,14 @@ app.get("/auth/facebook/success", passport.authorize("facebook", {
 }), appCon.fbUpload);
 app.get("/logout", appCon.logout);
 
+
+// app
+app.get("/", appCon.index);
+app.get("/home", appCon.auth, appCon.home);
+app.get("/error", appCon.error);
+app.get("/login", passport.authenticate("dropbox"));
+app.get("/all", appCon.auth, photoCon.all);
+app.get("/help", appCon.help);
 
 // album
 app.get("/albums", appCon.auth, albumCon.all);
@@ -144,8 +148,6 @@ app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
 app.get("/edit/:album/:photo", appCon.auth, photoCon.edit);
 app.get("/edit/:photo", appCon.auth, photoCon.edit);
 
-app.get("/all", appCon.auth, photoCon.all);
-app.get("/help", appCon.help);
 
 // make things go
 mongoose.connect(credentials.mongodb.url);
