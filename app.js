@@ -12,7 +12,6 @@ var express = require("express")
   , url = require("url");
 
 
-// Configuration Server
 app.configure(function() {
     app.engine("jade", require("jade").__express);
     app.set("views", __dirname + "/views");
