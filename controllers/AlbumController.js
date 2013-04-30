@@ -30,6 +30,18 @@ function getDropbox(dropboxId, callback) {
     });
 }
 
+function getAlbumList (dropbox, callback) {
+    dropbox.readdir("/", function(err, names, folder, folderEntries) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, folderEntries.filter(function(entry) {
+                return entry.isFolder;
+            }));
+        }
+    });
+};
+
 // public API
 var AlbumController = {
     "all": function(req, res) {
@@ -81,17 +93,7 @@ var AlbumController = {
         });
     },
 
-    "getAlbumList": function(dropbox, callback) {
-        dropbox.readdir("/", function(err, names, folder, folderEntries) {
-            if (err) {
-                callback(err);
-            } else {
-                callback(null, folderEntries.filter(function(entry) {
-                    return entry.isFolder;
-                }));
-            }
-        });
-    },
+    "getAlbumList": getAlbumList,
 
     "createForm": function(req, res) {
         res.render("album/create");
