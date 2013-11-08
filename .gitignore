@@ -4,3 +4,5 @@
 *.vim
 credentials.js
 node_modules
+tags
+
