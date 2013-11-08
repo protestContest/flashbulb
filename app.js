@@ -36,7 +36,7 @@ app.configure("development", function() {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
     port = 3000;
     hostname = "http://127.0.0.1:" + port;
 });
@@ -72,7 +72,7 @@ app.configure("production", function() {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
-    app.use(express.errorHandler()); 
+    app.use(express.errorHandler());
     port = process.env.PORT || 8080;
     hostname = process.env.HOSTNAME;
 });
@@ -106,14 +106,14 @@ passport.deserializeUser(function(obj, done) {
 /* Routes */
 
 // authentication
-app.get("/login/success", passport.authenticate("dropbox"), 
+app.get("/login/success", passport.authenticate("dropbox"),
         appCon.login);
 
-app.get("/auth/facebook", passport.authorize("facebook", { 
+app.get("/auth/facebook", passport.authorize("facebook", {
     scope: "publish_stream",
     failureRedirect: "/error"
 }));
-app.get("/auth/facebook/success", passport.authorize("facebook", { 
+app.get("/auth/facebook/success", passport.authorize("facebook", {
     failureRedirect: "/error"
 }), appCon.fbUpload);
 app.get("/logout", appCon.logout);
