@@ -43,7 +43,7 @@ app.configure("development", function() {
 
 app.configure("production", function() {
     var store,
-        redisURL = url.parse(process.env.REDISCLOUD_URL);
+        redisURL = url.parse(process.env.REDISTOGO_URL);
     console.log("running in production environment");
     credentials = {
         "mongodb": {
