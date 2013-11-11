@@ -5,7 +5,8 @@ var PhotoSchema = new Schema({
     photoId: String,
     url: String,
     name: String,
-    album: String
+    album: String,
+    tags: [String]
 });
 
 var AlbumSchema = new Schema({

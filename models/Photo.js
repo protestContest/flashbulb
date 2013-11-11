@@ -38,6 +38,15 @@ PhotoSchema.static("get", function(album, url, callback) {
     });
 });
 
+PhotoSchema.static("getByTag", function(tag, cb) {
+    Photo.find({"tags": tag}, function(err, photos) {
+        if (err) { cb(err); }
+        else {
+            cb(null, photos);
+        }
+    });
+});
+
 PhotoSchema.method("update", function(attrs, callback) {
     for (var attr in attrs) {
         this[attr] = attrs[attr];
