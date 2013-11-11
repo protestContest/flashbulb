@@ -60,6 +60,15 @@ PhotoSchema.method("update", function(attrs, callback) {
     });
 });
 
+PhotoSchema.method("addTag", function(tag, cb) {
+    this.update({tags: this.tags.concat(tag)}, cb);
+});
+
+PhotoSchema.method("removeTag", function(tag, cb) {
+    this.tags.splice(this.tags.indexOf(tag), 1);
+    this.save(cb);
+});
+
 PhotoSchema.method("destroy", function(callback) {
     Photo.remove({ albumId: this.albumId}, callback);
 });
