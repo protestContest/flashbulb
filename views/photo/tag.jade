@@ -1,0 +1,19 @@
+extends ../layout
+include ../gallery
+include ../aside
+
+block head
+  link(rel='stylesheet', href='/style/user.css')
+
+block toolbar
+  ul.nav.span3
+    li.toolbar-link All Pictures
+    li.toolbar-link: a(href='/albums') Albums
+    li.active Tags
+  #messages.span6
+
+block content
+  #content.main.container(data-type='gallery')
+    mixin gallery(photos)
+    mixin aside(albums, 'Move to album', 'albumList', '')
+
