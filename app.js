@@ -1,6 +1,4 @@
 var express = require("express")
-  , mongoose = require("mongoose")
-  , credentials
   , RedisStore = require("connect-redis")(express)
   , passport = require("passport")
   , DropboxStrategy = require("passport-dropbox").Strategy
@@ -30,52 +28,50 @@ app.configure(function() {
 });
 
 app.configure("development", function() {
-  console.log("running in development environment");
-  credentials = require("./credentials").development;
+  app.credentials = require("./credentials").development;
   app.locals.pretty = true;
   app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  port = 3000;
-  hostname = "http://127.0.0.1:" + port;
+  app.port = 3000;
+  hostname = "http://127.0.0.1:" + app.port;
 });
 
 app.configure("production", function() {
   var store;
-    redisURL = url.parse(process.env.REDISCLOUD_URL);
-  console.log("running in production environment");
-  credentials = require("./credentials").production;
+
+  app.credentials = require("./credentials").production;
   store = new RedisStore({
-    "host": credentials.redis.host,
-    "port": credentials.redis.port,
-    "pass": credentials.redis.auth
+    "host": app.credentials.redis.host,
+    "port": app.credentials.redis.port,
+    "pass": app.credentials.redis.auth
   });
   app.use(express.session({"secret": "bananahorsepancakes", "store": store}));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
   app.use(express.errorHandler());
-  port = process.env.PORT || 8080;
+  app.port = process.env.PORT || 8080;
   hostname = process.env.HOSTNAME;
 });
 
 // Controllers
-appCon = require("./controllers/ApplicationController")(credentials);
-albumCon = require("./controllers/AlbumController")(credentials);
-photoCon = require("./controllers/PhotoController")(credentials);
+appCon = require("./controllers/ApplicationController")(app.credentials);
+albumCon = require("./controllers/AlbumController")(app.credentials);
+photoCon = require("./controllers/PhotoController")(app.credentials);
 
 // configure passport
 passport.use(new DropboxStrategy({
-  consumerKey: credentials.dropbox.appkey,
-  consumerSecret: credentials.dropbox.secret,
+  consumerKey: app.credentials.dropbox.appkey,
+  consumerSecret: app.credentials.dropbox.secret,
   callbackURL: hostname + "/login/success",
   passReqToCallback: true
 }, appCon.dbAuthenticate));
 passport.use(new FacebookStrategy({
-  clientID: credentials.facebook.clientId,
-  clientSecret: credentials.facebook.secret,
+  clientID: app.credentials.facebook.clientId,
+  clientSecret: app.credentials.facebook.secret,
   callbackURL: hostname + "/auth/facebook/success",
   passReqToCallback: true
 }, appCon.fbAuthenticate));
@@ -87,17 +83,16 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-/* Routes */
-routes.setup(app, {
-  passport: passport,
-  application: appCon,
-  photo: photoCon,
-  album: albumCon
-});
+app.start = function() {
+  routes.setup(app, {
+    passport: passport,
+    application: appCon,
+    photo: photoCon,
+    album: albumCon
+  });
 
+  app.listen(app.port);
+};
 
-// make things go
-mongoose.connect(credentials.mongodb.url);
-app.listen(port);
-console.log("Express server listening on port %d", port);
+module.exports = app;
 
