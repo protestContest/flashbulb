@@ -13,68 +13,50 @@ var express = require("express")
 
 
 app.configure(function() {
-    app.engine("jade", require("jade").__express);
-    app.set("views", __dirname + "/views");
-    app.set("view engine", "jade");
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(require("less-middleware")({
-        "prefix": "/style",
-        "src": __dirname + "/public/style/src" ,
-        "dest": __dirname + "/public/style",
-        "compress": false
-    }));
-    app.use(express.static(__dirname + "/public"));
-    app.use(express.cookieParser());
+  app.engine("jade", require("jade").__express);
+  app.set("views", __dirname + "/views");
+  app.set("view engine", "jade");
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(require("less-middleware")({
+    "prefix": "/style",
+    "src": __dirname + "/public/style/src" ,
+    "dest": __dirname + "/public/style",
+    "compress": false
+  }));
+  app.use(express.static(__dirname + "/public"));
+  app.use(express.cookieParser());
 });
 
 app.configure("development", function() {
-    console.log("running in development environment");
-    credentials = require("./credentials").development;
-    app.locals.pretty = true;
-    app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(app.router);
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-    port = 3000;
-    hostname = "http://127.0.0.1:" + port;
+  console.log("running in development environment");
+  credentials = require("./credentials").development;
+  app.locals.pretty = true;
+  app.use(express.session({secret: "flashbulb", store: new RedisStore()}));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  port = 3000;
+  hostname = "http://127.0.0.1:" + port;
 });
 
 app.configure("production", function() {
-    var store,
-        redisURL = url.parse(process.env.REDISCLOUD_URL);
-    console.log("running in production environment");
-    credentials = {
-        "mongodb": {
-            "url": process.env.MONGO_URL
-        },
-        "dropbox": {
-            "appkey": process.env.DROPBOX_APPKEY,
-            "secret": process.env.DROPBOX_SECRET
-        },
-        "facebook": {
-            "clientId": process.env.FACEBOOK_CLIENTID,
-            "secret":   process.env.FACEBOOK_SECRET
-        },
-        "redis": {
-            "host": redisURL.hostname,
-            "port": redisURL.port,
-            "auth": redisURL.auth.split(":")[1]
-        }
-    };
-    store = new RedisStore({
-        "host": credentials.redis.host,
-        "port": credentials.redis.port,
-        "pass": credentials.redis.auth
-    });
-    app.use(express.session({"secret": "bananahorsepancakes", "store": store}));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(app.router);
-    app.use(express.errorHandler());
-    port = process.env.PORT || 8080;
-    hostname = process.env.HOSTNAME;
+  var store;
+  console.log("running in production environment");
+  credentials = require("./credentials").production;
+  store = new RedisStore({
+    "host": credentials.redis.host,
+    "port": credentials.redis.port,
+    "pass": credentials.redis.auth
+  });
+  app.use(express.session({"secret": "bananahorsepancakes", "store": store}));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.errorHandler());
+  port = process.env.PORT || 8080;
+  hostname = process.env.HOSTNAME;
 });
 
 // Controllers
@@ -84,37 +66,37 @@ photoCon = require("./controllers/PhotoController")(credentials);
 
 // configure passport
 passport.use(new DropboxStrategy({
-    consumerKey: credentials.dropbox.appkey,
-    consumerSecret: credentials.dropbox.secret,
-    callbackURL: hostname + "/login/success",
-    passReqToCallback: true
+  consumerKey: credentials.dropbox.appkey,
+  consumerSecret: credentials.dropbox.secret,
+  callbackURL: hostname + "/login/success",
+  passReqToCallback: true
 }, appCon.dbAuthenticate));
 passport.use(new FacebookStrategy({
-    clientID: credentials.facebook.clientId,
-    clientSecret: credentials.facebook.secret,
-    callbackURL: hostname + "/auth/facebook/success",
-    passReqToCallback: true
+  clientID: credentials.facebook.clientId,
+  clientSecret: credentials.facebook.secret,
+  callbackURL: hostname + "/auth/facebook/success",
+  passReqToCallback: true
 }, appCon.fbAuthenticate));
 
 passport.serializeUser(function(user, done) {
-    done(null, user);
+  done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+  done(null, obj);
 });
 
 /* Routes */
 
 // authentication
 app.get("/login/success", passport.authenticate("dropbox"),
-        appCon.login);
+    appCon.login);
 
 app.get("/auth/facebook", passport.authorize("facebook", {
-    scope: "publish_stream",
-    failureRedirect: "/error"
+  scope: "publish_stream",
+  failureRedirect: "/error"
 }));
 app.get("/auth/facebook/success", passport.authorize("facebook", {
-    failureRedirect: "/error"
+  failureRedirect: "/error"
 }), appCon.fbUpload);
 app.get("/logout", appCon.logout);
 
