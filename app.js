@@ -9,6 +9,7 @@ var express = require("express")
   , port, hostname
   , appCon, userCon, albumCon, photoCon
   , app = express()
+  , routes = require('./routes')
   , url = require("url");
 
 
@@ -43,6 +44,7 @@ app.configure("development", function() {
 
 app.configure("production", function() {
   var store;
+    redisURL = url.parse(process.env.REDISCLOUD_URL);
   console.log("running in production environment");
   credentials = require("./credentials").production;
   store = new RedisStore({
@@ -86,49 +88,12 @@ passport.deserializeUser(function(obj, done) {
 });
 
 /* Routes */
-
-// authentication
-app.get("/login/success", passport.authenticate("dropbox"),
-    appCon.login);
-
-app.get("/auth/facebook", passport.authorize("facebook", {
-  scope: "publish_stream",
-  failureRedirect: "/error"
-}));
-app.get("/auth/facebook/success", passport.authorize("facebook", {
-  failureRedirect: "/error"
-}), appCon.fbUpload);
-app.get("/logout", appCon.logout);
-
-
-// app
-app.get("/", appCon.index);
-app.get("/home", appCon.auth, appCon.home);
-app.get("/error", appCon.error);
-app.get("/login", passport.authenticate("dropbox"));
-app.get("/all", appCon.auth, photoCon.all);
-app.get("/help", appCon.help);
-
-// album
-app.get("/albums", appCon.auth, albumCon.all);
-app.get("/albums/new", appCon.auth, albumCon.createForm);
-app.get("/albums/:album", appCon.auth, albumCon.view);
-app.post("/albums", appCon.auth, albumCon.create);
-app.delete("/albums/:album", appCon.auth, albumCon.destroy);
-
-// photo
-app.get("/photos/all", appCon.auth, photoCon.all);
-app.get("/photos/:album/:photo", appCon.auth, photoCon.get);
-app.get("/photos/:photo", appCon.auth, photoCon.get);
-app.post("/photos", appCon.auth, photoCon.upload);
-app.post("/photos/:album", appCon.auth, photoCon.upload);
-app.post("/move", appCon.auth, photoCon.move);
-app.put("/photos/:album/:photo", photoCon.update);
-app.put("/photos/:photo", photoCon.update);
-
-app.get("/public/photos/:path", appCon.auth, photoCon.getPublicUrl);
-app.get("/edit/:album/:photo", appCon.auth, photoCon.edit);
-app.get("/edit/:photo", appCon.auth, photoCon.edit);
+routes.setup(app, {
+  passport: passport,
+  application: appCon,
+  photo: photoCon,
+  album: albumCon
+});
 
 
 // make things go
