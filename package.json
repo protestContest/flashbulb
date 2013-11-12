@@ -2,9 +2,9 @@
   "name": "flashbulb",
   "subdomain": "flashbulb",
   "scripts": {
-    "start": "./app.js"
+    "start": "./start.js"
   },
-  "version": "0.0.0-29",
+  "version": "0.2.0",
   "engines": {
     "node": "0.10.x",
     "npm": "1.1.x"

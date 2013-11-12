@@ -86,7 +86,7 @@ passport.deserializeUser(function(obj, done) {
 app.start = function() {
   routes.setup(app, {
     passport: passport,
-    application: appCon,
+    app: appCon,
     photo: photoCon,
     album: albumCon
   });

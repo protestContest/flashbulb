@@ -1,6 +1,5 @@
 function setup(app, h) {
-  app.get("/login/success", h.passport.authenticate("dropbox"),
-      h.app.login);
+  app.get("/login/success", h.passport.authenticate("dropbox"), h.app.login);
 
   app.get("/auth/facebook", h.passport.authorize("facebook", {
     scope: "publish_stream",
@@ -40,8 +39,6 @@ function setup(app, h) {
   app.get("/public/photos/:path", h.app.auth, h.photo.getPublicUrl);
   app.get("/edit/:album/:photo", h.app.auth, h.photo.edit);
   app.get("/edit/:photo", h.app.auth, h.photo.edit);
-
-  app.get('/test/login', h.app.testLogin);
 }
 
 exports.setup = setup;

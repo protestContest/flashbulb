@@ -1,3 +1,5 @@
+#!/usr/local/bin/node
+
 var app = require('./app')
   , mongoose = require('mongoose');
 
