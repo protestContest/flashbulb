@@ -1,4 +1,4 @@
-var mongoose = require("mongoose"), 
+var mongoose = require("mongoose"),
     Schemas = require("./Schemas"),
     AlbumSchema = Schemas.Album,
     UserSchema = Schemas.User,
