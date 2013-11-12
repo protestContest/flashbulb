@@ -27,7 +27,7 @@ var ApplicationController = {
     if (req.isAuthenticated()) {
       res.redirect("/home");
     } else {
-      res.render(index);
+      res.render('index');
     }
   },
 
@@ -72,7 +72,7 @@ var ApplicationController = {
       sandbox: true
     });
     dropbox.oauth.setToken(token, tokenSecret);
-    redis.hset(dropboxes, profile.id, JSON.stringify({
+    redis.hset('dropboxes', profile.id, JSON.stringify({
       token: token,
       secret: tokenSecret
     }));
@@ -124,7 +124,7 @@ var ApplicationController = {
   },
 
   help: function(req, res) {
-    res.render(help);
+    res.render('help');
   },
 };
 
