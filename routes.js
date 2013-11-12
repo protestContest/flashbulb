@@ -39,6 +39,34 @@ function setup(app, h) {
   app.get("/public/photos/:path", h.app.auth, h.photo.getPublicUrl);
   app.get("/edit/:album/:photo", h.app.auth, h.photo.edit);
   app.get("/edit/:photo", h.app.auth, h.photo.edit);
+
+
+  // data API
+  // Note:  users, photos, and tags cannot have '/' in them
+  app.get('/api/users/:user/photos/:photo/versions/:version', h.photo.getVersion);
+  app.get('/api/users/:user/photos/:photo/versions', h.photo.getAllVersions);
+  app.get('/api/users/:user/photos/:photo/tags', h.photo.getTags);
+  app.get('/api/users/:user/photos/:photo', h.photo.getOneByUser);
+  app.get('/api/users/:user/photos', h.photo.getByUser);
+  app.get('/api/users/:user/tags', h.user.getTags);
+  app.get('/api/users/:user', h.user.getOne);
+  app.get('/api/users', h.user.getAll);
+
+  app.get('/api/photos/:photo', h.photo.getByName);
+  app.get('/api/photos', h.photo.getAll);
+
+  app.get('/api/tags/:tag', h.photo.getByTag);
+  app.get('/api/tags', h.photo.getAllTags);
+
+  app.put('/api/users/:user/photos/:photo/tags/:tag', h.photo.addTag);
+  app.put('/api/users/:user/photos/:photo', h.photo.createOrUpdate);
+  app.put('/api/users/:user', h.user.createOrUpdate);
+
+  app.delete('/api/users/:user/photos/:photo/tags/:tag', h.photo.removeTag);
+  app.delete('/api/users/:user/photos/:photo', h.photo.destroy);
+  app.delete('/api/users/:user', h.user.destroy);
+
+  app.post('/api/users/:user/photos', h.photos.create);
 }
 
 exports.setup = setup;
