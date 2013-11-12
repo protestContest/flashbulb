@@ -59,6 +59,7 @@ app.configure("production", function() {
 
 // Controllers
 appCon = require("./controllers/ApplicationController")(app.credentials);
+userCon = require('./controllers/UserController')(app.credentials);
 albumCon = require("./controllers/AlbumController")(app.credentials);
 photoCon = require("./controllers/PhotoController")(app.credentials);
 
@@ -87,6 +88,7 @@ app.start = function() {
   routes.setup(app, {
     passport: passport,
     app: appCon,
+    user: userCon,
     photo: photoCon,
     album: albumCon
   });

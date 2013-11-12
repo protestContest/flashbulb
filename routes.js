@@ -66,7 +66,7 @@ function setup(app, h) {
   app.delete('/api/users/:user/photos/:photo', h.photo.destroy);
   app.delete('/api/users/:user', h.user.destroy);
 
-  app.post('/api/users/:user/photos', h.photos.create);
+  app.post('/api/users/:user/photos', h.photo.create);
 }
 
 exports.setup = setup;

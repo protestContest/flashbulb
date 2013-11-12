@@ -159,5 +159,64 @@ var PhotoController = {
     });
   },
 
+
+
+
+  getVersion: function(req, res) {
+
+  },
+
+  getAllVersions: function(req, res) {
+
+  },
+
+  getTags: function(req, res) {
+
+  },
+
+  getOneByUser: function(req, res) {
+
+  },
+
+  getByUser: function(req, res) {
+
+  },
+
+  getByName: function(req, res) {
+
+  },
+
+  getAll: function(req, res) {
+
+  },
+
+  getByTag: function(req, res) {
+
+  },
+
+  getAllTags: function(req, res) {
+
+  },
+
+  addTag: function(req, res) {
+
+  },
+
+  createOrUpdate: function(req, res) {
+
+  },
+
+  removeTag: function(req, res) {
+
+  },
+
+  destroy: function(req, res) {
+
+  },
+
+  create: function(req, res) {
+
+  }
+
 };
 
