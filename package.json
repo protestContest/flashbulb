@@ -6,7 +6,7 @@
   },
   "version": "0.0.0-29",
   "engines": {
-    "node": "0.6.x",
+    "node": "0.10.x",
     "npm": "1.1.x"
   },
   "dependencies": {
@@ -20,6 +20,9 @@
     "passport": "0.1.x",
     "passport-facebook": "0.1.x",
     "passport-dropbox": "0.1.x",
-    "redis": "0.8.x"
+    "redis": "0.8.x",
+    "mocha": "~1.14.0",
+    "should": "~2.1.0",
+    "supertest": "~0.8.1"
   }
 }
