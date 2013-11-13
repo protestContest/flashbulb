@@ -2,14 +2,16 @@ var should = require('should')
   , assert = require('assert')
   , request = require('supertest')
   , mongoose = require('mongoose')
-  , creds = require('../credentials').development
+  , app = require('../app')
   ;
 
 describe('Routing', function() {
   var url = 'http://127.0.0.1:3000';
 
   before(function(done) {
-    mongoose.connect(creds.mongodb.url + 'test');
+    mongoose.connect(app.credentials.mongodb.url);
+    app.start();
+    done();
   });
 
   describe('User', function() {
