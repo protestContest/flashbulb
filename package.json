@@ -2,7 +2,8 @@
   "name": "flashbulb",
   "subdomain": "flashbulb",
   "scripts": {
-    "start": "./start.js"
+    "start": "node start.js",
+    "test": "make test"
   },
   "version": "0.2.0",
   "engines": {
