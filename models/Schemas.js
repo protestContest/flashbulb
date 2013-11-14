@@ -5,20 +5,19 @@ var PhotoSchema = new Schema({
     photoId: String,
     url: String,
     name: String,
-    album: String
+    owner: String
 });
 
 var AlbumSchema = new Schema({
     name: String,
     photos: [String],
-    user: String
+    user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 var UserSchema = new Schema(  {
     email: {type:String, unique:true},
     name: String,
     dropboxId: String,
-    albums: [String]
 });
 
 module.exports = {
